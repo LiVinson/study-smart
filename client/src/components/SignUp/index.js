@@ -1,12 +1,12 @@
 import React from 'react';
 import "./style.css";
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 
 const SignUp = (props)=> {
 	return (
 		<div>
 			<h1>SIGN UP</h1>
-			<Link to = "/" >Go to sign in</Link>
+			{/* <Link to = "/" >Go to sign in</Link> */}
 			<form>
 				<label>Email</label><br/>
 				<input value = {props.username} onChange = {props.handleChange} name='username' type='email' placeholder = 'example@email.com'/>

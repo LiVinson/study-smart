@@ -1,7 +1,7 @@
 import React from 'react';
 import "./style.css";
 
-const Home = (props) =>{
+const Profile = (props) =>{
 	return (
 		<div>
 			<h1>You should only see this if you are logged in!</h1>
@@ -11,4 +11,4 @@ const Home = (props) =>{
 	);
 }
 
-export default Home;
+export default Profile;

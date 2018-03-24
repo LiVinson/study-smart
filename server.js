@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3001;
 const models = require("./models");
 
 const passport = require("passport");
-const session = require('express-session');
+const session = require('express-session'); //used for local authentication
 
 // Configure body parser for AJAX requests
 app.use(express.urlencoded({extended:true}));
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.static("client/build"));
 
  // For Passport
-app.use(session({ secret: 'changeThis',resave: true, saveUninitialized:true})); // session secret
+app.use(session({ secret: 'gators',resave: true, saveUninitialized:true})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport.js')(passport,models.User);
