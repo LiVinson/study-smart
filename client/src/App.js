@@ -3,9 +3,10 @@ import './App.css';
 import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import axios from 'axios';
 
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import Home from "./components/Home";
+// import SignIn from "./components/SignIn";
+// import SignUp from "./components/SignUp";
+import Profile from "./pages/Profile";
+import HomePage from "./pages/HomePage";
 
 class App extends Component {
   state = {
@@ -86,9 +87,9 @@ class App extends Component {
         <div>
         <Route exact path = "/" render = {()=> {
           if(loggedIn){
-            return <Redirect to = "/home" />
+            return <Redirect to = "/profile" /> //Change this to "/profile" endpoint (React Endopoint)
           } else{
-            return <SignIn 
+            return <HomePage //Change this to HomePage Component, which will require in everything needed to render Homepage
               handleChange= {this.handleChange} 
               handleSubmit = {this.handleSubmit}
               email = {this.state.email}
@@ -98,9 +99,9 @@ class App extends Component {
         }}/>
         <Route exact path = "/signup" render = {()=> {
           if(loggedIn){
-            return <Redirect to = "/home" />
+            return <Redirect to = "/profile" />
           } else{
-            return <SignUp 
+            return <HomePage 
               handleChange= {this.handleChange} 
               handleSubmit = {this.handleSubmit}
               email = {this.state.email}
@@ -108,11 +109,11 @@ class App extends Component {
             />
           }  
         }}/>
-        <Route exact path = "/home" render = {()=> {
+        <Route exact path = "/profile" render = {()=> {
           if(!loggedIn){
             return <Redirect to = "/" />
           } else {
-            return <Home handleLogout = {this.handleLogout} auth = { this.state.auth }/>
+            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
           } 
         }
         }/>

@@ -1,9 +1,10 @@
 const User = require("../models").User;
+
 module.exports = function (passport) {
 	const path = require("path");
 	const router = require('express').Router();
 
-	router.get("/isAuthenticated",function(req,res){
+	router.get("/isAuthenticated",function(req,res){ //When isAuthenticated is hit, checkks if user is logged in, and sends back userId, username, and authentication status:true
 		if (req.isAuthenticated()){
 			res.json({
 				userId: req.user._id,
@@ -13,7 +14,7 @@ module.exports = function (passport) {
 			//you can also pass up any other fields you with to expose
 			//for example, 
 			//nickname: req.user.nickname
-		} else {
+		} else { //if user is not authenticated: sends back falsy values for userId, username, authentication false
 			res.json({
 				userId: null,
 				username: null,
@@ -22,7 +23,7 @@ module.exports = function (passport) {
 		}
 	});
 
-	router.post("/signup",function(req,res){
+	router.post("/signup",function(req,res){ //when signup endpoint is hit, create a newUser from provided data. sends user, user pw, and cb function that takes in 2 parameters: error and userOBject
 		const newUser = req.body;
 		User.register(newUser,newUser.password,(err,user)=>{
 			if (err){ return res.json(err.message); }
@@ -34,7 +35,7 @@ module.exports = function (passport) {
 		});
 	});
 
-	router.post("/signin",passport.authenticate('local') ,function(req,res){
+	router.post("/signin",passport.authenticate('local') ,function(req,res){ //When signin endpoint is hit, calls passport method, and another function that takes ---
 		// console.log(req.user);
 		res.json({
 			userId: req.user._id,
