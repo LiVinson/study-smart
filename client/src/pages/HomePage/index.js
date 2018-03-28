@@ -10,16 +10,16 @@ const HomePage = (props) => {
 			<div>
 
 				<SignIn
-					// handleChange={props.handleChange}
-					// handleSubmit={props.handleSubmit}
-					// email={props.state.email}
-					// password={props.state.password} 
+					handleChange={props.handleChange}
+					handleSubmit={props.handleSubmit}
+					username={props.username}
+					password={props.password} 
 					/>
 				<SignUp
-					// handleChange={props.handleChange}
-					// handleSubmit={props.handleSubmit}
-					// email={props.state.email}
-					// password={props.state.password}
+					handleChange={props.handleChange}
+					handleSubmit={props.handleSubmit}
+					username={props.username}
+					password={props.password}
 					/>
 
 			</div>

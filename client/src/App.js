@@ -92,7 +92,7 @@ class App extends Component {
             return <HomePage //Change this to HomePage Component, which will require in everything needed to render Homepage
               handleChange= {this.handleChange} 
               handleSubmit = {this.handleSubmit}
-              email = {this.state.email}
+              username = {this.state.username}
               password = {this.state.password}
             />
           } 
@@ -104,7 +104,7 @@ class App extends Component {
             return <HomePage 
               handleChange= {this.handleChange} 
               handleSubmit = {this.handleSubmit}
-              email = {this.state.email}
+              username = {this.state.username}
               password = {this.state.password}
             />
           }  
