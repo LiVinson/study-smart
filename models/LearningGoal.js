@@ -5,6 +5,7 @@ const LearningGoal = new Schema({
         type: String,
         required: true,
     },
+
     due_date: {
         type: Date,
         required: true,
@@ -29,5 +30,4 @@ const LearningGoal = new Schema({
 }, {
     timestamps: true
 });
-
 module.exports = mongoose.model("LearningGoal", LearningGoal);
