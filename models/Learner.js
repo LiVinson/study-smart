@@ -23,8 +23,6 @@ const Learner = new Schema({
         type: Schema.Types.ObjectId,
         ref: "LearningGoals"
     }]
-}, {
-    timestamps: true
 });
 
 module.exports = mongoose.model("Learner", Learner);

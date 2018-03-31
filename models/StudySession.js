@@ -28,8 +28,6 @@ const StudySession = new Schema({
         type: Schema.Types.ObjectId,
         ref: "LearningGoal"
     }
-}, {
-    timestamps: true
 });
 
 module.exports = mongoose.model("StudySession", StudySession);
