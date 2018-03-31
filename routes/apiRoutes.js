@@ -1,39 +1,39 @@
 module.exports = function (passport) {
 	const path = require("path");
 	const router = require('express').Router();
-	const db = require("../models");
-	const studyController = require("../controllers/studyController");
+	// const db = require("../models");
+	// const studyController = require("../controllers/studyController");
 
-	//User Profile ---------
+	// //User Profile ---------
 
-	router.post("/profile", isLoggedIn, studyController.createProfile);
-	router.patch("/profile", isLoggedIn, studyController.editProfile)
-	router.get("/profile", isLoggedIn, studyController.findProfile);
+	// router.post("/profile", /*isLoggedIn,*/ studyController.createProfile);
+	// router.patch("/profile",/*isLoggedIn,*/  studyController.editProfile)
+	// router.get("/profile", /*isLoggedIn,*/ studyController.findProfile);
 
-	//Learning Goals -------
-	//When View All Learning Goals is Clicked 
-	router.get("/allgoals/", studyController.findAllGoals);
-	//When one learning goal is clicked
-	router.get("/goal/:goalId", studyController.findOneGoal);
-	//When submit on new learning goal form is clicked
-	router.post("/goal", studyController.createOneGoal);
+	// //Learning Goals -------
+	// //When View All Learning Goals is Clicked 
+	// router.get("/allgoals/",/*isLoggedIn,*/  studyController.findAllGoals);
+	// //When one learning goal is clicked
+	// router.get("/goal/:goalId", /*isLoggedIn,*/ studyController.findOneGoal);
+	// //When submit on new learning goal form is clicked
+	// router.post("/goal", /*isLoggedIn,*/ studyController.createOneGoal);
 
-	//Study Sessions -------
+	// //Study Sessions -------
 
-	//When View study session is Clicked 
-	router.get("/studysession", isLoggedIn, studyController.findAllStudySessions);
-	//When certain event is Clicked 
-	router.get("/studysession/:sessionId", isLoggedIn, studyController.findOneStudySessions);
-	router.post("/studysession", isLoggedIn, studyController.createStudySession);
+	// //When View study session is Clicked 
+	// router.get("/studysession", /*isLoggedIn,*/  studyController.findAllStudySessions);
+	// //When certain event is Clicked 
+	// router.get("/studysession/:sessionId", /*isLoggedIn,*/  studyController.findOneStudySessions);
+	// router.post("/studysession", /*isLoggedIn,*/  studyController.createStudySession);
 
 return router;
 };
 
-const isLoggedIn = (req, res, next) => {
-	if (req.isAuthenticated()) {
-		console.log("logged in!");
-		return next();
-	}
-	console.log("Not authenticated!")
-	res.redirect("/"); //determine how to redirect back to current view
-};
+// const isLoggedIn = (req, res, next) => {
+// 	if (req.isAuthenticated()) {
+// 		console.log("logged in!");
+// 		return next();
+// 	}
+// 	console.log("Not authenticated!")
+// 	res.redirect("/"); //determine how to redirect back to current view
+// };
