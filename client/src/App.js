@@ -113,7 +113,7 @@ class App extends Component {
           if(!loggedIn){
             return <Redirect to = "/" />
           } else {
-            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
+            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth.username }/>
           } 
         }
         }/>
