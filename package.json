@@ -21,7 +21,8 @@
     "mongoose": "^5.0.11",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.0"
+    "passport-local-mongoose": "^5.0.0",
+    "react-bootstrap": "^0.32.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
