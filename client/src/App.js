@@ -30,7 +30,7 @@ class App extends Component {
         }
       });
     });
-  }
+  };
 
   handleChange = (event) => {
     const {name, value} = event.target;    
@@ -38,7 +38,7 @@ class App extends Component {
     this.setState({
       [name]: value
     });
-  }
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -99,7 +99,7 @@ class App extends Component {
         }}/>
         <Route exact path = "/signup" render = {()=> {
           if(loggedIn){
-            return <Redirect to = "/profile" />
+            return <Redirect to = "/profile" /> 
           } else{
             return <HomePage 
               handleChange= {this.handleChange} 
@@ -113,7 +113,7 @@ class App extends Component {
           if(!loggedIn){
             return <Redirect to = "/" />
           } else {
-            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth.username }/>
+            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
           } 
         }
         }/>
