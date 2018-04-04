@@ -1,33 +1,43 @@
 module.exports = function (passport) {
 	const path = require("path");
 	const router = require('express').Router();
-	// const db = require("../models");
-	// const studyController = require("../controllers/studyController");
+	const db = require("../models");
+	const studyController = require("../controllers/studyController");
 
 	// //User Profile ---------
 
-	// router.post("/profile", /*isLoggedIn,*/ studyController.createProfile);
-	// router.patch("/profile",/*isLoggedIn,*/  studyController.editProfile)
-	// router.get("/profile", /*isLoggedIn,*/ studyController.findProfile);
+	router.post("/profile", studyController.createProfile);
+	router.patch("/profile/:userId", /*isLoggedIn,*/ studyController.editProfile);
+	router.get("/profile/:userId", /*isLoggedIn,*/ studyController.findProfile);
 
-	// //Learning Goals -------
+	// //LEARNING GOALS -------
+
 	// //When View All Learning Goals is Clicked 
-	// router.get("/allgoals/",/*isLoggedIn,*/  studyController.findAllGoals);
+	router.get("/allgoals/:userId",/*isLoggedIn,*/  studyController.findAllGoals);
 	// //When one learning goal is clicked
-	// router.get("/goal/:goalId", /*isLoggedIn,*/ studyController.findOneGoal);
+	router.get("/goal/:goalId", /*isLoggedIn,*/ studyController.findOneGoal);
 	// //When submit on new learning goal form is clicked
-	// router.post("/goal", /*isLoggedIn,*/ studyController.createOneGoal);
+	router.post("/goal", /*isLoggedIn,*/ studyController.createOneGoal);
+	router.patch("/goal/:goalId", /*isLoggedIn,*/ studyController.editGoal);
 
-	// //Study Sessions -------
+	// STUDY SESSIONS  -------
 
 	// //When View study session is Clicked 
-	// router.get("/studysession", /*isLoggedIn,*/  studyController.findAllStudySessions);
+	router.get("/studysessions/:userId", /*isLoggedIn,*/  studyController.findAllStudySessions);
 	// //When certain event is Clicked 
-	// router.get("/studysession/:sessionId", /*isLoggedIn,*/  studyController.findOneStudySessions);
-	// router.post("/studysession", /*isLoggedIn,*/  studyController.createStudySession);
+	router.get("/studysession/:sessionId", /*isLoggedIn,*/  studyController.findOneStudySessions);
+	router.post("/studysession", /*isLoggedIn,*/  studyController.createStudySession);
 
 return router;
 };
+
+/*Notes - Need to Do:
+	-Need to update/test patch routes for learner, goals, and study sessins
+	-Need to add routes to delete learner, goals, study sessions (cascading?)
+	-Test with logged in function
+	-Separate out into 3 separate route files
+	
+*/
 
 // const isLoggedIn = (req, res, next) => {
 // 	if (req.isAuthenticated()) {

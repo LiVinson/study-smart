@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Learner = new Schema({
 
-    userId: {
+    _userId: {
         type: Schema.Types.ObjectId,
         ref: "User"
     },
@@ -12,7 +12,7 @@ const Learner = new Schema({
         required: true,
     },
     last_name: {
-        type: Date,
+        type: String,
         required: true,
     },
     learner_status: [{
@@ -23,6 +23,10 @@ const Learner = new Schema({
         type: Schema.Types.ObjectId,
         ref: "LearningGoals"
     }],
+    mobile_number: {
+        type: String,
+        default:""
+    }
 
 }, {
     timestamps: true

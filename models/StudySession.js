@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const StudySession = new Schema({
+
+    _userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    _goalId: {
+        type: Schema.Types.ObjectId,
+        ref: "LearningGoal"
+    },
     topic: {
         type: String,
         required: true,
     },
-    when: {
+    date: {
         type: Date,
         required: true,
     },
@@ -22,12 +31,9 @@ const StudySession = new Schema({
     },
     participants: [{
         type: Schema.Types.ObjectId,
-        ref: "Learner"
+        ref: "User"
     }],
-    _goalId: {
-        type: Schema.Types.ObjectId,
-        ref: "LearningGoal"
-    }
+
 });
 
 module.exports = mongoose.model("StudySession", StudySession);

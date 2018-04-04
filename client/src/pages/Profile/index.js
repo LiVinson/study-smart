@@ -19,7 +19,7 @@ class Profile extends Component {
 		) : (
 			<div>
 				<h1>It looks like you've been here before!</h1>
-				<p>{this.props.auth}</p>
+				<p>{this.props.auth.username}</p>
 				<button onClick = {this.props.handleLogout}>Log Out</button>
 			</div>
 

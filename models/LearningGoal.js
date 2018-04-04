@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const LearningGoal = new Schema({
+
+    _userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+
     category: {
         type: String,
         required: true,
@@ -20,13 +26,12 @@ const LearningGoal = new Schema({
         }
 
     ],
-    // `studyEvents` is an array that stores ObjectIds
-    // The ref property links these ObjectIds to the StudySession model
-    // This allows us to populate the LearningGoal with any associated StudySessions
-    studyEvents: [{
-        type: Schema.Types.ObjectId,
-        ref: "StudySession"
-    }]
+    status: {
+        type: String,
+        required:true,
+        default: "active"
+    }
+
 }, {
     timestamps: true
 });
