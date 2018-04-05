@@ -21,7 +21,7 @@ class App extends Component {
 
   componentWillMount(){
     axios.get("/auth/isAuthenticated").then((result)=>{
-      const {userId, isAuthenticated,username} = result.data
+      const {userId, isAuthenticated,username} = result.data;
       this.setState({
         auth:{
           userId,
