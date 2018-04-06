@@ -15,13 +15,16 @@ const Learner = new Schema({
         type: String,
         required: true,
     },
-    learner_status: [{
+    learner_status: {
         type: String,
 
-    }],
-    learning_goals: [{
-        type: Schema.Types.ObjectId,
-        ref: "LearningGoals"
+    },
+    // learning_goals: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: "LearningGoals"
+    // }],
+    subjects: [{
+        type: String
     }],
     mobile_number: {
         type: String,

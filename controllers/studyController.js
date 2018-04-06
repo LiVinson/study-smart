@@ -9,13 +9,13 @@ module.exports = {
     createProfile: (req, res) => {
         console.log(req.body);
         const {
-            _userId,
+            userId,
             first_name,
             last_name,
             mobile_number /*, learner_status*/
         } = req.body;
         db.Learner.create({
-                _userId,
+                _userId: userId,
                 first_name,
                 last_name,
                 mobile_number
