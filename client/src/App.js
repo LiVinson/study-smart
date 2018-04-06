@@ -16,7 +16,18 @@ class App extends Component {
       userId:"",
       username:"",
       isAuthenticated:false
-    }
+    },
+		profile: {
+			first_name: "",
+			last_name: "",
+      mobile_number: "",
+      learner_status: "",
+      subjects:[],
+      firstLogin:true
+		},
+		learningGoals: [],
+		studySessions: [],
+  
   };
 
   componentWillMount(){
@@ -113,7 +124,7 @@ class App extends Component {
           if(!loggedIn){
             return <Redirect to = "/" />
           } else {
-            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
+            return <Profile handleLogout = {this.handleLogout} profile = { this.state.profile} auth = { this.state.auth }/>
           } 
         }
         }/>
