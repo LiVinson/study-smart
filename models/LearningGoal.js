@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const LearningGoal = new Schema({
 
-    _userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
+    // _userId: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "User"
+    // },
 
     category: {
         type: String,
@@ -20,18 +20,25 @@ const LearningGoal = new Schema({
         type: String,
         required: true
     },
-    measurement: [{
-            type: String,
-            required: true
-        }
-
-    ],
+    measurement:{
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         required:true,
         default: "active"
-    }
-
+    },
+    barriers:{
+        type: String,
+        required: true
+    },
+    sessions: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "StudySession"
+      }
+    ]
 }, {
     timestamps: true
 });

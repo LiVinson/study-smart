@@ -11,6 +11,13 @@ export default  {
         return (axios.get(`api/profile/${userId}`))
     },
 
+    createGoal: (goalData, userId) => {
+        
+        console.log(goalData);
+        return (axios.post(`api/goal/${userId}`, goalData))
+ 
+    }
+
 
 
 

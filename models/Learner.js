@@ -19,18 +19,23 @@ const Learner = new Schema({
         type: String,
 
     },
-    // learning_goals: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: "LearningGoals"
-    // }],
-    subjects: [{
-        type: String
-    }],
+
     mobile_number: {
         type: String,
         default:""
-    }
-
+    },
+    goals: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "LearningGoal"
+      }
+    ],
+      sessions: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "StudySession"
+      }
+    ]
 }, {
     timestamps: true
 });

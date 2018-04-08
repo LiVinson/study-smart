@@ -1,24 +1,36 @@
 import React, { Component } from 'react';
-import './style.css';
+import './Profile.css';
 import NavbarBoot from '../../components/NavbarBoot';
 import { Grid, Row, Col } from 'react-bootstrap';
 import GoalPanel from '../../components/GoalPanel';
 import GoalPanelMessage from '../../components/GoalPanelMessage';
+import GoalCard from '../../components/GoalCard';
+import AddGoalForm from '../../components/AddGoalForm';
 import API from "../../utils/API";
 import ModalBoot from '../../components/ModalBoot';
 import ProfileForm from '../../components/ProfileForm';
 class Profile extends Component {
 	state = {
-		firstLogin: true,
+		firstLogin: false,
 		profile: {
 			first_name: "",
 			last_name: "",
 			mobile_number: "",
 			learner_status: "",
-			subjects: [],
+			goals: [],
+			sessions: [],
 		},
-		learningGoals: [],
-		studySessions: [],
+		newGoal: {
+			category: "",
+			due_date: "",
+			goal: "",
+			measurement: "",
+			barriers: "",
+		},
+		newSession: {
+
+		},
+		showGoalModel: false,
 		error: ""
 	};
 
@@ -29,7 +41,7 @@ class Profile extends Component {
 	handleInputChange = event => {
 		const { name, value } = event.target;
 		let profile = Object.assign({}, this.state.profile);
-		profile[name]=value;
+		profile[name] = value;
 		this.setState({
 			profile: profile
 		})
@@ -37,11 +49,11 @@ class Profile extends Component {
 
 	createProfileSubmit = (event) => {
 		event.preventDefault();
-		const userProfile = Object.assign({userId: this.props.auth.userId}, this.state.profile);
-		API.createLearnerProfile(userProfile).then(response=> {
+		const userProfile = Object.assign({ userId: this.props.auth.userId }, this.state.profile);
+		API.createLearnerProfile(userProfile).then(response => {
 			console.log("response from createLearnerProfile", response);
-			
-			this.setState({firstLogin: false})
+
+			this.setState({ firstLogin: false })
 		})
 	};
 
@@ -61,16 +73,40 @@ class Profile extends Component {
 		})
 	};
 
+	showGoalForm = () => {
+		this.setState({
+			showGoalModel: true
+		})
+	};
+
+	handleGoalInputChange = event => {
+		const { name, value } = event.target;
+		let newGoal = Object.assign({}, this.state.newGoal);
+		newGoal[name] = value;
+		this.setState({
+			newGoal: newGoal
+		})
+	};
+
+
+	createGoalSubmit = () => {
+		console.log("you've created a goal!");
+		const goal = Object.assign({}, this.state.newGoal);
+		API.createGoal(goal, this.props.auth.userId).then(() => {
+			this.getProfile();
+		})
+	};
+
 	render() {
 		return (
 			<div>
 				<NavbarBoot />
-				<Grid fluid={true}>
+				<Grid fluid={true} className="pageContainer">
 					<Row>
 						<Col sm={3}>
-							<GoalPanel>
+							<GoalPanel showGoalForm={this.showGoalForm}>
 
-								{this.state.learningGoals.length ? (
+								{this.state.profile.goals.length ? (
 									<p>list of learning goals</p>
 								) : (
 										<GoalPanelMessage message='Looks like you need to create some learning goals!' />
@@ -94,6 +130,8 @@ class Profile extends Component {
 									/>
 								</ModalBoot>
 								: <div className="not-first">No modal</div>}
+							<ModalBoot closeButton show={this.state.showGoalModel} title='Add a Learning Goal'> <AddGoalForm handleGoalInputChange={this.handleGoalInputChange} createGoalSubmit={this.createGoalSubmit}/></ModalBoot>
+
 						</Col>
 					</Row>
 				</Grid>

@@ -17,7 +17,7 @@ module.exports = function (passport) {
 	// //When one learning goal is clicked
 	router.get("/goal/:goalId", /*isLoggedIn,*/ studyController.findOneGoal);
 	// //When submit on new learning goal form is clicked
-	router.post("/goal", /*isLoggedIn,*/ studyController.createOneGoal);
+	router.post("/goal/:userId", /*isLoggedIn,*/ studyController.createOneGoal);
 	router.patch("/goal/:goalId", /*isLoggedIn,*/ studyController.editGoal);
 
 	// STUDY SESSIONS  -------
