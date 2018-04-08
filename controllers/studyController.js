@@ -5,31 +5,32 @@ const axios = require("axios");
 module.exports = {
     // USER PROFILE------
 
-    //WORKING(Postman) - Sending name and Id (with out "ObjectId") - need to test with learning status and goals
+    //WORKING(Postman)
     createProfile: (req, res) => {
         console.log(req.body);
         const {
             userId,
             first_name,
             last_name,
-            mobile_number /*, learner_status*/
+            mobile_number,
+            learner_status
         } = req.body;
         db.Learner.create({
                 _userId: userId,
                 first_name,
                 last_name,
-                mobile_number
+                mobile_number,
+                learner_status
             })
             .then(response => res.json(response))
             .catch(err => res.status(422).json(err))
     },
 
-    //WORKING(Postman) - Sending name and Id (with out "ObjectId") - need to test with learning status and goals
+    //NEED TO RETEST (Postman) - Sending name and Id (with out "ObjectId") - need to test with learning status and goals
     findProfile: (req, res) => {
-
         db.Learner.findOne({
                 _userId: req.params.userId
-            }).then(response => res.json(response))
+            }).populate("goals").populate("sessions").then(response => res.json(response))
             .catch(err => res.status(422).json(err))
     },
 
@@ -44,19 +45,33 @@ module.exports = {
 
     // GOALS -----
 
-    //WORKING(Postman) - Pulls all goals associated with user
-    findAllGoals: (req, res) => {
-        db.LearningGoal.find({
+    //  NEED TO RETEST (Postman) - Pulls all goals associated with user
+    findAllGoals: (req, res) => { //Determine if needed
+        db.Learner.find({
                 _userId: req.params.userId
-            })
+            }).populate("goals")
             .then(response => res.json(response))
             .catch(err => res.status(422).json(err))
     },
 
-    //WORKING(Postman) - Date format: "2016-06-03T00:00:00.000Z",
+    //WORKING (Postman) - Date format: "2016-06-03T00:00:00.000Z",
+    //Add a new goal in to LG collection, and update Learner collection with goal's ID. Return updated learner profile
     createOneGoal: (req, res) => {
         db.LearningGoal.create(req.body)
-            .then(response => res.json(response))
+            .then(response => {
+                db.Learner.findOneAndUpdate({
+                    _userId: req.params.userId
+                }, {
+                    $push: {
+                        goals: response._id
+                    }
+                }, {
+                    new: true
+                }).then(profile => {
+                    res.json(profile); //confirm if sending profile back is what is needed...
+                })
+
+            })
             .catch(err => res.status(422).json(err))
     },
 
@@ -80,17 +95,40 @@ module.exports = {
 
     // STUDY SESSIONS ----------
 
-    //Working (Postman)
+    //NEED TO RETEST (Postman)
     createStudySession: (req, res) => {
         db.StudySession.create(req.body)
-            .then(response => res.json(response))
-            .catch(err => res.status(422).json(err))
+            .then(response => {
+                db.LearningGoal.findOneAndUpdate({
+                        _goalId: req.body.goalId
+                    }, {
+                        $push: {
+                            sessions: response._id
+                        }
+                    }, {
+                        new: true
+                    }).then(() => {
+                        db.Learner.findOneAndUpdate({
+                            _userId: req.params.userId
+                        }, {
+                            $push: {
+                                sessions: response._id
+                            }
+                        }, {
+                            new: true
+                        })
+                    })
+                    .then(profile => {
+                        res.json(response)
+                    })
+                    .catch(err => res.status(422).json(err))
 
+            })
     },
 
     //WORKING(Postman) -
     findAllStudySessions: (req, res) => {
-        db.StudySession.find({
+        db.Learner.find({
                 _userId: req.params.userId
             })
             .then(response => res.json(response))

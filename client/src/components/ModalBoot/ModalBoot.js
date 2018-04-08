@@ -5,7 +5,7 @@ import "./ModalBoot.css";
 
 const ModalBoot = (props) => {
     return (
-        <Modal show={true}>
+        <Modal show={props.show}>
             <Modal.Header>
                 <Modal.Title className="modalTitle">{props.title}</Modal.Title>
             </Modal.Header>
