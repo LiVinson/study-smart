@@ -7,6 +7,8 @@ import axios from 'axios';
 // import SignUp from "./components/SignUp";
 import Profile from "./pages/Profile";
 import HomePage from "./pages/HomePage";
+import ViewLearningGoal from "./pages/ViewLearningGoal";
+import ViewStudySession from "./pages/ViewStudySession";
 
 class App extends Component {
   state = {
@@ -17,17 +19,7 @@ class App extends Component {
       username:"",
       isAuthenticated:false
     },
-		profile: {
-			first_name: "",
-			last_name: "",
-      mobile_number: "",
-      learner_status: "",
-      subjects:[],
-      firstLogin:true
-		},
-		learningGoals: [],
-		studySessions: [],
-  
+	 
   };
 
   componentWillMount(){
@@ -124,10 +116,18 @@ class App extends Component {
           if(!loggedIn){
             return <Redirect to = "/" />
           } else {
-            return <Profile handleLogout = {this.handleLogout} profile = { this.state.profile} auth = { this.state.auth }/>
+            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
           } 
         }
         }/>
+        <Route exact path="/studysession/:id"  render = {()=> {
+          if(!loggedIn){
+            return <Redirect to = "/" />
+          } else {
+            return <ViewStudySession handleLogout = {this.handleLogout} auth = { this.state.auth }/>
+          } 
+        } 
+      }/>
         </div>
 
       </Router>

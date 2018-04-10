@@ -29,9 +29,8 @@ const StudySession = new Schema({
     resources: {
         type: String
     },
-    participants: [{
-        type: Schema.Types.ObjectId,
-        ref: "User"
+    invitees: [{
+        type: "String"
     }],
 
 });

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './Profile.css';
+import Calendar from '../../components/Calendar';
 import NavbarBoot from '../../components/NavbarBoot';
+import ButtonBar from '../../components/ButtonBar';
 import { Grid, Row, Col } from 'react-bootstrap';
 import GoalPanel from '../../components/GoalPanel';
 import GoalPanelMessage from '../../components/GoalPanelMessage';
@@ -9,6 +12,8 @@ import AddGoalForm from '../../components/AddGoalForm';
 import API from "../../utils/API";
 import ModalBoot from '../../components/ModalBoot';
 import ProfileForm from '../../components/ProfileForm';
+import StudySessionForm from '../../components/StudySessionForm';
+
 class Profile extends Component {
 	state = {
 		firstLogin: false,
@@ -28,9 +33,11 @@ class Profile extends Component {
 			barriers: "",
 		},
 		newSession: {
+			learningGoal: "",
 
 		},
-		showGoalModel: false,
+		showGoalModal: false,
+		showSessionModal: false,
 		error: ""
 	};
 
@@ -73,12 +80,6 @@ class Profile extends Component {
 		})
 	};
 
-	showGoalForm = () => {
-		this.setState({
-			showGoalModel: true
-		})
-	};
-
 	handleGoalInputChange = event => {
 		const { name, value } = event.target;
 		let newGoal = Object.assign({}, this.state.newGoal);
@@ -88,7 +89,6 @@ class Profile extends Component {
 		})
 	};
 
-
 	createGoalSubmit = () => {
 		console.log("you've created a goal!");
 		const goal = Object.assign({}, this.state.newGoal);
@@ -97,30 +97,76 @@ class Profile extends Component {
 		})
 	};
 
+	handleSessionInputChange = event => {
+		const { name, value } = event.target;
+		let newSession = Object.assign({}, this.state.newSession);
+		newSession[name] = value;
+		this.setState({
+			newSession: newSession
+		})
+	};
+
+
+	createSessionSubmit = () => {
+		console.log("you've created a study session!");
+		const session = Object.assign({}, this.state.newSession);
+		API.createSession(session, this.props.auth.userId).then(() => {
+			this.getProfile();
+		})
+	};
+
+
+	showSessionModal = () => {
+		this.setState({
+			showSessionModal: true
+		})
+	};
+	showGoalModal = () => {
+		this.setState({
+			showGoalModal: true
+		})
+	};
+
+	viewSessionDetails = (clickedevent) => {
+		// <Link to={"StudySession/" + book._id}/>
+	}; //Link  to event page with details
+
+	viewStudyInvites = () => {
+
+	}; //Link to view study invites
+
 	render() {
 		return (
 			<div>
 				<NavbarBoot />
+				<ButtonBar addGoal={this.showGoalModal} addSession={this.showSessionModal} viewStudySchedule={this.viewStudySchedule} viewStudyInvites={this.viewStudyInvites} />
 				<Grid fluid={true} className="pageContainer">
 					<Row>
 						<Col sm={3}>
 							<GoalPanel showGoalForm={this.showGoalForm}>
-
-								{this.state.profile.goals.length ? (
-									<p>list of learning goals</p>
-								) : (
+								<h2>Learning Goals</h2>
+                                {this.state.profile.goals.length ? (
+									<div>
+                                	{this.state.profile.goals.map(goal => (
+                                        <GoalCard key={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
+											
+									))}
+									</div>
+								 ) : (
 										<GoalPanelMessage message='Looks like you need to create some learning goals!' />
 									)}
 
 							</GoalPanel>
 						</Col>
 						<Col sm={9}>
-							<div>
-								<h1>React Calendar</h1>
-								<h1>It looks like you've been here before!</h1>
-								<p>{this.props.auth.username}</p>
-								<button onClick={this.props.handleLogout}>Log Out</button>
+						<h1>React Calendar</h1>
+
+							<div className="calendarContainer">
+								<Calendar />
+							
 							</div>
+							<p>{this.props.auth.username}</p>
+								<button onClick={this.props.handleLogout}>Log Out</button>
 
 							{this.state.firstLogin ?
 								<ModalBoot title='Create Your Profile!'>
@@ -130,7 +176,8 @@ class Profile extends Component {
 									/>
 								</ModalBoot>
 								: <div className="not-first">No modal</div>}
-							<ModalBoot closeButton show={this.state.showGoalModel} title='Add a Learning Goal'> <AddGoalForm handleGoalInputChange={this.handleGoalInputChange} createGoalSubmit={this.createGoalSubmit}/></ModalBoot>
+							<ModalBoot closeButton show={this.state.showGoalModal} title='Add a Learning Goal'> <AddGoalForm handleGoalInputChange={this.handleGoalInputChange} createGoalSubmit={this.createGoalSubmit}/></ModalBoot>
+							<ModalBoot closeButton show={this.state.showSessionModal} goals={this.state.profile.goals} title='Schedule a New Study Session'> <StudySessionForm handleSessionInputChange={this.handleSessionInputChange} createSessionSubmit={this.createSessionSubmit}/></ModalBoot>
 
 						</Col>
 					</Row>
