@@ -13,6 +13,7 @@ const ModalBoot = (props) => {
             <Modal.Body className="modal-body">
                 {props.children}
             </Modal.Body>
+            
             <Modal.Footer>
                 {/* <Button>Close</Button> */}
                 {/* <Button bsStyle="primary">Save Profile</Button> */}
