@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import "./AddGoalForm.css";
 
 const AddGoalForm = (props) => {
     return (
@@ -71,7 +72,8 @@ const AddGoalForm = (props) => {
                 />
         </FormGroup>
 
-        <Button onClick={props.createGoalSubmit}>Add Goal</Button>
+        <Button className="addGoalBtn" onClick={props.createGoalSubmit}>Add Goal</Button>
+        <Button className="cancelGoalBtn" onClick={props.hideGoalModal}>Cancel</Button>
 
     </form>
     );

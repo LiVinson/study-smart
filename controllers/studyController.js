@@ -97,17 +97,22 @@ module.exports = {
 
     //NEED TO RETEST (Postman)
     createStudySession: (req, res) => {
-        db.StudySession.create(req.body)
+        console.log("req.body inside createStudySession method in controller: ", req.body)
+        const { topic, start, end, location } = req.body;
+         
+        db.StudySession.create({topic, start, end, location})
             .then(response => {
+                console.log("response from creating a studysession", response);
+                console.log(req.body.goalId);
+                console.log("the user Id:", req.params.userId);
                 db.LearningGoal.findOneAndUpdate({
-                        _goalId: req.body.goalId
+                        _id: req.body.goalId
                     }, {
                         $push: {
                             sessions: response._id
                         }
-                    }, {
-                        new: true
-                    }).then(() => {
+                    }).then(goalresponse => {
+                        console.log("response after updating the goal with this event", goalresponse)
                         db.Learner.findOneAndUpdate({
                             _userId: req.params.userId
                         }, {

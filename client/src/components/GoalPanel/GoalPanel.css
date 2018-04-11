@@ -4,3 +4,8 @@
     background-color:lightgray;
     padding:10px;
 }
+
+.goalPanel > h2 {
+    text-align:center;
+    color:darkturquoise;
+}

@@ -1,7 +1,19 @@
 .pageContainer{
     height:100vh;
 }
-
+.mainContainer {
+    /* border:2px solid black; */
+    padding:2px;
+}
+.mainContainer > p{
+    text-align:center;
+    background-color:darkturquoise;
+    color:white;
+    padding-top:10px;
+    padding-bottom:10px;
+    font-size:24px;
+}
 .calendarContainer{
-    height: 80vh;
+    height:75vh;
+    /* border:2px solid black; */
 }
