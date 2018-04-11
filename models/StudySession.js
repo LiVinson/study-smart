@@ -14,11 +14,16 @@ const StudySession = new Schema({
         type: String,
         required: true,
     },
-    date: {
+    start: {
         type: Date,
         required: true,
     },
-    locationName: {
+    end: {
+        type: Date,
+        required: true,
+    },
+
+    location: {
         type: String,
         required: true
     },
@@ -33,6 +38,8 @@ const StudySession = new Schema({
         type: "String"
     }],
 
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model("StudySession", StudySession);

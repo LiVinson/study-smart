@@ -1,0 +1,24 @@
+.buttonBar > .btn {
+    padding-left:25px;
+    padding-right:25px;
+}
+
+.welcome {
+    padding-left:15px;
+    padding-right:15px;
+    width:25%;
+    border:solid 1px red;
+}
+.welcome > p{
+    color:white;
+    font-size:20px;
+    text-align:center;
+}
+.buttonBar{
+    display:flex;
+    justify-content:space-around;
+    padding-top: 5px;
+    padding-bottom:5px;
+    background-color:purple;
+    margin-bottom:5px;
+}
