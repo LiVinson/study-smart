@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import './Profile.css';
 import Calendar from '../../components/Calendar';
 import NavbarBoot from '../../components/NavbarBoot';
@@ -35,10 +36,10 @@ class Profile extends Component {
 		newSession: {
 
 			goalId: "",
-			topic: "",
+			title: "",
 			location:"",
-			start:"",
-			end:"",
+			start: moment(),
+			end: moment()
 
 		},
 		showGoalModal: false,
@@ -100,6 +101,7 @@ class Profile extends Component {
 	createGoalSubmit = () => {
 		console.log("you've created a goal!");
 		const goal = Object.assign({}, this.state.newGoal);
+		
 		API.createGoal(goal, this.props.auth.userId).then(() => {
 			this.setState({
 				showGoalModal: false
@@ -108,7 +110,27 @@ class Profile extends Component {
 		})
 	};
 
+	handleStartChange = date => {
+		console.log(date);
+		let newSession = Object.assign({}, this.state.newSession);
+		newSession.start = date;
+		this.setState({
+		  newSession: newSession
+		});
+	  };
+
+	  handleEndChange = date => {
+		console.log(date);
+		let newSession = Object.assign({}, this.state.newSession);
+		newSession.end = date;
+		this.setState({
+		  newSession: newSession
+		});
+	  }
+	
+	  
 	handleSessionInputChange = event => {
+		// console.log(event.target);
 		const { name, value } = event.target;
 		let newSession = Object.assign({}, this.state.newSession);
 		newSession[name] = value;
@@ -144,6 +166,12 @@ class Profile extends Component {
 	};
 		
 	hideGoalModal = () => {
+		this.setState({
+			showGoalModal: false
+		})
+	};
+
+	hideSessionModal = () => {
 		this.setState({
 			showGoalModal: false
 		})
@@ -193,7 +221,7 @@ class Profile extends Component {
 						<div className="mainContainer">
 							<p>Study Schedule</p>
 							<div className="calendarContainer">
-								<Calendar />
+								<Calendar studySessions={this.state.profile.sessions} />
 							</div>
 						</div>
 							<p>{this.props.auth.username}</p>
@@ -208,7 +236,7 @@ class Profile extends Component {
 								</ModalBoot>
 								: null}
 							<ModalBoot closeButton show={this.state.showGoalModal} title='Add a Learning Goal'> <AddGoalForm handleGoalInputChange={this.handleGoalInputChange} createGoalSubmit={this.createGoalSubmit} hideGoalModal={this.hideGoalModal}/></ModalBoot>
-							<ModalBoot closeButton show={this.state.showSessionModal} goals={this.state.profile.goals} title='Schedule a New Study Session'> <StudySessionForm handleSessionInputChange={this.handleSessionInputChange} createSessionSubmit={this.createSessionSubmit} goals={this.state.profile.goals}/></ModalBoot>
+							<ModalBoot closeButton show={this.state.showSessionModal} goals={this.state.profile.goals} title='Schedule a New Study Session'> <StudySessionForm handleStartChange={this.handleStartChange} handleEndChange={this.handleEndChange} handleSessionInputChange={this.handleSessionInputChange} createSessionSubmit={this.createSessionSubmit} hideSessionModal={this.hideSessionModal} goals={this.state.profile.goals} start={this.state.newSession.start} end={this.state.newSession.end}/></ModalBoot>
 
 						</Col>
 					</Row>

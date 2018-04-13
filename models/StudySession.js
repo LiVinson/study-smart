@@ -10,7 +10,7 @@ const StudySession = new Schema({
         type: Schema.Types.ObjectId,
         ref: "LearningGoal"
     },
-    topic: {
+    title: {
         type: String,
         required: true,
     },

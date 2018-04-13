@@ -98,9 +98,8 @@ module.exports = {
     //NEED TO RETEST (Postman)
     createStudySession: (req, res) => {
         console.log("req.body inside createStudySession method in controller: ", req.body)
-        const { topic, start, end, location } = req.body;
-         
-        db.StudySession.create({topic, start, end, location})
+        const { title, start, end, location } = req.body;
+        db.StudySession.create({title, start, end, location})
             .then(response => {
                 console.log("response from creating a studysession", response);
                 console.log(req.body.goalId);
@@ -112,23 +111,23 @@ module.exports = {
                             sessions: response._id
                         }
                     }).then(goalresponse => {
-                        console.log("response after updating the goal with this event", goalresponse)
+                        console.log("userId:", req.params.userId);
+
+                        console.log("response._id, after pushing into goal.", response._id);
                         db.Learner.findOneAndUpdate({
                             _userId: req.params.userId
                         }, {
                             $push: {
                                 sessions: response._id
                             }
-                        }, {
-                            new: true
                         })
-                    })
                     .then(profile => {
                         res.json(response)
                     })
                     .catch(err => res.status(422).json(err))
 
             })
+        })
     },
 
     //WORKING(Postman) -

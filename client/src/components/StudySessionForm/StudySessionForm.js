@@ -1,6 +1,7 @@
 import React from 'react'
 import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import DateTimePicker from '../DateTimePicker';
 
 const StudySessionForm = (props) => {
     return (
@@ -17,28 +18,32 @@ const StudySessionForm = (props) => {
 
          <FormGroup>
             <ControlLabel>Start Date &amp; Time</ControlLabel>
-            <FormControl
+            {/* <FormControl
                     // id="formControlsText"
                     type="text"
                     label="Text"
-                    placeholder="I want to learn"
                     name="start"
                     onChange={props.handleSessionInputChange}
                     value={props.start}
+                /> */}
+                <DateTimePicker name="start" timeframe={props.start} handleChange={props.handleStartChange}    
+    
                 />
         </FormGroup>
 
         <FormGroup>
-            <ControlLabel>End Date &amp; Time</ControlLabel>
-            <FormControl
+            <ControlLabel>End Date and Time</ControlLabel>
+            {/* <FormControl
                     // id="formControlsText"
                     type="text"
                     label="Text"
                     placeholder="I want to be able to..."
                     name="end"
-                    onChange={props.handleSessionInputChange}
+                    onChange={props.handleEndChange}
                     value={props.end}
-                />
+                /> */}
+            <DateTimePicker name="end" timeframe={props.end} handleChange={props.handleEndChange} />   
+
         </FormGroup>
 
         <FormGroup>
@@ -48,9 +53,9 @@ const StudySessionForm = (props) => {
                     type="text"
                     label="Text"
                     placeholder="example: data types, array methods"
-                    name="topic"
+                    name="title"
                     onChange={props.handleSessionInputChange}
-                    value={props.topic}
+                    value={props.title}
                 />
         </FormGroup>
         <FormGroup>
@@ -69,6 +74,8 @@ const StudySessionForm = (props) => {
 
         
         <Button onClick={props.createSessionSubmit}>Schedule Study Session</Button>
+        <Button onClick={props.hideSessionModal}>Cancel</Button>
+
     </form>
     );
 }
