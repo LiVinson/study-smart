@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 // import SignIn from "./components/SignIn";
@@ -15,18 +15,18 @@ class App extends Component {
     username: "",
     password: "",
     auth: {
-      userId:"",
-      username:"",
-      isAuthenticated:false
+      userId: "",
+      username: "",
+      isAuthenticated: false
     },
-	 
+
   };
 
-  componentWillMount(){
-    axios.get("/auth/isAuthenticated").then((result)=>{
-      const {userId, isAuthenticated,username} = result.data;
+  componentWillMount() {
+    axios.get("/auth/isAuthenticated").then((result) => {
+      const { userId, isAuthenticated, username } = result.data;
       this.setState({
-        auth:{
+        auth: {
           userId,
           isAuthenticated,
           username
@@ -36,8 +36,8 @@ class App extends Component {
   };
 
   handleChange = (event) => {
-    const {name, value} = event.target;    
-        // Set the state for the appropriate input field
+    const { name, value } = event.target;
+    // Set the state for the appropriate input field
     this.setState({
       [name]: value
     });
@@ -54,13 +54,13 @@ class App extends Component {
     this.setState({
       username: "",
       password: ""
-    }); 
-    const {name} = event.target;
+    });
+    const { name } = event.target;
     axios.post(name, newUser).then((data) => {
-      if (data.data.isAuthenticated){
-        const {userId, isAuthenticated,username} = data.data;
+      if (data.data.isAuthenticated) {
+        const { userId, isAuthenticated, username } = data.data;
         this.setState({
-          auth:{
+          auth: {
             userId,
             isAuthenticated,
             username
@@ -72,9 +72,9 @@ class App extends Component {
 
   handleLogout = (event) => {
     event.preventDefault();
-    axios.get("/auth/logout").then((result)=>{
+    axios.get("/auth/logout").then((result) => {
       this.setState({
-        auth:{
+        auth: {
           userId: "",
           username: "",
           isAuthenticated: false
@@ -88,46 +88,54 @@ class App extends Component {
     return (
       <Router>
         <div>
-        <Route exact path = "/" render = {()=> {
-          if(loggedIn){
-            return <Redirect to = "/profile" /> //Change this to "/profile" endpoint (React Endopoint)
-          } else{
-            return <HomePage //Change this to HomePage Component, which will require in everything needed to render Homepage
-              handleChange= {this.handleChange} 
-              handleSubmit = {this.handleSubmit}
-              username = {this.state.username}
-              password = {this.state.password}
-            />
-          } 
-        }}/>
-        <Route exact path = "/signup" render = {()=> {
-          if(loggedIn){
-            return <Redirect to = "/profile" /> 
-          } else{
-            return <HomePage 
-              handleChange= {this.handleChange} 
-              handleSubmit = {this.handleSubmit}
-              username = {this.state.username}
-              password = {this.state.password}
-            />
-          }  
-        }}/>
-        <Route exact path = "/profile" render = {()=> {
-          if(!loggedIn){
-            return <Redirect to = "/" />
-          } else {
-            return <Profile handleLogout = {this.handleLogout} auth = { this.state.auth }/>
-          } 
-        }
-        }/>
-        <Route exact path="/studysession/:id"  render = {()=> {
-          if(!loggedIn){
-            return <Redirect to = "/" />
-          } else {
-            return <ViewStudySession handleLogout = {this.handleLogout} auth = { this.state.auth }/>
-          } 
-        } 
-      }/>
+          <Route exact path="/" render={() => {
+            if (loggedIn) {
+              return <Redirect to="/profile" /> //Change this to "/profile" endpoint (React Endopoint)
+            } else {
+              return <HomePage //Change this to HomePage Component, which will require in everything needed to render Homepage
+                handleChange={this.handleChange}
+                handleSubmit={this.handleSubmit}
+                username={this.state.username}
+                password={this.state.password}
+              />
+            }
+          }} />
+          <Route exact path="/signup" render={() => {
+            if (loggedIn) {
+              return <Redirect to="/profile" />
+            } else {
+              return <HomePage
+                handleChange={this.handleChange}
+                handleSubmit={this.handleSubmit}
+                username={this.state.username}
+                password={this.state.password}
+              />
+            }
+          }} />
+          <Route exact path="/profile" render={() => {
+            if (!loggedIn) {
+              return <Redirect to="/" />
+            } else {
+              return <Profile handleLogout={this.handleLogout} auth={this.state.auth} />
+            }
+          }
+          } />
+          <Route exact path="/learninggoal/:goalId" render={(match) => {
+            if (!loggedIn) {
+              return <Redirect to="/" />
+            } else {
+              return <ViewLearningGoal match={match} handleLogout={this.handleLogout} auth={this.state.auth} />
+            }
+          }
+          } />
+          <Route exact path="/studysession/:sessionId" render={(match) => {
+            if (!loggedIn) {
+              return <Redirect to="/" />
+            } else {
+              return <ViewStudySession match={match} handleLogout={this.handleLogout} auth={this.state.auth} />
+            }
+          }
+          } />
         </div>
 
       </Router>

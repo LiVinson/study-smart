@@ -2,6 +2,7 @@ import React from 'react';
 import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "./AddGoalForm.css";
+import DateSelector from '../DateSelector';
 
 const AddGoalForm = (props) => {
     return (
@@ -9,6 +10,7 @@ const AddGoalForm = (props) => {
         <FormGroup>
             <ControlLabel>What category is your learning goal?</ControlLabel>
             <FormControl onChange={props.handleGoalInputChange} value={props.category} name="category" componentClass="select" placeholder="select">
+                    <option value="">Select One...</option>
                     <option value="Software Development">Software Development</option>
                     <option value="Science">Science</option>
                     <option value="Mathematics">Mathematics</option>
@@ -21,12 +23,12 @@ const AddGoalForm = (props) => {
         </FormGroup>
 
         <FormGroup>
-            <ControlLabel>What is your goal?</ControlLabel>
+            <ControlLabel>What is your learning goal?</ControlLabel>
             <FormControl
                     // id="formControlsText"
                     type="text"
                     label="Text"
-                    placeholder="I want to learn"
+                    placeholder="I want to learn..."
                     name="goal"
                     onChange={props.handleGoalInputChange}
                     value={props.goal}
@@ -39,7 +41,7 @@ const AddGoalForm = (props) => {
                     // id="formControlsText"
                     type="text"
                     label="Text"
-                    placeholder="I want to be able to..."
+                    placeholder="I will be able to..."
                     name="measurement"
                     onChange={props.handleGoalInputChange}
                     value={props.measurement}
@@ -48,14 +50,10 @@ const AddGoalForm = (props) => {
 
         <FormGroup>
             <ControlLabel>When do you want to have acheive this goal by?</ControlLabel>
-            <FormControl
-                    // id="formControlsText"
-                    type="text"
-                    label="date"
-                    placeholder="MM/DD/YYYY"
+                <DateSelector 
                     name="due_date"
-                    onChange={props.handleGoalInputChange}
-                    value={props.due_date}
+                    due_date={props.due_date}
+                    handleGoalDate={props.handleGoalDate}
                 />
         </FormGroup>
 
@@ -71,10 +69,10 @@ const AddGoalForm = (props) => {
                     value={props.barriers}
                 />
         </FormGroup>
-
-        <Button className="addGoalBtn" onClick={props.createGoalSubmit}>Add Goal</Button>
-        <Button className="cancelGoalBtn" onClick={props.hideGoalModal}>Cancel</Button>
-
+        <div className='goalFormBtnContainer'>
+            <Button className="addGoalBtn" onClick={props.createGoalSubmit}>Add Learning Goal</Button>
+            <Button className="cancelGoalBtn" onClick={props.hideGoalModal}>Cancel</Button>
+        </div>
     </form>
     );
 }

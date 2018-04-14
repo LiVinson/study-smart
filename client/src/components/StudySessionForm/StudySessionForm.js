@@ -2,6 +2,7 @@ import React from 'react'
 import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import DateTimePicker from '../DateTimePicker';
+import './StudySessionForm.css';
 
 const StudySessionForm = (props) => {
     return (
@@ -9,8 +10,9 @@ const StudySessionForm = (props) => {
         <FormGroup>
             <ControlLabel>Which learning goal are you studying for?</ControlLabel>
             <FormControl onChange={props.handleSessionInputChange} name="goalId" componentClass="select" placeholder="select">
+                  <option value="">Select one...</option>
                   {props.goals.map(goal=> (
-                      <option key ={goal._id} value={goal._id}>{goal.category}</option>
+                      <option key ={goal._id} value={goal._id}>{goal.category} - {goal.goal}</option>
 
                   ))}               
             </FormControl>
@@ -18,14 +20,6 @@ const StudySessionForm = (props) => {
 
          <FormGroup>
             <ControlLabel>Start Date &amp; Time</ControlLabel>
-            {/* <FormControl
-                    // id="formControlsText"
-                    type="text"
-                    label="Text"
-                    name="start"
-                    onChange={props.handleSessionInputChange}
-                    value={props.start}
-                /> */}
                 <DateTimePicker name="start" timeframe={props.start} handleChange={props.handleStartChange}    
     
                 />
@@ -33,15 +27,6 @@ const StudySessionForm = (props) => {
 
         <FormGroup>
             <ControlLabel>End Date and Time</ControlLabel>
-            {/* <FormControl
-                    // id="formControlsText"
-                    type="text"
-                    label="Text"
-                    placeholder="I want to be able to..."
-                    name="end"
-                    onChange={props.handleEndChange}
-                    value={props.end}
-                /> */}
             <DateTimePicker name="end" timeframe={props.end} handleChange={props.handleEndChange} />   
 
         </FormGroup>
@@ -71,11 +56,10 @@ const StudySessionForm = (props) => {
                     value={props.location}
                 />
         </FormGroup>
-
-        
-        <Button onClick={props.createSessionSubmit}>Schedule Study Session</Button>
-        <Button onClick={props.hideSessionModal}>Cancel</Button>
-
+        <div className="sessionFormBtnContainer">
+        <Button className="createSessionBtn" onClick={props.createSessionSubmit}>Schedule Study Session</Button>
+        <Button className="cancelSessionBtn" onClick={props.hideSessionModal}>Cancel</Button>
+        </div>
     </form>
     );
 }

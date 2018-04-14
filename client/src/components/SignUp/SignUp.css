@@ -1,0 +1,20 @@
+.signUpContainer{
+
+    padding:20px 25px 50px 25px;
+    height:100%;
+    border-left:darkturquoise 3px solid;
+    border-bottom: darkturquoise 3px solid;
+    color:darkturquoise;
+    margin-bottom:10px;
+
+}
+
+h1{
+    text-align:center;
+    margin-top: 0px;
+}
+
+.signUpBtn{
+    background-color: darkturquoise;
+    color:#fff;
+}

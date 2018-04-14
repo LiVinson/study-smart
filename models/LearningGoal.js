@@ -31,7 +31,8 @@ const LearningGoal = new Schema({
     },
     barriers:{
         type: String,
-        required: true
+        required: false,
+        default:"none"
     },
     sessions: [
         {

@@ -5,15 +5,28 @@ import NavbarBoot from '../../components/NavbarBoot';
 import ButtonBar from '../../components/ButtonBar';
 import { Grid, Row, Col } from 'react-bootstrap';
 import GoalPanel from '../../components/GoalPanel';
+import API from '../../utils/API';
 
 class ViewLearningGoal extends Component {
     state = {
-        goal: ""
+        profile: {},
+        goal: {}
     };
 
     componentDidMount() {
-        this.setState({
-            goal: this.props.clickedGoal
+        console.log("userId before API method:", this.props.auth.userId);
+        console.log("goalId before API methods:", this.props.match.match.params.goalId);
+        API.getLearnerProfile(this.props.auth.userId).then(response => {
+            console.log("profile -", response.data);
+            this.setState({
+                profile: response.data
+            })
+        })
+        .then(() => {
+            console.log("goalId:", this.props.match.match.params.id)
+            API.getGoal(this.props.match.match.params.goalId)
+            .then(res => this.setState({ goal: res.data }))
+            .catch(err => console.log(err));
 
         })
     };
@@ -21,14 +34,14 @@ class ViewLearningGoal extends Component {
     render() {
         return (
             <div>
-                <NavbarBoot />
+                <NavbarBoot home={false}/>
                 <ButtonBar />
                 <Grid fluid={true} className="pageContainer">
                     <Row>
                         <Col sm={3}>
                             <GoalPanel showGoalForm={this.showGoalForm}>
 
-                                {this.state.profile.goals.length ? (
+                                {this.state.profile ? (
                                     <p>list of learning goals</p>
                                 ) : (
                                         <div message='Looks like you need to create some learning goals!' />

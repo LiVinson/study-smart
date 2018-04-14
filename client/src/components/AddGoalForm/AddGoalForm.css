@@ -1,3 +1,19 @@
 .addGoalBtn{
-    margin-right:20px;
+    background-color: darkturquoise;
+    color:#fff;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.cancelGoalBtn{
+    background-color: purple;
+    color:#fff;
+    padding-left:15px;
+    padding-right:15px;
+    margin-left:15px;
+}
+
+.goalFormBtnContainer{
+    display:flex;
+    justify-content: flex-end;
 }
