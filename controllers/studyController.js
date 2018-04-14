@@ -86,7 +86,7 @@ module.exports = {
     findOneGoal: (req, res) => {
 
         db.LearningGoal.findOne({
-                _goalId: req.params.userId
+                _id: req.params.goalId
             })
             .then(response => res.json(response))
             .catch(err => res.status(422).json(err))

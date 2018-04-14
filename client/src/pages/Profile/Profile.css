@@ -7,8 +7,8 @@
 }
 .mainContainer > p{
     text-align:center;
-    background-color:darkturquoise;
-    color:white;
+    background-color:lightgray;
+    color:darkturquoise;
     padding-top:10px;
     padding-bottom:10px;
     font-size:24px;
@@ -16,4 +16,8 @@
 .calendarContainer{
     height:75vh;
     /* border:2px solid black; */
+}
+
+ul{ 
+    list-style-type: none; 
 }

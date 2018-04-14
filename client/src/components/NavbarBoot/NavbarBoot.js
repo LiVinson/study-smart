@@ -1,11 +1,10 @@
 import React from 'react';
-import { Navbar } from 'react-bootstrap';
-import { Nav } from 'react-bootstrap';
-import { NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
+
 import "./NavbarBoot.css";
 
 
-const NavbarBoot = () => (<Navbar className="customNav">
+const NavbarBoot = props => (<Navbar className="customNav">
   <Navbar.Header>
     <Navbar.Brand>
       <a href="#home">Study SMART</a>
@@ -13,14 +12,20 @@ const NavbarBoot = () => (<Navbar className="customNav">
     <Navbar.Toggle />
   </Navbar.Header>
   <Navbar.Collapse>
-  <Nav pullRight>
-    <NavItem eventKey={1} href="#">
-      Link
-    </NavItem>
-    <NavItem eventKey={2} href="#">
-      Link
-    </NavItem>
-  </Nav>
+
+    {props.home ? (null) : (
+      <Nav pullRight>
+        <NavItem eventKey={1} href="#">
+          <Button onClick={props.handleLogout}>Profile</Button>
+        </NavItem>
+        <NavItem eventKey={2} href="#">
+          <Button onClick={props.handleLogout}>Log Out</Button>
+        </NavItem>
+      </Nav>
+    )
+    }
+
+
   </Navbar.Collapse>
 </Navbar>);
 

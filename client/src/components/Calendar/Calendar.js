@@ -2,6 +2,7 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import React from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Link } from 'react-router-dom';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -41,10 +42,14 @@ const Calendar = props => (
     <BigCalendar
       selectable
       events={props.studySessions}
-      defaultView="month"
+      defaultView="week"
       startAccessor={((e) => {return new Date(e.start)})}
       endAccessor={((e) => {return new Date(e.end)})}
-      onSelectEvent={event => alert(event.title)}
+      onSelectEvent={event => {
+          console.log(event._id);
+          <Link to={"/studysession/" + event._id}/> //Add function tp reopen modal, view additional tabs
+        }
+      }
       defaultDate={new Date()}
 
     />

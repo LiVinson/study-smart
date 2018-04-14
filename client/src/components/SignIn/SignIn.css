@@ -1,0 +1,20 @@
+.signInContainer{
+
+    padding:20px 25px 50px 25px;
+    height:100%;
+    border-left:purple 3px solid;
+    border-bottom: purple 3px solid;
+    color:purple;
+    margin-bottom:10px;
+
+}
+
+h1{
+    text-align:center;
+    margin-top: 0px;
+}
+
+.signInBtn{
+    background-color: purple;
+    color:#fff;
+}
