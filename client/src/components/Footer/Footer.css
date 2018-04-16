@@ -6,4 +6,11 @@
     padding-bottom:25px;
     text-align:center;
     width:100%;
+    border-top:solid purple 5px;
+}
+
+.customFooter > a {
+    text-decoration:none;
+    color: purple;
+
 }

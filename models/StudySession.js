@@ -2,11 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const StudySession = new Schema({
 
-    _userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
-    _goalId: {
+    goalId: {
         type: Schema.Types.ObjectId,
         ref: "LearningGoal"
     },
@@ -31,9 +27,12 @@ const StudySession = new Schema({
     locationAddress: { //Determine if best to store as coordinates or as address
         type: String
     },
-    resources: {
-        type: String
-    },
+    resources: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "Resource"
+        }
+    ],
     invitees: [{
         type: "String"
     }],

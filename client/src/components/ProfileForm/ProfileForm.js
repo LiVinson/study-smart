@@ -1,25 +1,28 @@
 import React from "react";
-import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, Checkbox, HelpBlock } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import "./ProfileForm.css";
+
 const ProfileForm = (props) => {
     return (
         <form className="profile-form">
 
             <FormGroup>
                 <ControlLabel>Tell us a little about you!</ControlLabel>
-                <FormControl.Static>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Vivamus in tristique metus. Quisque sed rutrum est, quis volutpat eros.
-                     In lorem tortor, tristique eu varius sit amet, interdum sed diam. Proin 
-                     viverra vehicula sem, a sollicitudin nunc dapibus sit amet. Maecenas sit 
-                     amet risus non nibh convallis efficitur vitae sed sem. Nulla vitae nibh. </FormControl.Static>
+                <FormControl.Static>
+                    Tell us a little about you and what brings you to Study SMART. 
+                    Don't worry, your last name or phone number are not visible to other users and won't be shared. 
+                </FormControl.Static>
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup>    
+
                 <ControlLabel>First Name</ControlLabel>
+
                 <FormControl
                     type="text"
                     label="Text"
-                    placeholder="Sara"
+                    placeholder="First Name"
                     name="first_name"
                     onChange={props.handleInputChange}
                     value={props.first_name}
@@ -32,7 +35,7 @@ const ProfileForm = (props) => {
                     id="formControlsText"
                     type="text"
                     label="Text"
-                    placeholder="Doe"
+                    placeholder="Last Name"
                     name="last_name"
                     onChange={props.handleInputChange}
                     value={props.last_name}
@@ -40,7 +43,7 @@ const ProfileForm = (props) => {
             </FormGroup>
 
             <FormGroup>
-                <ControlLabel>Mobile Number</ControlLabel>
+                <ControlLabel>Mobile Number (US Only) - Optional</ControlLabel>
                 <FormControl
                     id="formControlsText"
                     type="text"
@@ -50,6 +53,7 @@ const ProfileForm = (props) => {
                     onChange={props.handleInputChange}
                     value={props.mobile_number}
                 />
+                <HelpBlock>This if you decide you would like a reminder text when your goal due date or a scheduled study session is approaching. You can always add it later.</HelpBlock>
             </FormGroup>
 
             <FormGroup>
@@ -59,27 +63,13 @@ const ProfileForm = (props) => {
                     <option value="High School Student">High School Student</option>
                     <option value="College Student (Undergraduate)">College Student (Undergraduate)</option>
                     <option value="College Student (Graduate)">College Student (Graduate)</option>
-                    <option value="Self-Improvement">Self-Improvement</option>
+                    <option value="Self-Improvement">Self-Improvement/For Fun</option>
                     <option value="Bootcamp">Bootcamp</option>
                 </FormControl>
             </FormGroup>
-
-            {/* // <FormGroup>
-            //     <ControlLabel>What subject(s) are you studying?</ControlLabel>
-            //     <Checkbox>Computer Science</Checkbox>
-            //     <Checkbox>Software Development</Checkbox>
-            //     <Checkbox>Biology</Checkbox>
-            //     <Checkbox>Chemistry</Checkbox>
-            //     <Checkbox>Physics</Checkbox>
-            //     <Checkbox>Anatomy</Checkbox>
-            //     <Checkbox>History/Political Science</Checkbox>
-            //     <Checkbox>Foriegn Language</Checkbox>
-            //     <Checkbox>Social Science</Checkbox>
-            //     <Checkbox>Mathematics</Checkbox>
-            //     <Checkbox>Other</Checkbox>
-            // </FormGroup> */}
-
-        <Button onClick={props.createProfileSubmit}>Submit Profile</Button>
+        <div className="createProfileBtnContainer">
+            <Button className="createProfileBtn" onClick={props.createProfileSubmit}>Submit Your Profile!</Button>
+        </div>
         </form>
     );
 }

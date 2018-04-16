@@ -4,29 +4,33 @@ import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
 import "./NavbarBoot.css";
 
 
-const NavbarBoot = props => (<Navbar className="customNav">
+const NavbarBoot = props => (
+<Navbar fluid className="customNav">
   <Navbar.Header>
-    <Navbar.Brand>
-      <a href="#home">Study SMART</a>
+    <Navbar.Brand className='navHeader'>
+      Study SMART
     </Navbar.Brand>
     <Navbar.Toggle />
   </Navbar.Header>
-  <Navbar.Collapse>
 
-    {props.home ? (null) : (
-      <Nav pullRight>
-        <NavItem eventKey={1} href="#">
-          <Button onClick={props.handleLogout}>Profile</Button>
-        </NavItem>
-        <NavItem eventKey={2} href="#">
-          <Button onClick={props.handleLogout}>Log Out</Button>
-        </NavItem>
-      </Nav>
+
+  {props.home ?
+    (null) : (
+      <Navbar.Collapse>
+        {/* <Navbar.Text>
+          Welcome {props.first_name}!
+        </Navbar.Text> */}
+        <Nav pullRight>
+          <NavItem className="navLink" eventKey={1} href="#">
+            <Button bsStyle="link" onClick={props.handleLogout}>Profile</Button>
+          </NavItem> 
+          <NavItem className="navLink"eventKey={2} href="#">
+            <Button  bsStyle="link" onClick={props.handleLogout}>Log Out</Button>
+          </NavItem>
+        </Nav>
+      </Navbar.Collapse>
     )
-    }
-
-
-  </Navbar.Collapse>
+  }
 </Navbar>);
 
 export default NavbarBoot;

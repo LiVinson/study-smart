@@ -1,6 +1,6 @@
 .goalPanel{
     border: solid 2px black;
-    height:100%;
+    min-height:85vh;
     background-color:lightgray;
     padding:10px;
 }

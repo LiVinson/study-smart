@@ -5,12 +5,25 @@ import NavbarBoot from '../../components/NavbarBoot';
 import ButtonBar from '../../components/ButtonBar';
 import { Grid, Row, Col } from 'react-bootstrap';
 import GoalPanel from '../../components/GoalPanel';
+import GoalPanelMessage from '../../components/GoalPanelMessage';
+import GoalCard from '../../components/GoalCard';
+import moment from 'moment';
 import API from '../../utils/API';
 
 class ViewLearningGoal extends Component {
     state = {
-        profile: {},
-        goal: {}
+        profile: {
+            first_name: "",
+			last_name: "",
+			mobile_number: "",
+			learner_status: "",
+			goals: [],
+			sessions: [],
+			invitations: []
+        },
+        goal: {
+
+        }
     };
 
     componentDidMount() {
@@ -23,7 +36,7 @@ class ViewLearningGoal extends Component {
             })
         })
         .then(() => {
-            console.log("goalId:", this.props.match.match.params.id)
+            // console.log("goalId:", this.props.match.match.params.id)
             API.getGoal(this.props.match.match.params.goalId)
             .then(res => this.setState({ goal: res.data }))
             .catch(err => console.log(err));
@@ -35,41 +48,59 @@ class ViewLearningGoal extends Component {
         return (
             <div>
                 <NavbarBoot home={false}/>
-                <ButtonBar />
                 <Grid fluid={true} className="pageContainer">
-                    <Row>
-                        <Col sm={3}>
-                            <GoalPanel showGoalForm={this.showGoalForm}>
+                <ButtonBar first_name={this.state.profile.first_name} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal} viewStudyInvites={this.viewStudyInvites}/>
 
-                                {this.state.profile ? (
-                                    <p>list of learning goals</p>
-                                ) : (
-                                        <div message='Looks like you need to create some learning goals!' />
-                                    )}
+                    <Row>
+                        <Col md={3} sm={12}>
+                            <GoalPanel>
+                            <h2>Learning Goals</h2>
+                            {this.state.profile.goals.length ? (
+									
+                                    <div> 
+                                       {this.state.profile.goals.map(goal => (
+                                           // <li key={goal._id}>
+                                            //    <Link to={"/learninggoal/" + goal._id}>
+                                                   <GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
+                                            //    </Link>
+                                           // </li>
+                                       ))}
+                                    </div>
+                                   
+                               ) : (
+                                       <GoalPanelMessage message='Looks like you need to create some learning goals!' />
+                                   )}
 
                             </GoalPanel>
                         </Col>
-                        <Col sm={9}>
-                            <Row>
-                                <Col sm={12}>
-                                    <div>
-                                        Information on this learning goal
-                                    </div>
-                                </Col>
-                            </Row>
+                        <Col md={9} sm={12}>
+                            <div className='learningGoalContainer'>
+                                <Row>
+                                    <Col sm={12}>
+                                        <div className='learningGoalInfo'>
+                                            <h2>Category:{this.state.goal.category}</h2>
+                                            <p>Goal: {this.state.goal.goal}</p>
+                                            <p>Measurement:{this.state.goal.measurement}</p>
+                                            <p>Barriers:{this.state.goal.barriers}</p>
+                                            <p>Created Date:{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
+                                            <p>Study Hours Completed So Far:</p>
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <Row>
-                                <Col sm={6}>
-                                    <div>
-                                        Past Study Sessions        
-                                    </div>
-                                </Col>
-                                <Col sm={6}>
-                                    <div>
-                                        Upcoming Study Sessions        
-                                    </div>
-                                </Col>
-                            </Row>
+                                <Row>
+                                    <Col sm={6}>
+                                        <div>
+                                            Past Study Sessions        
+                                        </div>
+                                    </Col>
+                                    <Col sm={6}>
+                                        <div>
+                                            Upcoming Study Sessions        
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
                         </Col>
                     </Row>
                 </Grid>

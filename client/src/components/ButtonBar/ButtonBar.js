@@ -1,17 +1,54 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import './ButtonBar.css'
+import { Link } from 'react-router-dom';
 
 const ButtonBar = props => {
     return (
-        <div className="buttonBar">
-        <div className="welcome"><p>Welcome {props.first_name}!</p></div>
+        <Row className='buttonBar'>
+            <Col md={3} xs={12}>
+                <Link to={"/profile"}>
+                    <Button block>View Study Calendar</Button>
+                </Link>
+            </Col>
+
+            <Col md={3} xs={12}>
+                <Button block onClick={props.showGoalModal}>Add New Learning Goal</Button>
+            </Col>
+
+            <Col md={3} xs={12}>
+                <Button disabled={props.goalCreated < 1} block onClick={props.showSessionModal}>Add New Study Session</Button>
+
+            </Col>
+            <Col md={3} xs={12}>
+                <Link to={"/"}>
+                    <Button block>View Study Invites</Button>
+                </Link>
+            </Col>
+        </Row>
+
+
+
+
+
+
+    //     <div className="buttonBar">
+    //     {/* <div className="welcome"><p>Welcome {props.first_name}!</p></div> */}
     
-            <Button onClick={props.viewSchedule}>View Study Schedule</Button>
-            <Button onClick={props.showGoalModal}>Add New Learning Goal</Button>
-            <Button onClick={props.showSessionModal}>Add New Study Session</Button>
-            <Button onClick={props.viewStudyInvites}>View Study Invites</Button>
-        </div>
+    // <ButtonGroup>
+    //         <Link to={"/profile"}>
+    //             <Button>View Study Calendar</Button>
+    //         </Link>
+
+    //         <Button onClick={props.showGoalModal}>Add New Learning Goal</Button>
+    //         <Button onClick={props.showSessionModal}>Add New Study Session</Button>
+            
+    //         <Link>
+    //         <Button>View Study Invites</Button>
+    //         </Link>
+
+    // </ButtonGroup>
+    //     </div>
     )
 
 };

@@ -6,7 +6,7 @@ const GoalPanelMessage = (props) => {
     return (
         <Panel className="goalPanelMessage">
             <Panel.Body>
-                {props.message}
+                {props.children}
             </Panel.Body>
         </Panel>
     );
