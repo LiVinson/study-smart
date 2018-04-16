@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 // import { Button } from 'react-bootstrap';
 import "./ModalBoot.css";
 
-const ModalBoot = (props) => {
+const ModalBoot = props => {
     return (
         <Modal show={props.show}>
             <Modal.Header>

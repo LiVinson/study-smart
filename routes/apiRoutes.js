@@ -27,8 +27,9 @@ module.exports = function (passport) {
 	// //When certain event is Clicked 
 	router.get("/studysession/:sessionId", /*isLoggedIn,*/  studyController.findOneStudySessions);
 	router.post("/studysession/:userId", /*isLoggedIn,*/  studyController.createStudySession);
+	router.post("/studyresource/:sessionId", /*isLoggedIn,*/  studyController.addStudyResource)
 
-return router;
+	return router;
 };
 
 /*Notes - Need to Do:

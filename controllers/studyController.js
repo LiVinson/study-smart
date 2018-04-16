@@ -98,36 +98,48 @@ module.exports = {
     //NEED TO RETEST (Postman)
     createStudySession: (req, res) => {
         console.log("req.body inside createStudySession method in controller: ", req.body)
-        const { title, start, end, location } = req.body;
-        db.StudySession.create({title, start, end, location})
+        const {
+            title,
+            start,
+            end,
+            location,
+            goalId
+        } = req.body;
+        db.StudySession.create({
+                title,
+                start,
+                end,
+                location,
+                goalId
+            })
             .then(response => {
-                console.log("response from creating a studysession", response);
-                console.log(req.body.goalId);
-                console.log("the user Id:", req.params.userId);
+                // console.log("response from creating a studysession", response);
+                // console.log(req.body.goalId);
+                // console.log("the user Id:", req.params.userId);
                 db.LearningGoal.findOneAndUpdate({
-                        _id: req.body.goalId
-                    }, {
-                        $push: {
-                            sessions: response._id
-                        }
-                    }).then(goalresponse => {
-                        console.log("userId:", req.params.userId);
+                    _id: req.body.goalId
+                }, {
+                    $push: {
+                        sessions: response._id
+                    }
+                }).then(goalresponse => {
+                    console.log("userId:", req.params.userId);
 
-                        console.log("response._id, after pushing into goal.", response._id);
-                        db.Learner.findOneAndUpdate({
+                    console.log("response._id, after pushing into goal.", response._id);
+                    db.Learner.findOneAndUpdate({
                             _userId: req.params.userId
                         }, {
                             $push: {
                                 sessions: response._id
                             }
                         })
-                    .then(profile => {
-                        res.json(response)
-                    })
-                    .catch(err => res.status(422).json(err))
+                        .then(profile => {
+                            res.json(response)
+                        })
+                        .catch(err => res.status(422).json(err))
 
+                })
             })
-        })
     },
 
     //WORKING(Postman) -
@@ -139,11 +151,38 @@ module.exports = {
             .catch(err => res.status(422).json(err))
     },
 
-    //determine if this needed - may store all events in state, and reference from there...
+    //Locate study session, and get associated resources for display
     findOneStudySessions: (req, res) => {
-        db.StudySession.findOne({})
+        console.log("inside controller.findOneStudySession - req.params.sessionId", req.params.sessionId)
+        db.StudySession.findOne({
+                _id: req.params.sessionId
+            }).populate("resources")
             .then(response => res.json(response))
             .catch(err => res.status(422).json(err))
+    },
+
+    addStudyResource: (req, res) => {
+        const { description, url } = req.body;
+        db.Resource.create({
+                description,
+                url
+            })
+            .then(response => {
+                db.StudySession.findOneAndUpdate({
+                        _id: req.params.sessionId
+                    }, {
+                        $push: {
+                            resources: response._id
+                        }
+                    }, {
+                        new: true
+                    })
+                    .then(sessionResponse => {
+                        res.json(sessionResponse)
+                    })
+                    .catch(err => res.status(422).json(err))
+
+            })
     }
 }
 

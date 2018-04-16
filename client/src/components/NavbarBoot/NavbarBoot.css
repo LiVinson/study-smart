@@ -1,6 +1,25 @@
 .customNav{
     background-color:darkturquoise;
-    padding:5px;
+    padding-top:10px;
+    padding-bottom:10px;
     margin-bottom:0px;
     border:none;
+ 
 }
+
+.navHeader{
+    font-size:34px;
+    color:#fff!important;
+    font-family: 'Gugi', cursive;
+    margin-left:10px!important;
+}
+
+.navLink{
+    padding:1px!important;
+}
+
+ul.navbar-right{
+    margin-right:10px;
+    padding-top:5px;
+}
+

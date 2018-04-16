@@ -1,20 +1,20 @@
-.pageContainer{
+/* .pageContainer{
     height:100vh;
-}
+} */
 .mainContainer {
     /* border:2px solid black; */
     padding:2px;
 }
-.mainContainer > p{
+.mainContainer > h2{
     text-align:center;
     background-color:lightgray;
-    color:darkturquoise;
+    color:purple;
     padding-top:10px;
     padding-bottom:10px;
-    font-size:24px;
+    margin-top:0px;
 }
 .calendarContainer{
-    height:75vh;
+    height:85vh;
     /* border:2px solid black; */
 }
 

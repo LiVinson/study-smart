@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const LearningGoal = new Schema({
 
-    // _userId: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "User"
-    // },
+const LearningGoal = new Schema({
 
     category: {
         type: String,

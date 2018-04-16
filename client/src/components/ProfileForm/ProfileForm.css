@@ -1,3 +1,14 @@
 .profile-form{
     overflow-y: auto;
 }
+
+.createProfileBtnContainer{
+    display:flex;
+    justify-content: flex-end;
+}
+.createProfileBtn{
+    background-color: purple;
+    color:#fff;
+    padding-left:20px;
+    padding-right:20px;
+}

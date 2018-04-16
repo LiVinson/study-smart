@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "./AddGoalForm.css";
 import DateSelector from '../DateSelector';
@@ -40,7 +40,6 @@ const AddGoalForm = (props) => {
             <FormControl
                     // id="formControlsText"
                     type="text"
-                    label="Text"
                     placeholder="I will be able to..."
                     name="measurement"
                     onChange={props.handleGoalInputChange}
@@ -62,7 +61,6 @@ const AddGoalForm = (props) => {
             <FormControl
                     // id="formControlsText"
                     type="text"
-                    label="Text"
                     placeholder="I want to be able to..."
                     name="barriers"
                     onChange={props.handleGoalInputChange}

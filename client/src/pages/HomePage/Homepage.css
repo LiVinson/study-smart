@@ -1,14 +1,21 @@
-p > span {
+*{
+    font-family:'Open Sans', sans-serif;
+}
+
+.smartText > span {
     color:darkturquoise;
     font-weight:bold;
     font-size:20px;
 }
 
-h3{
+.homePanelTitle{
     color:purple;
     text-align:center;
+    font-family:'Gugi', cursive;
+    margin-bottom:30px;
 }
 
-.row{
-    padding-bottom:15px;
+.homeMainPanel{
+    padding-top:25px;
+    padding-bottom:35px;
 }
