@@ -61,7 +61,7 @@ const AddGoalForm = (props) => {
             <FormControl
                     // id="formControlsText"
                     type="text"
-                    placeholder="I want to be able to..."
+                    placeholder=""
                     name="barriers"
                     onChange={props.handleGoalInputChange}
                     value={props.barriers}

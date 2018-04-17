@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { Tabs, Tab } from 'react-bootstrap';
 import { FormControl, FormGroup, ControlLabel, Button, HelpBlock } from "react-bootstrap";
 import StudyBuddyForm from '.././StudyBuddyForm';
+import './SessionTabModal.css'
 
 
 const SessionTabModal = props => {
@@ -16,18 +17,21 @@ const SessionTabModal = props => {
                 <Tabs defaultActiveKey={1} animation={true} id="studySessionDetails">
                     <Tab eventKey={1} title="Study Session">
                         <div>
-                            <h2>Study Session Details</h2>
+                            <h2 className="sessionDetailHeader">Study Session Details</h2>
                             {associatedGoal ? (<span>
-                                <p>Goal Category - {associatedGoal.category}</p> <p>Associated Goal:{associatedGoal.goal}</p></span>) : (null)}
-                            <p>Study Session Topics: {props.selectedSession.title}</p>
-                            <p>Scheduled Date: {props.selectedSession.start}</p>
-                            <p>End: {props.selectedSession.end}</p>
+                                <p><b>Goal Category:</b> {associatedGoal.category}</p>
+                                 <p><b>Associated Goal:</b> {associatedGoal.goal}</p></span>) : (null)}
+                            <p><b>Study Session Topics:</b> {props.selectedSession.title}</p>
+                            <p><b>Start Date and Time:</b> {props.selectedSession.start}</p>
+                            <p><b>End Date and Time:</b> {props.selectedSession.end}</p>
+                            <p><b>Location:</b> {props.selectedSession.location}</p>
+
 
                         </div>
                     </Tab>
                     <Tab eventKey={2} title="Resources">
                         <div>
-                            <h2>Add Resources</h2>
+                            <h2 className="sessionDetailHeader">Add Resources</h2>
 
                             <form>
                                 <FormGroup>
@@ -60,24 +64,24 @@ const SessionTabModal = props => {
                                             value={props.url}
                                         />
                                 </FormGroup>
-                                <Button onClick={props.handleResourceSubmit}>Add New Resource</Button>
+                                <Button className="resourceBtn" onClick={props.handleResourceSubmit}>Add New Resource</Button>
                                 {/* On click, save resource into database for this event  */}
                             </form>
                             
                             <div>
-                                <p>Saved Resources</p>
+                                <b><h4 className="centerHeader">Saved Resources</h4></b>
 
                                 {resourcesArr.length ? (                         
                                     (props.selectedSession.resources).map(resource => (
-                                        <div key={resource._id}>
-                                            <div>
+                                        <div key={resource._id} className="resourceDiv">
+                                            
                                                 <p>{resource.description}</p>
-                                                <p>{resource.url}</p>
-                                            </div>
-                                            <Button> 
+                                                <a href={resource.url} target="_blank"><p>{resource.url}</p></a>
+                                            
+                                            {/* <Button> 
                                             {/* // onClick={props.removeResource(props.selectedSession._id, resource._id)}> */}
-                                                Remove Resource
-                                            </Button>
+                                                {/* Remove Resource
+                                            </Button> */} 
                                         </div>
                                         )
                                     )) : (<div>No Resources Currently Saved</div>)} 
@@ -89,7 +93,7 @@ const SessionTabModal = props => {
                     </Tab>
 
                     <Tab eventKey={3} title="Study Buddies">
-                        <h1>Study Buddies</h1>
+                        <h2 className="sessionDetailHeader">Study Buddies</h2>
                         {(props.selectedSession.owner === props.auth.userId) ? (
                             <StudyBuddyForm 
                                 study_buddy={props.study_buddy} 
@@ -107,8 +111,8 @@ const SessionTabModal = props => {
             </Modal.Body>
 
             <Modal.Footer>
-                {(props.selectedSession.owner === props.auth.userId) ? (<Button>Edit Study Session</Button>) : (null)}
-                <Button onClick={props.hideSessionDetails}>Close</Button>
+                {/* {(props.selectedSession.owner === props.auth.userId) ? (<Button>Edit Study Session</Button>) : (null)} */}
+                <Button className="sessionDetailBtn" onClick={props.hideSessionDetails}>Close</Button>
             </Modal.Footer>
         </Modal>
     )

@@ -22,7 +22,15 @@ class ViewLearningGoal extends Component {
 			invitations: []
         },
         goal: {
-
+            _id:"",
+            barriers:"",
+            category: "",
+            due_date: "",
+            createdAt: "",
+            due_date:"",
+            goal: "",
+            measurement: "",
+            sessions: [],
         }
     };
 
@@ -41,13 +49,29 @@ class ViewLearningGoal extends Component {
             .then(res => this.setState({ goal: res.data }))
             .catch(err => console.log(err));
 
+
         })
     };
+
+    // getPastEvents() {
+    //     this.state.profile.goals.sessions.filter(session => {
+    //         return ((session.end).diff(moment()) < 0)
+    //      })
+    // }
+
+    // getUpcomingEvents() {
+    //     this.state.profile.goals.sessions.filter(session => {
+    //         const endDate=session.end;
+    //         console.log(endDate);
+    //         const now = moment()
+    //         return ((moment(endDate)).diff(now) > 0)
+    //      })
+    // }
 
     render() {
         return (
             <div>
-                <NavbarBoot home={false}/>
+                <NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout}/>
                 <Grid fluid={true} className="pageContainer">
                 <ButtonBar first_name={this.state.profile.first_name} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal} viewStudyInvites={this.viewStudyInvites}/>
 
@@ -78,25 +102,52 @@ class ViewLearningGoal extends Component {
                                 <Row>
                                     <Col sm={12}>
                                         <div className='learningGoalInfo'>
-                                            <h2>Category:{this.state.goal.category}</h2>
-                                            <p>Goal: {this.state.goal.goal}</p>
-                                            <p>Measurement:{this.state.goal.measurement}</p>
-                                            <p>Barriers:{this.state.goal.barriers}</p>
-                                            <p>Created Date:{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
-                                            <p>Study Hours Completed So Far:</p>
+                                            <h2>Goal Category: {this.state.goal.category}</h2>
+                                            <p><span>My Goal: </span> {this.state.goal.goal}</p>
+                                            <p><span>Measurement: </span>{this.state.goal.measurement}</p>
+                                            <p><span>Barriers: </span>{this.state.goal.barriers}</p>
+                                            <p><span>Created Date: </span>{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
+                                            <p><span>Total Study Hours Scheduled So Far: </span></p>
+                                            <p><span>Total Study Hours Completed: </span></p>
+
                                         </div>
                                     </Col>
                                 </Row>
 
                                 <Row>
                                     <Col sm={6}>
-                                        <div>
-                                            Past Study Sessions        
+                                        <div className='pastSessionsDiv'>
+                                            <h3>Past Study Sessions:</h3>    
+
+                                            {/* {this.getPastEvents.length ? (
+                                                this.getPastEvents.map(pastEvent => {
+                                                    <p>{pastEvent.topic}</p>
+                                                })
+                                            ) : ( */}
+                                            <div>You have not completed any study sessions for this goal yet!</div>
+                                            {/* // )} */}
                                         </div>
                                     </Col>
                                     <Col sm={6}>
-                                        <div>
-                                            Upcoming Study Sessions        
+                                    <div className='upcomingSessionsDiv'>
+                                            <h3>Upcoming Study Sessions:</h3>  
+                                                
+                                                <div className="upcomingEventDiv">
+                                                    <p>Study Topics: const, let, and block scoping</p> 
+                                                    <p>Date: April 20, 2018 at 11:00 AM</p>
+                                                </div>
+
+                                                <div className="upcomingEventDiv">
+                                                    <p>Study Topics: Arrow functions and promises</p> 
+                                                    <p>Date: April 21, 2018 at 4:00 PM</p>
+                                                </div>
+
+                                               {/* {this.getUpcomingEvents.length ? (
+                                                this.getUpcomingEvents.map(futureEvent => {
+                                                    <p>{futureEvent.topic}</p>
+                                                })
+                                            ) : (<div>You have no study sessions for this goal scheduled. Get to studying!</div>)} */}
+
                                         </div>
                                     </Col>
                                 </Row>

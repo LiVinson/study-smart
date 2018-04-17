@@ -87,7 +87,7 @@ module.exports = {
 
         db.LearningGoal.findOne({
                 _id: req.params.goalId
-            })
+            }).populate("sessions")
             .then(response => res.json(response))
             .catch(err => res.status(422).json(err))
     },

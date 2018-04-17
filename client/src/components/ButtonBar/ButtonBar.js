@@ -22,7 +22,7 @@ const ButtonBar = props => {
             </Col>
             <Col md={3} xs={12}>
                 <Link to={"/"}>
-                    <Button block>View Study Invites</Button>
+                    <Button disabled block>Study Invite-<span className="italics">Coming soon!</span></Button>
                 </Link>
             </Col>
         </Row>

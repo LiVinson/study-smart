@@ -1,0 +1,25 @@
+.sessionDetailHeader{
+    text-align:center;
+    margin-bottom:15px;
+    color:purple;
+}
+
+.sessionDetailBtn{
+    background-color:darkturquoise;
+    color:white;
+}
+
+.resourceBtn{
+    background-color:purple;
+    color:white;
+}
+
+.resourceDiv{
+    border: black solid 2px;
+    border-radius:15px;
+    padding:5px 15px 5px 15px
+}
+
+.centerHeader{
+    text-align:center;
+}

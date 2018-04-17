@@ -1,4 +1,17 @@
 .goalCard{
-    border: 1px solid black;
+    border: 2px groove purple;
     margin-bottom:10px;
+    color:black;
+}
+
+.goalCard:hover{
+    border: 3px groove purple;
+}
+.goalCardText {
+    margin-bottom:5px;
+
+}
+
+.goalLink:hover{
+    text-decoration:none;
 }
