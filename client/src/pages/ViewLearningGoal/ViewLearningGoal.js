@@ -107,8 +107,8 @@ class ViewLearningGoal extends Component {
                                             <p><span>Measurement: </span>{this.state.goal.measurement}</p>
                                             <p><span>Barriers: </span>{this.state.goal.barriers}</p>
                                             <p><span>Created Date: </span>{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
-                                            <p><span>Total Study Hours Scheduled So Far: </span></p>
-                                            <p><span>Total Study Hours Completed: </span></p>
+                                            <p><span>Total Study Hours Scheduled So Far: 4 hours</span></p>
+                                            <p><span>Total Study Hours Completed: 0 hours - Time to hit the books!</span></p>
 
                                         </div>
                                     </Col>
