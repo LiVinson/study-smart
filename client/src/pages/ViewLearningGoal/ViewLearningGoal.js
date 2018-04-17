@@ -58,7 +58,7 @@ class ViewLearningGoal extends Component {
                             {this.state.profile.goals.length ? (
 									
                                     <div> 
-                                       {this.state.profile.goals.map(goal => (
+                                       {this.state.profile.goals.slice(0).reverse().map(goal => (
                                            // <li key={goal._id}>
                                             //    <Link to={"/learninggoal/" + goal._id}>
                                                    <GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />

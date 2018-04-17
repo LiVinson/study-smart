@@ -38,16 +38,24 @@ class Profile extends Component {
 		newSession: {
 
 			goalId: "",
+			owner: this.props.auth.userId,
+			owner_name:"",
 			title: "",
-			location: "",
 			start: moment(),
-			end: moment()
+			duration_hours:0,
+			duration_minutes:0,
+			location: "",
+			
 
 		},
 		selectedSession:{
 			_id:"",
+			active:true,
 			title: "",
+			owner:"",
+			owner_name:"",
 			start:"",
+			duration:"",
 			end:"",
 			location:"",
 			createdAt:"",
@@ -58,6 +66,10 @@ class Profile extends Component {
 		newResource:{
 			description:"",
 			url:""
+		},
+		study_buddy:{
+			email:"",
+			emailError:""
 		},
 
 		showGoalModal: false,
@@ -75,7 +87,7 @@ class Profile extends Component {
 	//Profile Form input
 	handleInputChange = event => {
 		const { name, value } = event.target;
-		let profile = Object.assign({}, this.state.profile);
+		const profile = Object.assign({}, this.state.profile);
 		profile[name] = value;
 		this.setState({
 			profile: profile
@@ -93,13 +105,33 @@ class Profile extends Component {
 			this.setState({ firstLogin: false })
 		})
 	};
+		//Get user's profile data and save in state
+		getProfile = () => {
+			API.getLearnerProfile(this.props.auth.userId).then(response => {
+				console.log("response from API.getLearnerProfile", response);
+				console.log("response from API.getLearnerProfile", response.data);
+				if (response.data) {
+					const ownerName = `${response.data.first_name} ${response.data.last_name[0]}.`
+					const newSession = {...this.state.newSession, owner_name: ownerName}
+					
+					this.setState({
+						profile: response.data,
+						newSession: newSession
+					})
+				} else {
+					this.setState({
+						firstLogin: true
+					})
+				}
+			})
+		};
 
 //CREATE NEW GOAL FORM
 
 	//Goal Form Input (all except date)
 	handleGoalInputChange = event => {
 		const { name, value } = event.target;
-		let newGoal = Object.assign({}, this.state.newGoal);
+		const newGoal = Object.assign({}, this.state.newGoal);
 		newGoal[name] = value;
 		this.setState({
 			newGoal: newGoal
@@ -108,7 +140,7 @@ class Profile extends Component {
 
 	//Goal form input - date
 	handleGoalDate = date => {
-		let newGoal = Object.assign({}, this.state.newGoal);
+		const newGoal = Object.assign({}, this.state.newGoal);
 		newGoal.due_date = date;
 		this.setState({
 			newGoal: newGoal
@@ -133,7 +165,7 @@ class Profile extends Component {
 	handleSessionInputChange = event => {
 		// console.log(event.target);
 		const { name, value } = event.target;
-		let newSession = Object.assign({}, this.state.newSession);
+		const newSession = Object.assign({}, this.state.newSession);
 		newSession[name] = value;
 		this.setState({
 			newSession: newSession
@@ -142,38 +174,27 @@ class Profile extends Component {
 
 	handleStartChange = date => {
 		console.log(date);
-		let newSession = Object.assign({}, this.state.newSession);
+		const newSession = Object.assign({}, this.state.newSession);
 		newSession.start = date;
 		this.setState({
 			newSession: newSession
 		});
 	};
 
-	handleEndChange = date => {
-		console.log(date);
-		let newSession = Object.assign({}, this.state.newSession);
-		newSession.end = date;
-		this.setState({
-			newSession: newSession
-		});
-	};
-
 	createSessionSubmit = () => {
-		console.log("you've created a study session!");
-		const session = Object.assign({}, this.state.newSession);
-		API.createSession(session, this.props.auth.userId).then(() => {
-			this.setState({
-				showSessionModal: false
-			});
+		 API.createSession(this.state.newSession, this.props.auth.userId)
+		.then((response) => {
+			console.log(response.data);
+			this.hideSessionModal();
 			this.getProfile();
-		})
-	};
+			}) 
+		};
 
 
-	//ADD NEW RESOURCE FORM
+//ADD NEW RESOURCE FORM
 
 	handleResourceInputChange = event => {
-		console.log(event.target);
+		// console.log(event.target);
 		const { name, value } = event.target;
 		let newResource = Object.assign({}, this.state.newResource);
 		newResource[name] = value;
@@ -195,22 +216,48 @@ class Profile extends Component {
 		})
 	};
 
-	//Get user's profile data and save in state
-	getProfile = () => {
-		API.getLearnerProfile(this.props.auth.userId).then(response => {
-			console.log("response from API.getLearnerProfile", response);
-			console.log("response from API.getLearnerProfile", response.data);
-			if (response.data) {
-				this.setState({
-					profile: response.data
-				})
-			} else {
-				this.setState({
-					firstLogin: true
-				})
-			}
-		})
-	};
+//INVITE STUDYBUDDY FORM
+handleStudyBuddyInputChange = event => {
+	const { name, value } = event.target;
+	const study_buddy = Object.assign({}, this.state.study_buddy);
+	study_buddy[name] = value;
+	this.setState({
+		study_buddy: study_buddy
+	})
+};
+
+handleStudyBuddySubmit = event => {
+	event.preventDefault();
+	const studyBuddyEmail= this.state.study_buddy.email.toLowerCase();
+	API.checkEmailExists(studyBuddyEmail).then(response =>{
+		console.log("response received from API.checkEmail:", response.data)
+		if (response.data === "null") { //invalid email
+
+			const study_buddy = this.state.study_buddy;
+			study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
+			
+			this.setState({
+				study_buddy:study_buddy
+			})
+			
+		} else {
+			const study_buddy = this.state.study_buddy;
+			study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
+			//Send invite to this user
+			this.setState({
+				study_buddy:study_buddy
+			}, this.inviteUser(response.data))
+
+		}
+	})
+};
+
+inviteUser = (buddyId) => {
+	const session = this.state.selectedSession;
+	API.sendSessionInvitation(buddyId, session).then(response => {
+		console.log("response received from API.sendSessionInvitation", response.data)
+	})
+};
 
 
 //MODAL CONTROLS
@@ -251,11 +298,11 @@ class Profile extends Component {
 	}; 
 
 	viewSessionDetails = (clickedEvent) => {
-		console.log("event clicked! - before formatting:", clickedEvent);
+		// console.log("event clicked! - before formatting:", clickedEvent);
 		API.getSession(clickedEvent._id).then(response=>{
 			const selectedSession = {...response.data, }
-			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY");
-			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY");
+			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY,  h:mm A"); //copies data and formats, but does not impact original
+			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY,  h:mm A");
 			console.log("selectedSession after formatting:",selectedSession);
 			
 			this.setState({
@@ -266,7 +313,21 @@ class Profile extends Component {
 	}; 
 
 	hideSessionDetails = () => {
-		const selectedSession = {}; 
+		const selectedSession = {
+			_id:"",
+			active:true,
+			title: "",
+			owner:"",
+			owner_name: "",
+			start:"",
+			duration:"",
+			end:"",
+			location:"",
+			createdAt:"",
+			updatedAt:"",
+			invitees:[],
+			resources:[]
+		}; 
 		this.setState({
 			selectedSession: selectedSession,
 			showSessionDetailModal: false
@@ -289,7 +350,7 @@ class Profile extends Component {
 							<h2>Learning Goals</h2>
 								{this.state.profile.goals.length ? (
 									 <div> 
-										{this.state.profile.goals.map(goal => ( 
+										{this.state.profile.goals.slice(0).reverse().map(goal => ( 
 													<GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
 										))}
 									 </div>									
@@ -348,6 +409,11 @@ class Profile extends Component {
 								goals={this.state.profile.goals}
 								handleResourceInputChange={this.handleResourceInputChange}
 								handleResourceSubmit={this.handleResourceSubmit}
+								hideSessionDetails={this.hideSessionDetails}
+								auth={this.props.auth}
+								study_buddy={this.state.study_buddy}
+								handleStudyBuddyInputChange={this.handleStudyBuddyInputChange}
+								handleStudyBuddySubmit={this.handleStudyBuddySubmit}
 							/>
 						</Col>
 					</Row>

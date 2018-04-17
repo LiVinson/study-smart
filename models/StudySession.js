@@ -6,13 +6,26 @@ const StudySession = new Schema({
         type: Schema.Types.ObjectId,
         ref: "LearningGoal"
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    owner_name: {
+        type:String,
+        required:true
+    }, 
+
     title: {
-        type: String,
+        type: String,   
         required: true,
     },
     start: {
         type: Date,
         required: true,
+    },
+    duration: {
+        type: Number,
+        required:true
     },
     end: {
         type: Date,
@@ -34,9 +47,22 @@ const StudySession = new Schema({
         }
     ],
     invitees: [{
-        type: "String"
+        eventId: {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        },
+        first_name: String,
+        last_initial: String,
+        invite_status: {
+            type: String,
+            default: "pending"
+        }
     }],
-
+    active: {
+        type: Boolean,
+        required:true,
+        default:true
+    }
 }, {
     timestamps: true
 });

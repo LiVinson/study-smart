@@ -1,5 +1,5 @@
 const db = require("../models");
-const axios = require("axios");
+const moment = require('moment');
 
 
 module.exports = {
@@ -98,22 +98,33 @@ module.exports = {
     //NEED TO RETEST (Postman)
     createStudySession: (req, res) => {
         console.log("req.body inside createStudySession method in controller: ", req.body)
+
         const {
+            goalId,
+            owner,
+            owner_name,
             title,
             start,
-            end,
-            location,
-            goalId
+            location
         } = req.body;
+        // end,
+
+        // duration,
+        const duration = parseInt(req.body.duration_hours) + parseInt(req.body.duration_minutes);
+        const end = moment(req.body.start).add(duration, "minutes");
+        console.log("endtime:", end);
         db.StudySession.create({
+                goalId,
+                owner,
+                owner_name,
                 title,
                 start,
+                duration,
                 end,
                 location,
-                goalId
             })
             .then(response => {
-                // console.log("response from creating a studysession", response);
+                console.log("response from creating a studysession", response);
                 // console.log(req.body.goalId);
                 // console.log("the user Id:", req.params.userId);
                 db.LearningGoal.findOneAndUpdate({
@@ -162,7 +173,10 @@ module.exports = {
     },
 
     addStudyResource: (req, res) => {
-        const { description, url } = req.body;
+        const {
+            description,
+            url
+        } = req.body;
         db.Resource.create({
                 description,
                 url
@@ -183,6 +197,39 @@ module.exports = {
                     .catch(err => res.status(422).json(err))
 
             })
+    },
+
+    getBuddyUserId: (req, res) => {
+        console.log("inside controller.getBuddyId:", req.params.buddyEmail)
+
+        db.User.findOne({
+                username: req.params.buddyEmail
+            }).then(response => {
+                if (response) {
+                    console.log("response is true", response)
+                    res.json(response._id)
+                }
+                else {
+                    res.json("null"); //No user matched with email
+                }                 
+            })
+            .catch(err => res.status(422).json(err))
+    },
+
+    createInvitation:(req, res) => {
+        console.log("inside create invitiation", req.body);
+        const eventId = req.body._id;
+        const status = "pending";
+        const  invite ={ owner, owner_name, title, location, start, end, duration } = req.body; 
+        // db.Learner.update({userId: req.params.userId}, { $push: {$invitations: {'eventId':eventId, 'status': status, 'owner':owner, 'owner_name':owner_name, 'title': title, 'location': location, 'start': start, 'end': end, 'duration': duration}}})
+        // db.Learner.update({_userId: req.params.userId}, { $set: {'invitations.$.eventId': eventId, 'invitations.$.status': status, 'invitations.$.owner': owner, 'invitations.$.owner_name': owner_name, 'invitations.$.title': title, 'invitations.$.location': location, 'invitations.$.start': start, 'invitations.$.end': end, 'invitations.$.duration':duration}})
+
+        db.Learner.update({_userId: req.params.userId}, { $push: {'invitations.$.eventId': eventId, 'invitations.$.status': status, 'invitations.$.owner': owner, 'invitations.$.owner_name': owner_name, 'invitations.$.title': title, 'invitations.$.location': location, 'invitations.$.start': start, 'invitations.$.end': end, 'invitations.$.duration':duration}})
+        .then((response)=> {
+            console.log("response after updating Learner.invitation", response)
+            res.json(response);
+        })
+        .catch(err => res.status(422).json(err))
     }
 }
 

@@ -31,8 +31,8 @@ export default {
 //STUDY SESSIONS
     createSession: (sessionData, userId) => {
         console.log("studySession object, before sending to port", sessionData);
-        sessionData.start = sessionData.start.format();
-        console.log(sessionData.start);
+        // sessionData.start = sessionData.start.format();
+        // console.log(sessionData.start);
         return (axios.post(`/api/studysession/${userId}`, sessionData))
     },
 
@@ -49,7 +49,21 @@ export default {
         console.log("resource and sessionId inside of API.addSessionResource", resource, sessionId)
         return (axios.post(`/api/studyresource/${sessionId}`, resource))
 
-    }
+    },
+
+    //STUDY BUDDY INVITATIONS
+    checkEmailExists: (userEmail) => {
+        console.log("API.checkEmailExists - email before GET", userEmail);
+        return (axios.get(`/api/buddyId/${userEmail}`))
+
+    },
+
+    sendSessionInvitation: (userId, inviteData) =>{
+        console.log("invitee userID and invite Data", userId, inviteData);
+        return (axios.post(`/api/invite/${userId}`, inviteData))
+    },
+
+
 
 
 }
