@@ -29,6 +29,12 @@ module.exports = function (passport) {
 	router.post("/studysession/:userId", /*isLoggedIn,*/  studyController.createStudySession);
 	router.post("/studyresource/:sessionId", /*isLoggedIn,*/  studyController.addStudyResource)
 
+	//STUDY BUDDIES:
+	router.get("/buddyId/:buddyEmail", /*isLoggedIn,*/ studyController.getBuddyUserId)
+	router.post("/invite/:userId", /*isLoggedIn,*/ studyController.createInvitation)
+
+	
+	
 	return router;
 };
 

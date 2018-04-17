@@ -1,10 +1,9 @@
 import React from 'react'
-import { FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, Checkbox, Button } from "react-bootstrap";
 import DateTimePicker from '../DateTimePicker';
 import './StudySessionForm.css';
 
-const StudySessionForm = (props) => {
+const StudySessionForm = props => {
     return (
     <form>
         <FormGroup>
@@ -26,11 +25,40 @@ const StudySessionForm = (props) => {
         </FormGroup>
 
         <FormGroup>
-            <ControlLabel>End Date and Time</ControlLabel>
-            <DateTimePicker name="end" timeframe={props.end} handleChange={props.handleEndChange} />   
+            {/* <ControlLabel>End Date and Time</ControlLabel>
+            <DateTimePicker name="end" timeframe={props.end} handleChange={props.handleEndChange} />    */}
+                <FormControl.Static>
+                    How Long are You Planning to Study (Make sure to account for time to take short breaks) 
+                </FormControl.Static>
+            
+         
+            <ControlLabel>Number of Hours</ControlLabel>
 
+            <FormControl onChange={props.handleSessionInputChange} name="duration_hours" componentClass="select" placeholder="select">
+                  <option value="0">Select number of hours</option>
+                  <option value="0">0</option>
+                  <option value="60">1</option>
+                  <option value="120">2</option>
+                  <option value="180">3</option>
+                  <option value="240">4</option>
+                  <option value="300">5</option>
+                  <option value="360">6</option>
+                  <option value="420">7</option>
+                  <option value="480">8</option>
+            </FormControl>
         </FormGroup>
-
+        <FormGroup>
+            <ControlLabel>Number of Minutes</ControlLabel>
+            
+            <FormControl onChange={props.handleSessionInputChange} name="duration_minutes" componentClass="select" placeholder="select">
+                  <option value="0">Select number of minutes</option>
+                  <option value="0">0</option>
+                  <option value="15">15</option>
+                  <option value="30">30</option>
+                  <option value="45">45</option>
+   
+            </FormControl>
+        </FormGroup>
         <FormGroup>
             <ControlLabel>What topics will you be studying?</ControlLabel>
             <FormControl

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { Tabs, Tab } from 'react-bootstrap';
-import { FormControl, FormGroup, ControlLabel, Button } from "react-bootstrap";
-
+import { FormControl, FormGroup, ControlLabel, Button, HelpBlock } from "react-bootstrap";
+import StudyBuddyForm from '.././StudyBuddyForm';
 
 
 const SessionTabModal = props => {
@@ -90,14 +90,25 @@ const SessionTabModal = props => {
 
                     <Tab eventKey={3} title="Study Buddies">
                         <h1>Study Buddies</h1>
+                        {(props.selectedSession.owner === props.auth.userId) ? (
+                            <StudyBuddyForm 
+                                study_buddy={props.study_buddy} 
+                                handleStudyBuddyInputChange={props.handleStudyBuddyInputChange}
+                                handleStudyBuddySubmit={props.handleStudyBuddySubmit}
+                                selectedSession={props.selectedSession}
+                            />
+                            // props.selectedSession.invitees.length ? (
+                            //     <div>You have invited some study buddies. Their names and acceptance status will show here</div>
+                            // ) : (<div>You haven't invited anyone to study with yet...</div>)
+                        ) : (<div>You are not the owner of this event. You will only be able to see the accepted users</div>)}
                     </Tab>
 
                 </Tabs>
             </Modal.Body>
 
             <Modal.Footer>
-                <Button>Edit Study Session</Button>
-                <Button onClick={props.showSessionDetailModal}>Close</Button>
+                {(props.selectedSession.owner === props.auth.userId) ? (<Button>Edit Study Session</Button>) : (null)}
+                <Button onClick={props.hideSessionDetails}>Close</Button>
             </Modal.Footer>
         </Modal>
     )
