@@ -11,7 +11,8 @@ const Calendar = props => (
     <BigCalendar
       selectable
       events={props.studySessions}
-      defaultView="week"
+      defaultView="month"
+      views={['month', 'week', 'day']}
       startAccessor={((e) => {return new Date(e.start)})}
       endAccessor={((e) => {return new Date(e.end)})}
       onSelectEvent={event => {

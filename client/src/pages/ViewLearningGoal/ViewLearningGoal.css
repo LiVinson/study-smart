@@ -1,8 +1,43 @@
 .learningGoalContainer{
-    background-color:purple;
+    background-color:darkturquoise;
+    padding:10px 15px 20px 15px;
 
 }
 
 .learningGoalInfo{
     background-color:#fff;
+    padding:10px 15px 10px 20px;
+    border:2px solid black;
+
+}
+
+.learningGoalInfo > h2 {
+    text-align:center;
+}
+
+.learningGoalInfo > p{
+    font-size:16px;
+}
+.learningGoalInfo > p> span {
+    font-weight:bold;
+}
+.pastSessionsDiv, .upcomingSessionsDiv {
+    background-color:white;
+    padding: 10px 15px 15px 15px;
+    margin-top:20px;
+    border:2px solid black;
+    min-height:45vh;
+
+}
+.pastSessionsDiv > h3, .upcomingSessionsDiv > h3 {
+    text-align:center;
+    margin-bottom:15px;
+    color:darkturquoise;
+}
+
+.upcomingEventDiv{
+    border: solid 2px black;
+    border-radius:20px;
+    margin-bottom: 10px;
+    padding:5px 10px 5px 10px
 }

@@ -4,33 +4,43 @@ import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
 import "./NavbarBoot.css";
 
 
-const NavbarBoot = props => (
-<Navbar fluid className="customNav">
-  <Navbar.Header>
-    <Navbar.Brand className='navHeader'>
-      Study SMART
-    </Navbar.Brand>
-    <Navbar.Toggle />
-  </Navbar.Header>
+const NavbarBoot = props => {
 
-
-  {props.home ?
-    (null) : (
-      <Navbar.Collapse>
-        {/* <Navbar.Text>
+  return (
+    props.home ? (
+      <Navbar fluid className="homeNav">
+      <Navbar.Header>
+        <Navbar.Brand className='navHeader'>
+          Study SMART
+  </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+    </Navbar>
+     
+    ) : (
+      <Navbar fluid className="profileNav">
+      <Navbar.Header>
+        <Navbar.Brand className='navHeader navHeaderProfile'>
+          Study SMART
+  </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Text>
           Welcome {props.first_name}!
-        </Navbar.Text> */}
+      </Navbar.Text>
+      <Navbar.Collapse>
+
         <Nav pullRight>
-          <NavItem className="navLink" eventKey={1} href="#">
-            <Button bsStyle="link" onClick={props.handleLogout}>Profile</Button>
-          </NavItem> 
-          <NavItem className="navLink"eventKey={2} href="#">
-            <Button  bsStyle="link" onClick={props.handleLogout}>Log Out</Button>
+
+          <NavItem className="navLink" eventKey={2} href="#">
+            <Button bsSize="small" className ="navLinkBtn" bsStyle="default" onClick={props.handleLogout}>Log Out</Button>
           </NavItem>
         </Nav>
       </Navbar.Collapse>
+    </Navbar>
     )
-  }
-</Navbar>);
 
-export default NavbarBoot;
+  );
+}
+
+export default NavbarBoot

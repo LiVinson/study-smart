@@ -53,7 +53,7 @@ const ProfileForm = (props) => {
                     onChange={props.handleInputChange}
                     value={props.mobile_number}
                 />
-                <HelpBlock>This if you decide you would like a reminder text when your goal due date or a scheduled study session is approaching. You can always add it later.</HelpBlock>
+                <HelpBlock className="comingSoon"><b>Coming Soon!</b> Choose if you would like to receive reminder texts for upcoming study sessions!</HelpBlock>
             </FormGroup>
 
             <FormGroup>

@@ -1,10 +1,16 @@
-.customNav{
+.homeNav{
     background-color:darkturquoise;
     padding-top:10px;
     padding-bottom:10px;
     margin-bottom:0px;
     border:none;
  
+}
+
+.profileNav{
+    background-color:darkturquoise; 
+    margin-bottom:0px;
+    border:none;
 }
 
 .navHeader{
@@ -14,12 +20,17 @@
     margin-left:10px!important;
 }
 
-.navLink{
-    padding:1px!important;
-}
 
 ul.navbar-right{
     margin-right:10px;
     padding-top:5px;
 }
 
+.navLinkBtn {
+    color:purple!important;
+}
+p.navbar-text{
+    font-size: 20px;
+    margin-left:60px;
+    color: white!important;
+}

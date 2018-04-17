@@ -16,10 +16,12 @@ const StudyBuddyForm = props => {
                     onChange={props.handleStudyBuddyInputChange}
                     value={props.study_buddy.email}
                 />
-                <HelpBlock>{props.study_buddy.emailError}</HelpBlock>
+                {/* <HelpBlock>{props.study_buddy.emailError}</HelpBlock> */}
+                <HelpBlock><b>Coming Soon!</b></HelpBlock>
+
             </FormGroup>
 
-            <Button onClick={props.handleStudyBuddySubmit}>Send Invite</Button>
+            <Button disabled onClick={props.handleStudyBuddySubmit}>Send Invite</Button>
         </form>
     )
 };
