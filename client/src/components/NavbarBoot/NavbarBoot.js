@@ -32,6 +32,9 @@ const NavbarBoot = props => {
 
         <Nav pullRight>
 
+          <NavItem className="navLink" eventKey={1} href="#">
+            <Button bsSize="small" className ="navLinkBtn" bsStyle="default" onClick={props.toggleProfileModal}>View Profile</Button>
+          </NavItem>
           <NavItem className="navLink" eventKey={2} href="#">
             <Button bsSize="small" className ="navLinkBtn" bsStyle="default" onClick={props.handleLogout}>Log Out</Button>
           </NavItem>

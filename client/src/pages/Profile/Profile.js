@@ -13,6 +13,7 @@ import AddGoalForm from '../../components/AddGoalForm';
 import API from "../../utils/API";
 import ModalBoot from '../../components/ModalBoot';
 import ProfileForm from '../../components/ProfileForm';
+import ViewProfile from '../../components/ViewProfile';
 import StudySessionForm from '../../components/StudySessionForm';
 import SessionTabModal from '../../components/SessionTabModal';
 
@@ -28,6 +29,13 @@ class Profile extends Component {
 			sessions: [],
 			invitations: []
 		},
+		editProfile: {
+			first_name: "",
+			last_name: "",
+			mobile_number: "",
+			learner_status: ""
+		},
+		viewProfile: true,
 		newGoal: {
 			category: "",
 			due_date: moment(),
@@ -36,45 +44,43 @@ class Profile extends Component {
 			barriers: "",
 		},
 		newSession: {
-
 			goalId: "",
 			owner: this.props.auth.userId,
-			owner_name:"",
+			owner_name: "",
 			title: "",
 			start: moment(),
-			duration_hours:0,
-			duration_minutes:0,
+			duration_hours: 0,
+			duration_minutes: 0,
 			location: "",
-			
-
 		},
-		selectedSession:{
-			_id:"",
-			active:true,
+		selectedSession: {
+			_id: "",
+			active: true,
 			title: "",
-			owner:"",
-			owner_name:"",
-			start:"",
-			duration:"",
-			end:"",
-			location:"",
-			createdAt:"",
-			updatedAt:"",
-			invitees:[],
-			resources:[]
+			owner: "",
+			owner_name: "",
+			start: "",
+			duration: "",
+			end: "",
+			location: "",
+			createdAt: "",
+			updatedAt: "",
+			invitees: [],
+			resources: []
 		},
-		newResource:{
-			description:"",
-			url:""
+		newResource: {
+			description: "",
+			url: ""
 		},
-		study_buddy:{
-			email:"",
-			emailError:""
+		study_buddy: {
+			email: "",
+			emailError: ""
 		},
 
 		showGoalModal: false,
 		showSessionModal: false,
 		showSessionDetailModal: false,
+		showProfileModal: false,
 		error: ""
 	};
 
@@ -82,17 +88,25 @@ class Profile extends Component {
 		this.getProfile()
 	};
 
-//CREATE USER PROFILE FORM
+	//CREATE USER PROFILE FORM
 
 	//Profile Form input
 	handleInputChange = event => {
 		const { name, value } = event.target;
-		const profile = Object.assign({}, this.state.profile);
-		profile[name] = value;
-		this.setState({
-			profile: profile
-		})
 
+		if (this.state.firstLogin) {
+			const profile = Object.assign({}, this.state.profile);
+			profile[name] = value;
+			this.setState({
+				profile: profile
+			})
+		} else {
+			const editProfile = Object.assign({}, this.state.editProfile);
+			editProfile[name] = value;
+			this.setState({
+				editProfile: editProfile
+			})
+		}
 	};
 
 	//Submit Profile Form
@@ -105,28 +119,68 @@ class Profile extends Component {
 			this.setState({ firstLogin: false })
 		})
 	};
-		//Get user's profile data and save in state
-		getProfile = () => {
-			API.getLearnerProfile(this.props.auth.userId).then(response => {
-				console.log("response from API.getLearnerProfile", response);
-				console.log("response from API.getLearnerProfile", response.data);
-				if (response.data) {
-					const ownerName = `${response.data.first_name} ${response.data.last_name[0]}.`
-					const newSession = {...this.state.newSession, owner_name: ownerName}
-					
-					this.setState({
-						profile: response.data,
-						newSession: newSession
-					})
-				} else {
-					this.setState({
-						firstLogin: true
-					})
-				}
-			})
-		};
+	//Get user's profile data and save in state
+	getProfile = () => {
+		API.getLearnerProfile(this.props.auth.userId).then(response => {
+			console.log("response from API.getLearnerProfile", response);
+			console.log("response from API.getLearnerProfile", response.data);
+			if (response.data) {
+				const ownerName = `${response.data.first_name} ${response.data.last_name[0]}.`
+				const newSession = { ...this.state.newSession, owner_name: ownerName }
 
-//CREATE NEW GOAL FORM
+				this.setState({
+					profile: response.data,
+					newSession: newSession
+				})
+			} else {
+				this.setState({
+					firstLogin: true
+				})
+			}
+		})
+	};
+
+	toggleProfileModal = () => {
+		if (!this.state.showProfileModal) {
+			const editProfile = Object.assign({}, this.state.editProfile);
+			editProfile.first_name = this.state.profile.first_name;
+			editProfile.last_name = this.state.profile.last_name;
+			editProfile.mobile_number = this.state.profile.mobile_number;
+			editProfile.learner_status = this.state.profile.learner_status;
+			this.setState({
+				showProfileModal: true,
+				viewProfile: true,
+				editProfile: editProfile
+			})
+		}
+		else {
+			this.setState({
+				showProfileModal: false,
+				viewProfile: true
+			})
+		}
+	};
+
+	editProfileForm = () => {
+		console.log("edit profile clicked");
+
+		this.setState({
+			viewProfile: false,
+			// editProfile: editProfile
+		})
+	}
+
+	saveProfileEdit = () => {
+		console.log("you have requested to edit your profile");
+		/*API.editProfile(profileOBject, userId).then(response=> [
+			confirmation message
+			getProfile and save in state
+			Change the modal back to viewProfile - this.toggleProfileModal ()
+
+		])*/
+	}
+
+	//CREATE NEW GOAL FORM
 
 	//Goal Form Input (all except date)
 	handleGoalInputChange = event => {
@@ -160,7 +214,7 @@ class Profile extends Component {
 		})
 	};
 
-//CREATE NEW STUDY SESSION FORM
+	//CREATE NEW STUDY SESSION FORM
 
 	handleSessionInputChange = event => {
 		// console.log(event.target);
@@ -182,16 +236,16 @@ class Profile extends Component {
 	};
 
 	createSessionSubmit = () => {
-		 API.createSession(this.state.newSession, this.props.auth.userId)
-		.then((response) => {
-			console.log(response.data);
-			this.hideSessionModal();
-			this.getProfile();
-			}) 
-		};
+		API.createSession(this.state.newSession, this.props.auth.userId)
+			.then((response) => {
+				console.log(response.data);
+				this.hideSessionModal();
+				this.getProfile();
+			})
+	};
 
 
-//ADD NEW RESOURCE FORM
+	//ADD NEW RESOURCE FORM
 
 	handleResourceInputChange = event => {
 		// console.log(event.target);
@@ -205,62 +259,62 @@ class Profile extends Component {
 
 	handleResourceSubmit = event => {
 		event.preventDefault();
-		const newResource = {...this.state.newResource};
+		const newResource = { ...this.state.newResource };
 		const sessionId = this.state.selectedSession._id;
 		API.addSessionResource(newResource, sessionId).then(response => {
 			console.log("response from adding newResource, and updating assiociated event:", response.data)
-			API.getSession(sessionId).then(responseSession => { 
+			API.getSession(sessionId).then(responseSession => {
 				console.log("response from getting event (should have updated resource),", responseSession.data);
 				this.setState({ selectedSession: responseSession.data })
 			})
 		})
 	};
 
-//INVITE STUDYBUDDY FORM
-handleStudyBuddyInputChange = event => {
-	const { name, value } = event.target;
-	const study_buddy = Object.assign({}, this.state.study_buddy);
-	study_buddy[name] = value;
-	this.setState({
-		study_buddy: study_buddy
-	})
-};
+	//INVITE STUDYBUDDY FORM
+	handleStudyBuddyInputChange = event => {
+		const { name, value } = event.target;
+		const study_buddy = Object.assign({}, this.state.study_buddy);
+		study_buddy[name] = value;
+		this.setState({
+			study_buddy: study_buddy
+		})
+	};
 
-handleStudyBuddySubmit = event => {
-	event.preventDefault();
-	const studyBuddyEmail= this.state.study_buddy.email.toLowerCase();
-	API.checkEmailExists(studyBuddyEmail).then(response =>{
-		console.log("response received from API.checkEmail:", response.data)
-		if (response.data === "null") { //invalid email
+	handleStudyBuddySubmit = event => {
+		event.preventDefault();
+		const studyBuddyEmail = this.state.study_buddy.email.toLowerCase();
+		API.checkEmailExists(studyBuddyEmail).then(response => {
+			console.log("response received from API.checkEmail:", response.data)
+			if (response.data === "null") { //invalid email
 
-			const study_buddy = this.state.study_buddy;
-			study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
-			
-			this.setState({
-				study_buddy:study_buddy
-			})
-			
-		} else {
-			const study_buddy = this.state.study_buddy;
-			study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
-			//Send invite to this user
-			this.setState({
-				study_buddy:study_buddy
-			}, this.inviteUser(response.data))
+				const study_buddy = this.state.study_buddy;
+				study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
 
-		}
-	})
-};
+				this.setState({
+					study_buddy: study_buddy
+				})
 
-inviteUser = (buddyId) => {
-	const session = this.state.selectedSession;
-	API.sendSessionInvitation(buddyId, session).then(response => {
-		console.log("response received from API.sendSessionInvitation", response.data)
-	})
-};
+			} else {
+				const study_buddy = this.state.study_buddy;
+				study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
+				//Send invite to this user
+				this.setState({
+					study_buddy: study_buddy
+				}, this.inviteUser(response.data))
+
+			}
+		})
+	};
+
+	inviteUser = (buddyId) => {
+		const session = this.state.selectedSession;
+		API.sendSessionInvitation(buddyId, session).then(response => {
+			console.log("response received from API.sendSessionInvitation", response.data)
+		})
+	};
 
 
-//MODAL CONTROLS
+	//MODAL CONTROLS
 	showSessionModal = () => {
 		console.log("show session modal");
 		this.setState({
@@ -295,39 +349,39 @@ inviteUser = (buddyId) => {
 
 	viewGoalDetails = (clickedGoal) => {
 		alert("view details on this goal");
-	}; 
+	};
 
 	viewSessionDetails = (clickedEvent) => {
 		// console.log("event clicked! - before formatting:", clickedEvent);
-		API.getSession(clickedEvent._id).then(response=>{
-			const selectedSession = {...response.data, }
+		API.getSession(clickedEvent._id).then(response => {
+			const selectedSession = { ...response.data, }
 			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY,  h:mm A"); //copies data and formats, but does not impact original
 			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY,  h:mm A");
-			console.log("selectedSession after formatting:",selectedSession);
-			
+			console.log("selectedSession after formatting:", selectedSession);
+
 			this.setState({
 				selectedSession: selectedSession,
 				showSessionDetailModal: true
 			})
 		})
-	}; 
+	};
 
 	hideSessionDetails = () => {
 		const selectedSession = {
-			_id:"",
-			active:true,
+			_id: "",
+			active: true,
 			title: "",
-			owner:"",
+			owner: "",
 			owner_name: "",
-			start:"",
-			duration:"",
-			end:"",
-			location:"",
-			createdAt:"",
-			updatedAt:"",
-			invitees:[],
-			resources:[]
-		}; 
+			start: "",
+			duration: "",
+			end: "",
+			location: "",
+			createdAt: "",
+			updatedAt: "",
+			invitees: [],
+			resources: []
+		};
 		this.setState({
 			selectedSession: selectedSession,
 			showSessionDetailModal: false
@@ -341,19 +395,19 @@ inviteUser = (buddyId) => {
 	render() {
 		return (
 			<div>
-				<NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout} />
-				<ButtonBar goalCreated={this.state.profile.goals.length} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal}/>
+				<NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.toggleProfileModal}/>
+				<ButtonBar goalCreated={this.state.profile.goals.length} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal}  />
 				<Grid fluid={true} className="pageContainer">
 					<Row>
 						<Col xs={12} sm={3}>
 							<GoalPanel>
-							<h2>Learning Goals</h2>
+								<h2>Learning Goals</h2>
 								{this.state.profile.goals.length ? (
-									 <div> 
-										{this.state.profile.goals.slice(0).reverse().map(goal => ( 
-													<GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
+									<div>
+										{this.state.profile.goals.slice(0).reverse().map(goal => (
+											<GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
 										))}
-									 </div>									
+									</div>
 								) : (
 										<GoalPanelMessage>
 											<p>Looks Like You need to Create Your First Learning Goal!</p>
@@ -366,46 +420,59 @@ inviteUser = (buddyId) => {
 							<div className="mainContainer">
 								<h2>Study Schedule</h2>
 								<div className="calendarContainer">
-									<Calendar studySessions={this.state.profile.sessions} viewSessionDetails={this.viewSessionDetails}/>
+									<Calendar studySessions={this.state.profile.sessions} viewSessionDetails={this.viewSessionDetails} />
 								</div>
 							</div>
-						
-								<ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
-									<ProfileForm
-										handleInputChange={this.handleInputChange}
-										createProfileSubmit={this.createProfileSubmit}
-									/>
-								</ModalBoot>
-								
-								<ModalBoot show={this.state.showGoalModal} title='Add a Learning Goal'>
-									<AddGoalForm 
-										handleGoalInputChange={this.handleGoalInputChange}
-										handleGoalDate={this.handleGoalDate} 
-										createGoalSubmit={this.createGoalSubmit} 
-										hideGoalModal={this.hideGoalModal}
-										due_date={this.state.newGoal.due_date} 
-									/>
-								</ModalBoot>
 
-								<ModalBoot 
-									show={this.state.showSessionModal} 
-									goals={this.state.profile.goals} 
-									title='Schedule a New Study Session'>
-									<StudySessionForm
-										  handleStartChange={this.handleStartChange}
-										  handleEndChange={this.handleEndChange}
-										  handleSessionInputChange={this.handleSessionInputChange} 
-										  createSessionSubmit={this.createSessionSubmit}
-										  hideSessionModal={this.hideSessionModal} 
-										  goals={this.state.profile.goals}
-										  start={this.state.newSession.start} 
-										  end={this.state.newSession.end}
-									/>
-								</ModalBoot>
+							<ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
+								<ProfileForm
+									handleInputChange={this.handleInputChange}
+									createProfileSubmit={this.createProfileSubmit}
+								/>
+							</ModalBoot>
 
-							<SessionTabModal 
+							<ModalBoot show={this.state.showProfileModal} title='User Profile'>
+								<ViewProfile
+									viewProfile={this.state.viewProfile}
+									profile={this.state.profile}
+									editProfileForm={this.editProfileForm}
+									saveProfileEdit={this.saveProfileEdit}
+									handleInputChange={this.handleInputChange}
+									toggleProfileModal={this.toggleProfileModal}
+									editProfile={this.state.editProfile}
+									// createProfileSubmit={this.createProfileSubmit}
+								/>
+							</ModalBoot>
+
+							<ModalBoot show={this.state.showGoalModal} title='Add a Learning Goal'>
+								<AddGoalForm
+									handleGoalInputChange={this.handleGoalInputChange}
+									handleGoalDate={this.handleGoalDate}
+									createGoalSubmit={this.createGoalSubmit}
+									hideGoalModal={this.hideGoalModal}
+									due_date={this.state.newGoal.due_date}
+								/>
+							</ModalBoot>
+
+							<ModalBoot
+								show={this.state.showSessionModal}
+								goals={this.state.profile.goals}
+								title='Schedule a New Study Session'>
+								<StudySessionForm
+									handleStartChange={this.handleStartChange}
+									handleEndChange={this.handleEndChange}
+									handleSessionInputChange={this.handleSessionInputChange}
+									createSessionSubmit={this.createSessionSubmit}
+									hideSessionModal={this.hideSessionModal}
+									goals={this.state.profile.goals}
+									start={this.state.newSession.start}
+									end={this.state.newSession.end}
+								/>
+							</ModalBoot>
+
+							<SessionTabModal
 								show={this.state.showSessionDetailModal}
-								selectedSession={this.state.selectedSession} 
+								selectedSession={this.state.selectedSession}
 								goals={this.state.profile.goals}
 								handleResourceInputChange={this.handleResourceInputChange}
 								handleResourceSubmit={this.handleResourceSubmit}
