@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, FormGroup, ControlLabel, Checkbox, HelpBlock } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "./ProfileForm.css";
 
