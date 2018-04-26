@@ -130,7 +130,8 @@ class Profile extends Component {
 
 				this.setState({
 					profile: response.data,
-					newSession: newSession
+					newSession: newSession,
+					viewProfile: true
 				})
 			} else {
 				this.setState({
@@ -168,17 +169,18 @@ class Profile extends Component {
 			viewProfile: false,
 			// editProfile: editProfile
 		})
-	}
+	};
 
 	saveProfileEdit = () => {
 		console.log("you have requested to edit your profile");
-		/*API.editProfile(profileOBject, userId).then(response=> [
-			confirmation message
-			getProfile and save in state
-			Change the modal back to viewProfile - this.toggleProfileModal ()
-
-		])*/
-	}
+		const profile = this.state.editProfile;
+		const userId = this.props.auth.userId
+		API.editLearnerProfile(profile, userId).then(response=> {
+			console.log(response);
+			this.getProfile()
+			})
+	};
+	
 
 	//CREATE NEW GOAL FORM
 
