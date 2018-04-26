@@ -30,15 +30,20 @@ module.exports = {
     findProfile: (req, res) => {
         db.Learner.findOne({
                 _userId: req.params.userId
-            }).populate("goals").populate("sessions").then(response => res.json(response))
+            }).populate({
+                path: "goals",
+                populate: { path: "sessions" } 
+            })
+            .populate("sessions").then(response => res.json(response))
             .catch(err => res.status(422).json(err))
     },
 
-    //UPDATE NEEDED - Come back to this later, once profile is showing - determine how to build route no matter what is being edited
-    //options: Could do a form that shows everything, and saves all fields
     editProfile: (req, res) => {
-        db.Learner.update({})
-            .then(response => res.json(response))
+        const userId = req.params.userId;
+        const { first_name, last_name, learner_status, mobile_number } = req.body;
+
+        db.Learner.update({ _userId: userId }, { $set: { first_name, last_name, learner_status, mobile_number }})
+            .then(response => {console.log("response from updating learner", response); res.json(response)})
             .catch(err => res.status(422).json(err))
     },
 

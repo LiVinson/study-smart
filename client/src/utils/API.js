@@ -11,6 +11,12 @@ export default {
         return (axios.get(`/api/profile/${userId}`))
     },
 
+    editLearnerProfile: (profileData, userId) => {
+        console.log("inside of API editLearnerProfile", profileData)
+        return (axios.patch(`/api/profile/${userId}`, profileData))
+
+    },
+
 //GOALS
     createGoal: (goalData, userId) => {
 

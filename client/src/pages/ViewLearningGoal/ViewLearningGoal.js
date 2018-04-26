@@ -31,33 +31,59 @@ class ViewLearningGoal extends Component {
             goal: "",
             measurement: "",
             sessions: [],
-        }
+        }, 
+        pastSessions: [],
+        upcomingSessions: []
     };
 
     componentDidMount() {
-        console.log("userId before API method:", this.props.auth.userId);
-        console.log("goalId before API methods:", this.props.match.match.params.goalId);
+        // console.log("userId before API method:", this.props.auth.userId);
+        // console.log("goalId before API methods:", this.props.match.match.params.goalId);
         API.getLearnerProfile(this.props.auth.userId).then(response => {
-            console.log("profile -", response.data);
+            // console.log("profile -", response.data);
+            console.log("goals array inside of profile", response.data.goals);
+            console.log("id of goal to locate", this.props.match.match.params.goalId);
+            const goal = response.data.goals.filter(goal => {
+                return goal._id === this.props.match.match.params.goalId
+            })[0];
+            console.log("goal after filtering the return profile based on Id", goal);
+            const pastSessions = goal.sessions.filter(session => {
+                // console.log("past event end time", session.end);
+                // console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
+                return ((moment(session.end)).diff(moment()) < 0)
+            });
+            console.log("past sessions", pastSessions );
+            const upcomingSessions = goal.sessions.filter(session => {
+                // console.log("past event end time", session.end);
+                // console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
+                return ((moment(session.end)).diff(moment()) > 0)
+            });
+            console.log("upcoming sessions", upcomingSessions );
             this.setState({
-                profile: response.data
+                profile: response.data,
+                goal: goal,
+                pastSessions: pastSessions,
+                upcomingSessions: upcomingSessions
             })
         })
-        .then(() => {
-            // console.log("goalId:", this.props.match.match.params.id)
-            API.getGoal(this.props.match.match.params.goalId)
-            .then(res => this.setState({ goal: res.data }))
+        // .then(() => {
+        //     // console.log("goalId:", this.props.match.match.params.id)
+        //     API.getGoal(this.props.match.match.params.goalId)
+        //     .then(res => this.setState({
+        //          goal: res.data,
+
+        //         }))
             .catch(err => console.log(err));
-
-
-        })
+        
     };
 
-    // getPastEvents() {
-    //     this.state.profile.goals.sessions.filter(session => {
-    //         return ((session.end).diff(moment()) < 0)
-    //      })
-    // }
+    getPastEvents() {
+        this.state.goal.sessions.filter(session => {
+            console.log("past event end time", session.end);
+            console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
+            return ((moment(session.end)).diff(moment()) < 0);
+         })
+    }
 
     // getUpcomingEvents() {
     //     this.state.profile.goals.sessions.filter(session => {
@@ -118,21 +144,35 @@ class ViewLearningGoal extends Component {
                                     <Col sm={6}>
                                         <div className='pastSessionsDiv'>
                                             <h3>Past Study Sessions:</h3>    
-
-                                            {/* {this.getPastEvents.length ? (
-                                                this.getPastEvents.map(pastEvent => {
-                                                    <p>{pastEvent.topic}</p>
+                                   
+                                            {this.state.pastSessions.length ? (
+                                              this.state.pastSessions.map(session => {
+                                                  return(
+                                                  <div key={session._id}>
+                                                    <p>Study Session Topics: {session.title}</p>
+                                                    <p>Study Session Completed:{session.end}</p>
+                                                    
+                                                </div>)
                                                 })
-                                            ) : ( */}
-                                            <div>You have not completed any study sessions for this goal yet!</div>
-                                            {/* // )} */}
+                                            ) : (<div>You have not completed any study sessions for this goal yet!</div>)
+                                        }
                                         </div>
                                     </Col>
                                     <Col sm={6}>
                                     <div className='upcomingSessionsDiv'>
                                             <h3>Upcoming Study Sessions:</h3>  
-                                                
-                                                <div className="upcomingEventDiv">
+                                            {this.state.upcomingSessions.length ? (
+                                              this.state.upcomingSessions.map(session => {
+                                                  return(
+                                                  <div key={session._id}>
+                                                    <p>Study Session Topics: {session.title}</p>
+                                                    <p>Study Session Completed:{session.end}</p>
+                                                    
+                                                </div>)
+                                                })
+                                            ) : (<div>You do not have any study sessions scheduled for this goal.</div>)
+                                        }
+                                                {/* <div className="upcomingEventDiv">
                                                     <p>Study Topics: const, let, and block scoping</p> 
                                                     <p>Date: April 20, 2018 at 11:00 AM</p>
                                                 </div>
@@ -140,7 +180,7 @@ class ViewLearningGoal extends Component {
                                                 <div className="upcomingEventDiv">
                                                     <p>Study Topics: Arrow functions and promises</p> 
                                                     <p>Date: April 21, 2018 at 4:00 PM</p>
-                                                </div>
+                                                </div> */}
 
                                                {/* {this.getUpcomingEvents.length ? (
                                                 this.getUpcomingEvents.map(futureEvent => {
