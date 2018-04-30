@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, FormGroup, ControlLabel, Checkbox, Button } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, Button } from "react-bootstrap";
 import DateTimePicker from '../DateTimePicker';
 import './StudySessionForm.css';
 

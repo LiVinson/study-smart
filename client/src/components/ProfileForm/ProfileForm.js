@@ -18,7 +18,6 @@ const ProfileForm = (props) => {
             <FormGroup>    
 
                 <ControlLabel>First Name</ControlLabel>
-
                 <FormControl
                     type="text"
                     label="Text"
@@ -58,7 +57,6 @@ const ProfileForm = (props) => {
 
             <FormGroup>
                 <ControlLabel>Learner Status</ControlLabel>
-
                 <FormControl onChange={props.handleInputChange} value={props.learner_status} name="learner_status" componentClass="select" placeholder="select">
                     <option value="High School Student">High School Student</option>
                     <option value="College Student (Undergraduate)">College Student (Undergraduate)</option>

@@ -1,0 +1,31 @@
+.viewProfileDiv{
+    margin: 25px 20px 10px 20px;
+}
+
+.profileText{
+    font-size:15px;
+}
+.profileText > span {
+    font-weight:bold;
+}
+
+.editProfileBtn{
+    background-color: darkturquoise;
+    color:#fff;
+    padding-left:20px;
+    padding-right:20px;
+}
+
+.cancelViewProfile{
+    background-color: purple;
+    color:#fff;
+    padding-left:20px;
+    padding-right:20px;
+    margin-left:15px;
+}
+
+.viewProfileBtnContainer{
+    display:flex;
+    justify-content: flex-end;
+    margin-top:20px;
+}

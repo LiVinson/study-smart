@@ -8,7 +8,7 @@ import axios from 'axios';
 import Profile from "./pages/Profile";
 import HomePage from "./pages/HomePage";
 import ViewLearningGoal from "./pages/ViewLearningGoal";
-import ViewStudySession from "./pages/ViewStudySession";
+
 
 class App extends Component {
   state = {
@@ -120,22 +120,15 @@ class App extends Component {
             }
           }
           } />
-          <Route exact path="/learninggoal/:goalId" render={(match) => {
+          <Route exact path="/learninggoal/:goalId" render={(renderProps) => {
             if (!loggedIn) {
               return <Redirect to="/" />
             } else {
-              return <ViewLearningGoal match={match} handleLogout={this.handleLogout} auth={this.state.auth} />
+              return <ViewLearningGoal goalData={renderProps} handleLogout={this.handleLogout} auth={this.state.auth} />
             }
           }
           } />
-          <Route exact path="/studysession/:sessionId" render={(match) => {
-            if (!loggedIn) {
-              return <Redirect to="/" />
-            } else {
-              return <ViewStudySession match={match} handleLogout={this.handleLogout} auth={this.state.auth} />
-            }
-          }
-          } />
+
         </div>
 
       </Router>

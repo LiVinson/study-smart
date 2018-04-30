@@ -28,7 +28,9 @@
     "prop-types": "^15.6.1",
     "react-big-calendar": "^0.19.0",
     "react-bootstrap": "^0.32.1",
-    "react-datepicker": "^1.4.1"
+    "react-custom-scrollbars": "^4.2.1",
+    "react-datepicker": "^1.4.1",
+    "react-scrollbar": "^0.5.4"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",

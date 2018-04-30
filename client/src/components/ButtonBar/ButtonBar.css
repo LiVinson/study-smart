@@ -22,7 +22,9 @@
     padding: 15px 10px 10px 10px;
     background-color:purple;
     margin-bottom:5px;
+    margin-right:0px;
 } 
+
 .italics{
     font-style:italic;
 }

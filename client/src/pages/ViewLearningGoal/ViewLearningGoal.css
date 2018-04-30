@@ -1,6 +1,16 @@
+.mainRow{
+    display:flex;
+    align-items:stretch;
+
+}
+
+.learningGoalCol{
+    padding-right: 0px;
+}
 .learningGoalContainer{
     background-color:darkturquoise;
     padding:10px 15px 20px 15px;
+    min-height:90vh;
 
 }
 
@@ -26,7 +36,9 @@
     padding: 10px 15px 15px 15px;
     margin-top:20px;
     border:2px solid black;
-    min-height:45vh;
+    height:45vh;
+    overflow-y: auto;
+
 
 }
 .pastSessionsDiv > h3, .upcomingSessionsDiv > h3 {
@@ -40,4 +52,19 @@
     border-radius:20px;
     margin-bottom: 10px;
     padding:5px 10px 5px 10px
+}
+
+.sessionDiv{
+    border: 1px solid purple;
+    border-radius:10px;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.sessionDiv > p {
+    margin-bottom:2px;
+}
+
+.bold{
+    font-weight:bold;
 }

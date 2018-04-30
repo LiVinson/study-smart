@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { Tabs, Tab } from 'react-bootstrap';
-import { FormControl, FormGroup, ControlLabel, Button, HelpBlock } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, Button } from "react-bootstrap";
 import StudyBuddyForm from '.././StudyBuddyForm';
 import './SessionTabModal.css'
 

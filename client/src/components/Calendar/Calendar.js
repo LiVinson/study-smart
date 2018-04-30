@@ -2,7 +2,7 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import React from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Link } from 'react-router-dom';
+import './Calendar.css';
 
 BigCalendar.momentLocalizer(moment);
 

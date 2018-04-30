@@ -1,6 +1,10 @@
-/* .pageContainer{
-    height:100vh;
-} */
+.pageContainer{
+    margin-bottom:10px;
+}
+
+.calendarCol{
+    padding-left: 0px;
+}
 .mainContainer {
     /* border:2px solid black; */
     padding:2px;
@@ -14,7 +18,7 @@
     margin-top:0px;
 }
 .calendarContainer{
-    height:85vh;
+    height:83vh;
     /* border:2px solid black; */
 }
 

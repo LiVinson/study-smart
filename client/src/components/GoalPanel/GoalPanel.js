@@ -1,12 +1,16 @@
 import React from 'react';
 import "./GoalPanel.css";
-import { Button } from 'react-bootstrap';
+// import ScrollArea from 'react-scrollbar';
 
-const GoalPanel = (props) => {
+const GoalPanel = props => {
+    console.log("goal panel has been rendered");
     return (
-        <div className="goalPanel">
-        {props.children}
-        </div>
+            
+            <div className="goalPanel">
+                {props.children}
+            </div>
+
+           
     );
 }
 
