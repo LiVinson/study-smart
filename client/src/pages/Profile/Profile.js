@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './Profile.css';
 import Calendar from '../../components/Calendar';
@@ -400,7 +400,7 @@ class Profile extends Component {
 				<NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.toggleProfileModal}/>
 				<ButtonBar goalCreated={this.state.profile.goals.length} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal}  />
 				<Grid fluid={true} className="pageContainer">
-					<Row>
+					<Row className="mainRow">
 						<Col xs={12} sm={3}>
 							<GoalPanel>
 								<h2>Learning Goals</h2>
@@ -418,7 +418,7 @@ class Profile extends Component {
 									)}
 							</GoalPanel>
 						</Col>
-						<Col xs={12} sm={9} >
+						<Col className="calendarCol" xs={12} sm={9} >
 							<div className="mainContainer">
 								<h2>Study Schedule</h2>
 								<div className="calendarContainer">
@@ -433,7 +433,7 @@ class Profile extends Component {
 								/>
 							</ModalBoot>
 
-							<ModalBoot show={this.state.showProfileModal} title='User Profile'>
+							<ModalBoot show={this.state.showProfileModal} title='View &amp; Edit Your Profile'>
 								<ViewProfile
 									viewProfile={this.state.viewProfile}
 									profile={this.state.profile}

@@ -1,27 +1,30 @@
 import React from 'react';
 import { FormControl, FormGroup, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import './ViewProfile.css';
+
 const ViewProfile = props => {
     return (
         <div>
             {props.viewProfile ? (
-                <div>
+                <div className="viewProfileDiv">
                     <div>
-                        <p>First Name: {props.profile.first_name}</p>
-                        <p>Last Name: {props.profile.last_name}</p>
-                        <p>Mobile Number: {props.profile.mobile_number}</p>
-                        <p>Learner Status: {props.profile.learner_status}</p>
+                        <p className="profileText"><span>First Name: </span>{props.profile.first_name}</p>
+                        <p className="profileText"><span>Last Name: </span>{props.profile.last_name}</p>
+                        <p className="profileText"><span>Mobile Number: </span>{props.profile.mobile_number}</p>
+                        <p className="profileText"><span>Learner Status: </span>{props.profile.learner_status}</p>
+                        <p className="profileText"><span>Number of Learning Goals: </span>{props.profile.goals.length}</p>
+                        <p className="profileText"><span>Number of Study Sessions: </span>{props.profile.sessions.length}</p>
+
                     </div>
-                    <div>
-                        <Button onClick={props.editProfileForm}>Edit Profile</Button>
-                        <Button onClick={props.toggleProfileModal}>Close Profile</Button>
+                    <div className='viewProfileBtnContainer'>
+                        <Button className="editProfileBtn" onClick={props.editProfileForm}>Edit Profile</Button>
+                        <Button className="cancelViewProfile" onClick={props.toggleProfileModal}>Close</Button>
                     </div>
                 </div>
             ) : (
                     <form>
                         <FormGroup>
-
                             <ControlLabel>First Name</ControlLabel>
-
                             <FormControl
                                 type="text"
                                 label="Text"
@@ -70,9 +73,9 @@ const ViewProfile = props => {
                                 <option value="Bootcamp">Bootcamp</option>
                             </FormControl>
                         </FormGroup>
-                        <div>
-                            <Button onClick={props.saveProfileEdit}>Save Changes</Button>
-                            <Button onClick={props.toggleProfileModal}>Cancel</Button>
+                        <div className='viewProfileBtnContainer'>
+                            <Button className="editProfileBtn" onClick={props.saveProfileEdit}>Save Changes</Button>
+                            <Button className="cancelViewProfile" onClick={props.toggleProfileModal}>Cancel</Button>
                         </div>
                     </form>
 

@@ -1,8 +1,9 @@
 .goalPanel{
     border: solid 2px black;
-    min-height:94vh;
     background-color:lightgray;
     padding:10px;
+    height:100%;
+    overflow-y: auto;
 }
 
 .goalPanel > h2 {

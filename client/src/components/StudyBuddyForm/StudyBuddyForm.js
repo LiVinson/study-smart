@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, ControlLabel, Checkbox, HelpBlock, Button } from "react-bootstrap";
+import { FormControl, FormGroup, ControlLabel, HelpBlock, Button } from "react-bootstrap";
 import './StudyBuddyForm.css';
 
 const StudyBuddyForm = props => {

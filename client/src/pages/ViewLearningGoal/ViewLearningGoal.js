@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import './ViewLearningGoal.css';
 import NavbarBoot from '../../components/NavbarBoot';
 import ButtonBar from '../../components/ButtonBar';
@@ -27,7 +27,6 @@ class ViewLearningGoal extends Component {
             category: "",
             due_date: "",
             createdAt: "",
-            due_date:"",
             goal: "",
             measurement: "",
             sessions: [],
@@ -37,28 +36,33 @@ class ViewLearningGoal extends Component {
     };
 
     componentDidMount() {
-        // console.log("userId before API method:", this.props.auth.userId);
-        // console.log("goalId before API methods:", this.props.match.match.params.goalId);
+        // console.log("renderProps (goalData):", this.props.goalData);
+
+        this.getProfile();
+
+    };
+
+    getProfile() {
         API.getLearnerProfile(this.props.auth.userId).then(response => {
             // console.log("profile -", response.data);
-            console.log("goals array inside of profile", response.data.goals);
-            console.log("id of goal to locate", this.props.match.match.params.goalId);
+            // console.log("goals array inside of profile", response.data.goals);
+            // console.log("id of goal to locate", this.props.match.match.params.goalId);
             const goal = response.data.goals.filter(goal => {
-                return goal._id === this.props.match.match.params.goalId
+                return goal._id === this.props.goalData.match.params.goalId
             })[0];
-            console.log("goal after filtering the return profile based on Id", goal);
+            // console.log("goal after filtering the return profile based on Id", goal);
             const pastSessions = goal.sessions.filter(session => {
                 // console.log("past event end time", session.end);
                 // console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
                 return ((moment(session.end)).diff(moment()) < 0)
             });
-            console.log("past sessions", pastSessions );
+            // console.log("past sessions", pastSessions );
             const upcomingSessions = goal.sessions.filter(session => {
                 // console.log("past event end time", session.end);
                 // console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
                 return ((moment(session.end)).diff(moment()) > 0)
             });
-            console.log("upcoming sessions", upcomingSessions );
+            // console.log("upcoming sessions", upcomingSessions );
             this.setState({
                 profile: response.data,
                 goal: goal,
@@ -66,54 +70,50 @@ class ViewLearningGoal extends Component {
                 upcomingSessions: upcomingSessions
             })
         })
-        // .then(() => {
-        //     // console.log("goalId:", this.props.match.match.params.id)
-        //     API.getGoal(this.props.match.match.params.goalId)
-        //     .then(res => this.setState({
-        //          goal: res.data,
-
-        //         }))
-            .catch(err => console.log(err));
+        .catch(err => console.log(err))
+      
         
     };
 
-    getPastEvents() {
-        this.state.goal.sessions.filter(session => {
-            console.log("past event end time", session.end);
-            console.log("difference between now and session end time", (moment(session.end)).diff(moment()));
-            return ((moment(session.end)).diff(moment()) < 0);
-         })
-    }
+    componentDidUpdate(prevProps) {
+        console.log("prevProps.goalData.location:", prevProps.goalData.location);
+        console.log("this.props.goalData.location:", this.props.goalData.location);
 
-    // getUpcomingEvents() {
-    //     this.state.profile.goals.sessions.filter(session => {
-    //         const endDate=session.end;
-    //         console.log(endDate);
-    //         const now = moment()
-    //         return ((moment(endDate)).diff(now) > 0)
-    //      })
-    // }
+        if (this.props.goalData.location !== prevProps.goalData.location) {
+          this.onRouteChanged();
+        }
+      };
+    
+      onRouteChanged() {
+        console.log("ROUTE CHANGED");
+        this.getProfile();
+      };
 
-    render() {
+    studyHoursCompleted(items, prop) {
+        return items.reduce((acc, session) => {
+            return (acc + session[prop]/60);
+        }, 0)
+    };
+
+     render() {
+        console.log("renderProps (goalData):", this.props.goalData);
         return (
             <div>
                 <NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout}/>
-                <Grid fluid={true} className="pageContainer">
                 <ButtonBar first_name={this.state.profile.first_name} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal} viewStudyInvites={this.viewStudyInvites}/>
 
-                    <Row>
-                        <Col md={3} sm={12}>
+                <Grid fluid={true} className="pageContainer">
+
+                    <Row className="mainRow">
+                        <Col sm={3} xs={12}>
                             <GoalPanel>
                             <h2>Learning Goals</h2>
-                            {this.state.profile.goals.length ? (
-									
+                            {this.state.profile.goals.length ? (									
                                     <div> 
                                        {this.state.profile.goals.slice(0).reverse().map(goal => (
-                                           // <li key={goal._id}>
-                                            //    <Link to={"/learninggoal/" + goal._id}>
+
                                                    <GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
-                                            //    </Link>
-                                           // </li>
+
                                        ))}
                                     </div>
                                    
@@ -123,7 +123,7 @@ class ViewLearningGoal extends Component {
 
                             </GoalPanel>
                         </Col>
-                        <Col md={9} sm={12}>
+                        <Col className="learningGoalCol" sm={9} xs={12}>
                             <div className='learningGoalContainer'>
                                 <Row>
                                     <Col sm={12}>
@@ -133,8 +133,8 @@ class ViewLearningGoal extends Component {
                                             <p><span>Measurement: </span>{this.state.goal.measurement}</p>
                                             <p><span>Barriers: </span>{this.state.goal.barriers}</p>
                                             <p><span>Created Date: </span>{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
-                                            <p><span>Total Study Hours Scheduled So Far: 4 hours</span></p>
-                                            <p><span>Total Study Hours Completed: 0 hours - Time to hit the books!</span></p>
+                                            <p><span>Due Date: </span>{moment(this.state.goal.due_date).format("dddd, MMMM, D, YYYY")}</p>
+                                            <p><span>Total Study Hours Completed: </span>{this.state.pastSessions ? (this.studyHoursCompleted(this.state.pastSessions, "duration")): ("0 minutes - It looks like you need to hit the books!")}</p>
 
                                         </div>
                                     </Col>
@@ -148,11 +148,10 @@ class ViewLearningGoal extends Component {
                                             {this.state.pastSessions.length ? (
                                               this.state.pastSessions.map(session => {
                                                   return(
-                                                  <div key={session._id}>
-                                                    <p>Study Session Topics: {session.title}</p>
-                                                    <p>Study Session Completed:{session.end}</p>
-                                                    
-                                                </div>)
+                                                  <div className= "sessionDiv" key={session._id}>
+                                                    <p><span className="bold">Topics: </span>{session.title}</p>
+                                                    <p><span className="bold">Date: </span>{moment(session.end).format("MMMM Do YYYY, h:mm A")}</p>
+                                                 </div>)
                                                 })
                                             ) : (<div>You have not completed any study sessions for this goal yet!</div>)
                                         }
@@ -164,9 +163,9 @@ class ViewLearningGoal extends Component {
                                             {this.state.upcomingSessions.length ? (
                                               this.state.upcomingSessions.map(session => {
                                                   return(
-                                                  <div key={session._id}>
-                                                    <p>Study Session Topics: {session.title}</p>
-                                                    <p>Study Session Completed:{session.end}</p>
+                                                  <div className= "sessionDiv" key={session._id}>
+                                                    <p><span className="bold">Topics: </span>{session.title}</p>
+                                                    <p><span className="bold">Date: </span>{moment(session.end).format("MMMM Do YYYY, h:mm A")}</p>
                                                     
                                                 </div>)
                                                 })

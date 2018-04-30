@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import './ButtonBar.css'
 import { Link } from 'react-router-dom';
 
@@ -20,9 +20,9 @@ const ButtonBar = props => {
                 <Button disabled={props.goalCreated < 1} block onClick={props.showSessionModal}>Add New Study Session</Button>
 
             </Col>
-            <Col sm={3} xs={12}>
+            <Col className="btnBarCol4" sm={3} xs={12}>
                 <Link to={"/"}>
-                    <Button disabled block>Study Invite-<span className="italics">Coming soon!</span></Button>
+                    <Button disabled block>View Study Invites - <span className="italics">Coming soon!</span></Button>
                 </Link>
             </Col>
         </Row>
