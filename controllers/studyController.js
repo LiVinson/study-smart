@@ -107,7 +107,7 @@ module.exports = {
         const {
             goalId,
             owner,
-            owner_name,
+            // owner_name,
             title,
             start,
             location
@@ -121,7 +121,7 @@ module.exports = {
         db.StudySession.create({
                 goalId,
                 owner,
-                owner_name,
+                // owner_name,
                 title,
                 start,
                 duration,

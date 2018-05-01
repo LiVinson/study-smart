@@ -37,6 +37,7 @@ export default {
 //STUDY SESSIONS
     createSession: (sessionData, userId) => {
         console.log("studySession object, before sending to port", sessionData);
+        console.log("user Id before sending event:", userId)
         // sessionData.start = sessionData.start.format();
         // console.log(sessionData.start);
         return (axios.post(`/api/studysession/${userId}`, sessionData))
