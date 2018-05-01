@@ -12,7 +12,7 @@ const StudySession = new Schema({
     },
     owner_name: {
         type:String,
-        required:true
+        required:false
     }, 
 
     title: {

@@ -273,47 +273,47 @@ class Profile extends Component {
 	};
 
 	//INVITE STUDYBUDDY FORM
-	handleStudyBuddyInputChange = event => {
-		const { name, value } = event.target;
-		const study_buddy = Object.assign({}, this.state.study_buddy);
-		study_buddy[name] = value;
-		this.setState({
-			study_buddy: study_buddy
-		})
-	};
+	// handleStudyBuddyInputChange = event => {
+	// 	const { name, value } = event.target;
+	// 	const study_buddy = Object.assign({}, this.state.study_buddy);
+	// 	study_buddy[name] = value;
+	// 	this.setState({
+	// 		study_buddy: study_buddy
+	// 	})
+	// };
 
-	handleStudyBuddySubmit = event => {
-		event.preventDefault();
-		const studyBuddyEmail = this.state.study_buddy.email.toLowerCase();
-		API.checkEmailExists(studyBuddyEmail).then(response => {
-			console.log("response received from API.checkEmail:", response.data)
-			if (response.data === "null") { //invalid email
+	// handleStudyBuddySubmit = event => {
+	// 	event.preventDefault();
+	// 	const studyBuddyEmail = this.state.study_buddy.email.toLowerCase();
+	// 	API.checkEmailExists(studyBuddyEmail).then(response => {
+	// 		console.log("response received from API.checkEmail:", response.data)
+	// 		if (response.data === "null") { //invalid email
 
-				const study_buddy = this.state.study_buddy;
-				study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
+	// 			const study_buddy = this.state.study_buddy;
+	// 			study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
 
-				this.setState({
-					study_buddy: study_buddy
-				})
+	// 			this.setState({
+	// 				study_buddy: study_buddy
+	// 			})
 
-			} else {
-				const study_buddy = this.state.study_buddy;
-				study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
-				//Send invite to this user
-				this.setState({
-					study_buddy: study_buddy
-				}, this.inviteUser(response.data))
+	// 		} else {
+	// 			const study_buddy = this.state.study_buddy;
+	// 			study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
+	// 			//Send invite to this user
+	// 			this.setState({
+	// 				study_buddy: study_buddy
+	// 			}, this.inviteUser(response.data))
 
-			}
-		})
-	};
+	// 		}
+	// 	})
+	// };
 
-	inviteUser = (buddyId) => {
-		const session = this.state.selectedSession;
-		API.sendSessionInvitation(buddyId, session).then(response => {
-			console.log("response received from API.sendSessionInvitation", response.data)
-		})
-	};
+	// inviteUser = (buddyId) => {
+	// 	const session = this.state.selectedSession;
+	// 	API.sendSessionInvitation(buddyId, session).then(response => {
+	// 		console.log("response received from API.sendSessionInvitation", response.data)
+	// 	})
+	// };
 
 
 	//MODAL CONTROLS
@@ -346,11 +346,6 @@ class Profile extends Component {
 			newSession: newSession,
 			showSessionModal: false
 		})
-	};
-
-
-	viewGoalDetails = (clickedGoal) => {
-		alert("view details on this goal");
 	};
 
 	viewSessionDetails = (clickedEvent) => {

@@ -7,8 +7,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import GoalPanel from '../../components/GoalPanel';
 import GoalPanelMessage from '../../components/GoalPanelMessage';
 import GoalCard from '../../components/GoalCard';
+import AddGoalForm from '../../components/AddGoalForm';
+import ModalBoot from '../../components/ModalBoot';
+import ProfileForm from '../../components/ProfileForm';
+import ViewProfile from '../../components/ViewProfile';
+import StudySessionForm from '../../components/StudySessionForm';
 import moment from 'moment';
 import API from '../../utils/API';
+
 
 class ViewLearningGoal extends Component {
     state = {
@@ -31,16 +37,42 @@ class ViewLearningGoal extends Component {
             measurement: "",
             sessions: [],
         }, 
+        editProfile: {
+			first_name: "",
+			last_name: "",
+			mobile_number: "",
+			learner_status: ""
+		},
+		viewProfile: true,
+		newGoal: {
+			category: "",
+			due_date: moment(),
+			// goalId: "",
+			measurement: "",
+			barriers: "",
+		},
+		newSession: {
+			goalId: "",
+			owner: this.props.auth.userId,
+			owner_name: "",
+			title: "",
+			start: moment(),
+			duration_hours: 0,
+			duration_minutes: 0,
+			location: "",
+		},
         pastSessions: [],
-        upcomingSessions: []
+        upcomingSessions: [],
+        showGoalModal: false,
+		showSessionModal: false,
+		showProfileModal: false,
+		error: ""
     };
 
     componentDidMount() {
         // console.log("renderProps (goalData):", this.props.goalData);
-
         this.getProfile();
-
-    };
+   };
 
     getProfile() {
         API.getLearnerProfile(this.props.auth.userId).then(response => {
@@ -95,12 +127,167 @@ class ViewLearningGoal extends Component {
         }, 0)
     };
 
+    	//Profile Form input
+	handleInputChange = event => {
+		const { name, value } = event.target;
+
+		if (this.state.firstLogin) {
+			const profile = Object.assign({}, this.state.profile);
+			profile[name] = value;
+			this.setState({
+				profile: profile
+			})
+		} else {
+			const editProfile = Object.assign({}, this.state.editProfile);
+			editProfile[name] = value;
+			this.setState({
+				editProfile: editProfile
+			})
+		}
+	};
+
+	toggleProfileModal = () => {
+		if (!this.state.showProfileModal) {
+			const editProfile = Object.assign({}, this.state.editProfile);
+			editProfile.first_name = this.state.profile.first_name;
+			editProfile.last_name = this.state.profile.last_name;
+			editProfile.mobile_number = this.state.profile.mobile_number;
+			editProfile.learner_status = this.state.profile.learner_status;
+			this.setState({
+				showProfileModal: true,
+				viewProfile: true,
+				editProfile: editProfile
+			})
+		}
+		else {
+			this.setState({
+				showProfileModal: false,
+				viewProfile: true
+			})
+		}
+    };
+    
+    editProfileForm = () => {
+		console.log("edit profile clicked");
+
+		this.setState({
+			viewProfile: false,
+			// editProfile: editProfile
+		})
+	};
+
+	saveProfileEdit = () => {
+		console.log("you have requested to edit your profile");
+		const profile = this.state.editProfile;
+		const userId = this.props.auth.userId
+		API.editLearnerProfile(profile, userId).then(response=> {
+			console.log(response);
+			this.getProfile()
+			})
+    };
+    
+	showGoalModal = () => {
+		console.log("show goal modal");
+		this.setState({
+			showGoalModal: true
+		})
+	};
+
+	hideGoalModal = () => {
+		const newGoal = { ...this.state.newGoal, category: "", due_date: moment(), measurement: "", barriers: "" };
+		this.setState({
+			newGoal: newGoal,
+			showGoalModal: false
+		})
+    };
+    
+
+	//CREATE NEW GOAL FORM
+	showSessionModal = () => {
+		console.log("show session modal");
+		this.setState({
+			showSessionModal: true
+		})
+    };
+
+    hideSessionModal = () => {
+		const newSession = { ...this.state.newSession, goalId: "", title: "", location: "", start: moment(), end: moment() };
+		this.setState({
+			newSession: newSession,
+			showSessionModal: false
+		})
+	};
+    
+	//Goal Form Input (all except date)
+	handleGoalInputChange = event => {
+		const { name, value } = event.target;
+		const newGoal = Object.assign({}, this.state.newGoal);
+		newGoal[name] = value;
+		this.setState({
+			newGoal: newGoal
+		})
+	};
+
+	//Goal form input - date
+	handleGoalDate = date => {
+		const newGoal = Object.assign({}, this.state.newGoal);
+		newGoal.due_date = date;
+		this.setState({
+			newGoal: newGoal
+		})
+	};
+
+	//Goam form submission
+	createGoalSubmit = () => {
+		console.log("you've created a goal!");
+		const goal = Object.assign({}, this.state.newGoal);
+
+		API.createGoal(goal, this.props.auth.userId).then(() => {
+			this.setState({
+				showGoalModal: false
+			});
+			this.getProfile();
+		})
+	};
+
+	//CREATE NEW STUDY SESSION FORM
+
+	handleSessionInputChange = event => {
+		// console.log(event.target);
+		const { name, value } = event.target;
+		const newSession = Object.assign({}, this.state.newSession);
+		newSession[name] = value;
+		this.setState({
+			newSession: newSession
+		})
+	};
+
+	handleStartChange = date => {
+		console.log(date);
+		const newSession = Object.assign({}, this.state.newSession);
+		newSession.start = date;
+		this.setState({
+			newSession: newSession
+		});
+	};
+
+	createSessionSubmit = () => {
+        console.log("create study session clicked!");
+		API.createSession(this.state.newSession, this.props.auth.userId)
+			.then((response) => {
+				console.log(response.data);
+				this.hideSessionModal();
+				this.getProfile(); //Redirect to profile page
+			})
+	};
+
+
      render() {
         console.log("renderProps (goalData):", this.props.goalData);
         return (
             <div>
-                <NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout}/>
-                <ButtonBar first_name={this.state.profile.first_name} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal} viewStudyInvites={this.viewStudyInvites}/>
+				<NavbarBoot home={false} first_name={this.state.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.toggleProfileModal}/>
+				<ButtonBar goalCreated={this.state.profile.goals.length} showGoalModal={this.showGoalModal} showSessionModal={this.showSessionModal}  />
 
                 <Grid fluid={true} className="pageContainer">
 
@@ -171,23 +358,53 @@ class ViewLearningGoal extends Component {
                                                 })
                                             ) : (<div>You do not have any study sessions scheduled for this goal.</div>)
                                         }
-                                                {/* <div className="upcomingEventDiv">
-                                                    <p>Study Topics: const, let, and block scoping</p> 
-                                                    <p>Date: April 20, 2018 at 11:00 AM</p>
-                                                </div>
-
-                                                <div className="upcomingEventDiv">
-                                                    <p>Study Topics: Arrow functions and promises</p> 
-                                                    <p>Date: April 21, 2018 at 4:00 PM</p>
-                                                </div> */}
-
-                                               {/* {this.getUpcomingEvents.length ? (
-                                                this.getUpcomingEvents.map(futureEvent => {
-                                                    <p>{futureEvent.topic}</p>
-                                                })
-                                            ) : (<div>You have no study sessions for this goal scheduled. Get to studying!</div>)} */}
-
                                         </div>
+
+                                        							<ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
+								<ProfileForm
+									handleInputChange={this.handleInputChange}
+									createProfileSubmit={this.createProfileSubmit}
+								/>
+							</ModalBoot>
+
+							<ModalBoot show={this.state.showProfileModal} title='View &amp; Edit Your Profile'>
+								<ViewProfile
+									viewProfile={this.state.viewProfile}
+									profile={this.state.profile}
+									editProfileForm={this.editProfileForm}
+									saveProfileEdit={this.saveProfileEdit}
+									handleInputChange={this.handleInputChange}
+									toggleProfileModal={this.toggleProfileModal}
+									editProfile={this.state.editProfile}
+									// createProfileSubmit={this.createProfileSubmit}
+								/>
+							</ModalBoot>
+
+							<ModalBoot show={this.state.showGoalModal} title='Add a Learning Goal'>
+								<AddGoalForm
+									handleGoalInputChange={this.handleGoalInputChange}
+									handleGoalDate={this.handleGoalDate}
+									createGoalSubmit={this.createGoalSubmit}
+									hideGoalModal={this.hideGoalModal}
+									due_date={this.state.newGoal.due_date}
+								/>
+							</ModalBoot>
+
+							<ModalBoot
+								show={this.state.showSessionModal}
+								goals={this.state.profile.goals}
+								title='Schedule a New Study Session'>
+								<StudySessionForm
+									handleStartChange={this.handleStartChange}
+									handleEndChange={this.handleEndChange}
+									handleSessionInputChange={this.handleSessionInputChange}
+									createSessionSubmit={this.createSessionSubmit}
+									hideSessionModal={this.hideSessionModal}
+									goals={this.state.profile.goals}
+									start={this.state.newSession.start}
+									end={this.state.newSession.end}
+								/>
+							</ModalBoot>
                                     </Col>
                                 </Row>
                             </div>

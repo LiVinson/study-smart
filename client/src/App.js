@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
-
-// import SignIn from "./components/SignIn";
-// import SignUp from "./components/SignUp";
+// import NavbarBoot from './components/NavbarBoot';
+// import ButtonBar from './components/ButtonBar';
 import Profile from "./pages/Profile";
 import HomePage from "./pages/HomePage";
 import ViewLearningGoal from "./pages/ViewLearningGoal";
@@ -22,6 +21,10 @@ class App extends Component {
 
   };
 
+  //Add duplicated functions in Profile and Learning Goal page here
+
+
+  
   componentWillMount() {
     axios.get("/auth/isAuthenticated").then((result) => {
       const { userId, isAuthenticated, username } = result.data;
@@ -86,6 +89,7 @@ class App extends Component {
   render() {
     const loggedIn = this.state.auth.isAuthenticated;
     return (
+
       <Router>
         <div>
           <Route exact path="/" render={() => {
