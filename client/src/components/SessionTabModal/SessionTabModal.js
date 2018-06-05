@@ -8,7 +8,11 @@ import './SessionTabModal.css'
 
 const SessionTabModal = props => {
 
+    //Takes in goals array from props.profile.goals passed from LearningGoalPage. Uses find method to search each element and return the one with an ID that matches
+    //the if passed in as props.selected Session from LearningGoalPage component. Used to ...
     const associatedGoal = (props.goals).find(goal => { return goal._id === (props.selectedSession.goalId) });
+
+    //Takes in the array passed in as props.selectedSession.resources from LearningGoalPage
     const resourcesArr = (props.selectedSession.resources).filter(resource => {return resource.show === true});
 
     return (

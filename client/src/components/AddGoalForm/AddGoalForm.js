@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import "./AddGoalForm.css";
 import DateSelector from '../DateSelector';
 
-const AddGoalForm = (props) => {
+const AddGoalForm = props => {
     return (
     <form>
         <FormGroup>

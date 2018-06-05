@@ -2,9 +2,9 @@ const User = require("../models").User;
 
 module.exports = {
 
-    getAuthentication: (req, res) => {
+	getAuthentication: (req, res) => {
 		console.log("get  authenthication");
-        if (req.isAuthenticated()){
+		if (req.isAuthenticated()) {
 			res.json({
 				userId: req.user._id,
 				username: req.user.username,
@@ -21,30 +21,33 @@ module.exports = {
 			});
 		}
 
-    },
+	},
 
-    createNewUser: (req ,res) => {
-        const newUser = req.body;
-		User.register(newUser,newUser.password,(err,user)=>{
-			if (err){ return res.json(err.message); }
+	createNewUser: (req, res) => {
+		const newUser = req.body;
+		console.log("user info in controller:", newUser);
+		User.register(newUser, newUser.password, (err, user) => {
+			if (err) {
+				return res.json(err.message);
+			}
 			res.json({
 				userId: user._id,
 				username: user.username,
 				isAuthenticated: true
 			});
 		});
-    },
+	},
 
-    signInUser: (req, res) => {
-        res.json({
+	signInUser: (req, res) => {
+		res.json({
 			userId: req.user._id,
 			username: req.user.username,
 			isAuthenticated: true
 		});
-    },
+	},
 
-    logoutUser: (req, res) => {
+	logoutUser: (req, res) => {
 		req.logout();
 		res.json();
-    }
+	}
 }
