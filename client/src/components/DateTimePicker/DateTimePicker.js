@@ -26,10 +26,7 @@ const DateTimePicker = props =>  {
           timeIntervals={15}
           dateFormat="LLL"
           timeCaption="Time"
-          // name="start"
-          // value={props.start}
       />
-    // }
   }
 
   export default DateTimePicker;

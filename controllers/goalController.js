@@ -21,7 +21,12 @@ module.exports = {
                     }
                 }, {
                     new: true
-                }).then(profile => {
+                }).populate({
+                    path: "goals",
+                    populate: { path: "sessions" } 
+                }) //nested population: populates sessions within the goals goals populated
+                .populate("sessions").then(profile => {
+                    console.log("profile at the end of createOneGoal function - is sent back", profile)
                     res.json(profile); //confirm if sending profile back is what is needed...
                 })
             })

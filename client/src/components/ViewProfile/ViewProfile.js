@@ -17,7 +17,7 @@ const ViewProfile = props => {
 
                     </div>
                     <div className='viewProfileBtnContainer'>
-                        <Button className="editProfileBtn" onClick={props.editProfileForm}>Edit Profile</Button>
+                        <Button className="editProfileBtn" onClick={props.editProfileFormClicked}>Edit Profile</Button>
                         <Button className="cancelViewProfile" onClick={props.toggleProfileModal}>Close</Button>
                     </div>
                 </div>
@@ -30,7 +30,7 @@ const ViewProfile = props => {
                                 label="Text"
                                 placeholder="First Name"
                                 name="first_name"
-                                onChange={props.handleInputChange}
+                                onChange={props.handleProfileInputChange}
                                 value={props.editProfile.first_name}
                             />
                         </FormGroup>
@@ -43,7 +43,7 @@ const ViewProfile = props => {
                                 label="Text"
                                 placeholder="Last Name"
                                 name="last_name"
-                                onChange={props.handleInputChange}
+                                onChange={props.handleProfileInputChange}
                                 value={props.editProfile.last_name}
                             />
                         </FormGroup>
@@ -56,7 +56,7 @@ const ViewProfile = props => {
                                 label="Text"
                                 placeholder="123-456-7890"
                                 name="mobile_number"
-                                onChange={props.handleInputChange}
+                                onChange={props.handleProfileInputChange}
                                 value={props.editProfile.mobile_number}
                             />
                             <HelpBlock className="comingSoon"><b>Coming Soon!</b> Choose if you would like to receive reminder texts for upcoming study sessions!</HelpBlock>
@@ -65,7 +65,7 @@ const ViewProfile = props => {
                         <FormGroup>
                             <ControlLabel>Learner Status</ControlLabel>
 
-                            <FormControl onChange={props.handleInputChange} value={props.editProfile.learner_status} name="learner_status" componentClass="select" placeholder="select">
+                            <FormControl onChange={props.handleProfileInputChange} value={props.editProfile.learner_status} name="learner_status" componentClass="select" placeholder="select">
                                 <option value="High School Student">High School Student</option>
                                 <option value="College Student (Undergraduate)">College Student (Undergraduate)</option>
                                 <option value="College Student (Graduate)">College Student (Graduate)</option>
@@ -74,7 +74,7 @@ const ViewProfile = props => {
                             </FormControl>
                         </FormGroup>
                         <div className='viewProfileBtnContainer'>
-                            <Button className="editProfileBtn" onClick={props.saveProfileEdit}>Save Changes</Button>
+                            <Button className="editProfileBtn" onClick={props.saveProfileEdits}>Save Changes</Button>
                             <Button className="cancelViewProfile" onClick={props.toggleProfileModal}>Cancel</Button>
                         </div>
                     </form>
