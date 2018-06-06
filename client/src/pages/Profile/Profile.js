@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './Profile.css';
 import Calendar from '../../components/Calendar';
@@ -19,40 +18,6 @@ import SessionTabModal from '../../components/SessionTabModal';
 
 class Profile extends Component {
 	state = {
-		firstLogin: false,
-		profile: { //To be deleted, stored in App state
-			first_name: "",
-			last_name: "",
-			mobile_number: "",
-			learner_status: "",
-			goals: [],
-			sessions: [],
-			invitations: []
-		},
-		editProfile: { //To be deleted, stored in App state
-			first_name: "",
-			last_name: "",
-			mobile_number: "",
-			learner_status: ""
-		},
-		viewProfile: true,
-		newGoal: {
-			category: "",
-			due_date: moment(),
-			// goalId: "",
-			measurement: "",
-			barriers: "",
-		},
-		newSession: {
-			goalId: "",
-			owner: this.props.auth.userId,
-			owner_name: "",
-			title: "",
-			start: moment(),
-			duration_hours: 0,
-			duration_minutes: 0,
-			location: "",
-		},
 		selectedSession: {
 			_id: "",
 			active: true,
@@ -72,17 +37,15 @@ class Profile extends Component {
 			description: "",
 			url: ""
 		},
-		study_buddy: {
-			email: "",
-			emailError: ""
-		},
-
-		showGoalModal: false,
-		showSessionModal: false,
 		showSessionDetailModal: false,
 		showProfileModal: false,
-		error: ""
+		error: "",
+		// study_buddy: {
+		// 	email: "",
+		// 	emailError: ""
+		// },
 	};
+
 
 	componentDidMount() {
 		this.props.getProfile()
@@ -90,7 +53,7 @@ class Profile extends Component {
 
 
 	//Submit Profile Form
-	createProfileSubmit = (event) => { //TO be deleted, passed down as prop
+	createProfileSubmit = event => { 
 		event.preventDefault();
 		const userProfile = Object.assign({ userId: this.props.auth.userId }, this.props.profile);
 		API.createLearnerProfile(userProfile).then(response => {
@@ -122,6 +85,44 @@ class Profile extends Component {
 				console.log("response from getting event (should have updated resource),", responseSession.data);
 				this.setState({ selectedSession: responseSession.data })
 			})
+		})
+	};
+
+
+	viewSessionDetails = clickedEvent => {
+		// console.log("event clicked! - before formatting:", clickedEvent);
+		API.getSession(clickedEvent._id).then(response => {
+			const selectedSession = { ...response.data, }
+			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY,  h:mm A"); //copies data and formats, but does not impact original
+			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY,  h:mm A");
+			console.log("selectedSession after formatting:", selectedSession);
+
+			this.setState({
+				selectedSession: selectedSession,
+				showSessionDetailModal: true
+			})
+		})
+	};
+
+	hideSessionDetails = () => {
+		const selectedSession = {
+			_id: "",
+			active: true,
+			title: "",
+			owner: "",
+			owner_name: "",
+			start: "",
+			duration: "",
+			end: "",
+			location: "",
+			createdAt: "",
+			updatedAt: "",
+			invitees: [],
+			resources: []
+		};
+		this.setState({
+			selectedSession: selectedSession,
+			showSessionDetailModal: false
 		})
 	};
 
@@ -168,85 +169,13 @@ class Profile extends Component {
 	// 	})
 	// };
 
-
-	//MODAL CONTROLS
-	// showSessionModal = () => { //To be deleted, passed down from App as prop
-	// 	console.log("show session modal");
-	// 	this.setState({
-	// 		showSessionModal: true
-	// 	})
-	// };
-
-
-	// showGoalModal = () => { //To be deleted, passed down from APp as prop
-	// 	console.log("show goal modal");
-	// 	this.setState({
-	// 		showGoalModal: true
-	// 	})
-	// };
-
-	// hideGoalModal = () => { //To be deleted, passed down from App as prop
-	// 	const newGoal = { ...this.state.newGoal, category: "", due_date: moment(), measurement: "", barriers: "" };
-	// 	this.setState({
-	// 		newGoal: newGoal,
-	// 		showGoalModal: false
-	// 	})
-	// };
-
-	// hideSessionModal = () => { //To be deleted, pass down from App as prop
-	// 	const newSession = { ...this.state.newSession, goalId: "", title: "", location: "", start: moment(), end: moment() };
-	// 	this.setState({
-	// 		newSession: newSession,
-	// 		showSessionModal: false
-	// 	})
-	// };
-
-	viewSessionDetails = (clickedEvent) => {
-		// console.log("event clicked! - before formatting:", clickedEvent);
-		API.getSession(clickedEvent._id).then(response => {
-			const selectedSession = { ...response.data, }
-			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY,  h:mm A"); //copies data and formats, but does not impact original
-			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY,  h:mm A");
-			console.log("selectedSession after formatting:", selectedSession);
-
-			this.setState({
-				selectedSession: selectedSession,
-				showSessionDetailModal: true
-			})
-		})
-	};
-
-	hideSessionDetails = () => {
-		const selectedSession = {
-			_id: "",
-			active: true,
-			title: "",
-			owner: "",
-			owner_name: "",
-			start: "",
-			duration: "",
-			end: "",
-			location: "",
-			createdAt: "",
-			updatedAt: "",
-			invitees: [],
-			resources: []
-		};
-		this.setState({
-			selectedSession: selectedSession,
-			showSessionDetailModal: false
-		})
-	};
-
 	// viewStudyInvites = () => {
 	// 	alert("view your invites");
 	// }; //Link to view study invites
 
 	render() {
-		console.log("profile page has been rendered again!")
 		return (
 			<div>
-				
 				<NavbarBoot home={false} first_name={this.props.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.props.toggleProfileModal}/>
 				<ButtonBar goalCreated={this.props.profile.goals.length} showGoalModal={this.props.showGoalModal} showSessionModal={this.props.showSessionModal}  />
 				<Grid fluid={true} className="pageContainer">

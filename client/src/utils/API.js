@@ -3,7 +3,6 @@ import axios from "axios";
 export default {
 //PROFILE
     createLearnerProfile: (profileData) => {
-        console.log("inside of API createLearner (before)", profileData)
         return (axios.post(`/api/profile/`, profileData))
     },
 
@@ -12,44 +11,34 @@ export default {
     },
 
     editLearnerProfile: (profileData, userId) => {
-        console.log("inside of API editLearnerProfile", profileData)
         return (axios.patch(`/api/profile/${userId}`, profileData))
-
     },
 
 //GOALS
     createGoal: (goalData, userId) => {
-
-        console.log(goalData);
         return (axios.post(`/api/goal/${userId}`, goalData))
     },
 
     getGoal: (goalId) =>{
-        console.log(goalId)
         return (axios.get(`/api/goal/${goalId}`))
     },
 
     editGoal: (goalData, userId) => {
-        //Determine how to complete patch request
+        //ACTION - Determine how to complete patch request - mimic editProfile
 
     },
 
 //STUDY SESSIONS
     createSession: (sessionData, userId) => {
-        console.log("studySession object, before sending to port", sessionData);
-        console.log("user Id before sending event:", userId)
-        // sessionData.start = sessionData.start.format();
-        // console.log(sessionData.start);
         return (axios.post(`/api/studysession/${userId}`, sessionData))
     },
 
     getSession: (sessionId) => {
-        console.log(sessionId)
         return (axios.get(`api/studysession/${sessionId}`))
     },
 
     editSession: (goalData, userId) => {
-        //Determine how to complete patch request
+        //Determine how to complete patch request - mimic editProfile
     },
 
     addSessionResource: (resource, sessionId) => {

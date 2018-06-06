@@ -12,7 +12,6 @@ import ProfileForm from '../../components/ProfileForm';
 import ViewProfile from '../../components/ViewProfile';
 import StudySessionForm from '../../components/StudySessionForm';
 import moment from 'moment';
-import API from '../../utils/API';
 
 
 class ViewLearningGoal extends Component {
@@ -69,7 +68,7 @@ class ViewLearningGoal extends Component {
     };
 
     componentDidMount() {
-        // console.log("renderProps (goalData):", this.props.goalData);
+        console.log("renderProps (goalData):, passed in as props.goalData", this.props.goalData);
         this.retrieveGoal();
    };
 
@@ -134,7 +133,7 @@ class ViewLearningGoal extends Component {
         return (
             <div>
 				<NavbarBoot home={false} first_name={this.props.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.props.toggleProfileModal}/>
-				<ButtonBar goalCreated={this.props.profile.goals.length} showGoalModal={this.props.showGoalModal} showSessionModal={this.props.redirectShowSessionModal}  />
+				<ButtonBar goalCreated={this.props.profile.goals.length} showGoalModal={this.props.showGoalModal} showSessionModal={this.props.showSessionModal}  />
 
                 <Grid fluid={true} className="pageContainer">
 
@@ -207,7 +206,8 @@ class ViewLearningGoal extends Component {
                                         }
                                         </div>
 
-                                        							<ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
+                            {/* ACTION - Confirm create profile modal can be deleted from this page */}
+                            <ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
 								<ProfileForm
 									handleProfileInputChange={this.props.handleProfileInputChange}
 									createProfileSubmit={this.createProfileSubmit}
@@ -216,7 +216,7 @@ class ViewLearningGoal extends Component {
 
 							<ModalBoot show={this.props.modalToggle.ProfileModal} title='View &amp; Edit Your Profile'>
 								<ViewProfile
-									viewProfile={this.state.viewProfile}
+									viewProfile={this.state.viewProfile} //ACTION - determine if state in this component needed, or should be props
 									profile={this.state.profile}
 									editProfileFormClicked={this.props.editProfileFormClicked}
 									saveProfileEdits={this.props.saveProfileEdits}

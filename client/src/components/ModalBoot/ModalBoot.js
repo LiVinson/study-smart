@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-// import { Button } from 'react-bootstrap';
 import "./ModalBoot.css";
 
 const ModalBoot = props => {
@@ -14,9 +13,9 @@ const ModalBoot = props => {
                 {props.children}
             </Modal.Body>
             
+            {/* ACTION - Determine what, if anything should go in modal footer */}
             <Modal.Footer>
-                {/* <Button>Close</Button> */}
-                {/* <Button bsStyle="primary">Save Profile</Button> */}
+
             </Modal.Footer>
         </Modal>
     );

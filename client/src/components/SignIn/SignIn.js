@@ -2,8 +2,6 @@ import React from 'react';
 import './SignIn.css';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 
-// import {Link} from 'react-router-dom';
-
 const SignIn = props => {
     return (
         <div className='signInContainer'>

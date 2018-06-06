@@ -8,7 +8,6 @@ const StudyBuddyForm = props => {
             <FormGroup>
             <ControlLabel>Enter the email address for the study buddy you would like to invite to your {props.selectedSession.title} study session.</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     label="Text"
                     placeholder="user@email.com"
