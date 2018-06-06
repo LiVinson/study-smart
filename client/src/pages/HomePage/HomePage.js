@@ -3,11 +3,7 @@ import './Homepage.css';
 import NavbarBoot from '../../components/NavbarBoot';
 import JumbotronBoot from '../../components/JumbotronBoot';
 import { Grid, Row, Col } from 'react-bootstrap';
-
-// import { myTabs } from '../../components/Tab';
 import { Tabs, Tab } from 'react-bootstrap';
-
-// import { Link } from 'react-router-dom';
 import SignIn from '../../components/SignIn';
 import SignUp from '../../components/SignUp';
 import Footer from '../../components/Footer';

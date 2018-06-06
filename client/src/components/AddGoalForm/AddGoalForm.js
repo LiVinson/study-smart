@@ -25,7 +25,6 @@ const AddGoalForm = props => {
         <FormGroup>
             <ControlLabel>What is your learning goal?</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     label="Text"
                     placeholder="I want to learn..."
@@ -38,7 +37,6 @@ const AddGoalForm = props => {
         <FormGroup>
             <ControlLabel>How will you know you have acheived your goal?</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     placeholder="I will be able to..."
                     name="measurement"
@@ -59,7 +57,6 @@ const AddGoalForm = props => {
                 <FormGroup>
             <ControlLabel>What are some potential barriers to acheiving your goal?</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     placeholder=""
                     name="barriers"
@@ -69,6 +66,7 @@ const AddGoalForm = props => {
         </FormGroup>
         <div className='goalFormBtnContainer'>
             <Button className="addGoalBtn" onClick={props.createGoalSubmit}>Add Learning Goal</Button>
+           
             <Button className="cancelGoalBtn" onClick={props.hideGoalModal}>Cancel</Button>
         </div>
     </form>

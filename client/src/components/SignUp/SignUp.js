@@ -1,16 +1,9 @@
 import React from 'react';
 import "./SignUp.css";
-// import {Link} from 'react-router-dom';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 
 
-const SignUp = props=> {
-
-    // getValidationState: () => {
-
-
-    // }
-
+const SignUp = props => {
 
 	return (
 		<div className='signUpContainer'>
@@ -29,7 +22,6 @@ const SignUp = props=> {
                     />
                 </FormGroup>
                 <FormGroup
-                // validationState={this.getValidationState()
                     >
                     <ControlLabel>Password</ControlLabel>
                     <FormControl

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './App.css';
-import { BrowserRouter as Router, Route, Redirect, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 // import NavbarBoot from './components/NavbarBoot';
 // import ButtonBar from './components/ButtonBar';
@@ -22,7 +22,7 @@ class App extends Component {
       isAuthenticated: false
     },
     firstLogin: false,
-    profile: { //Pass down as prop to LG and Profile
+    profile: { //Passed down as prop to LG and Profile to store user profile
       first_name: "",
 			last_name: "",
 			mobile_number: "",
@@ -31,23 +31,21 @@ class App extends Component {
 			sessions: [],
 			invitations: []
     },
-    editProfile: { //Pass down as prop to LG and Profile
+    editProfile: { //Pass down as prop to LG and Profile to store profile input when being edited
       first_name: "",
 			last_name: "",
 			mobile_number: "",
 			learner_status: ""
     },
-    viewProfile:true,
-    newGoal: {
+    viewProfile:true, //
+    newGoal: { //Goal is stored when user inputs in add goal form
 			category: "",
 			due_date: moment(),
-			// goalId: "",
 			measurement: "",
 			barriers: "",
 		},
-		newSession: {
+		newSession: { //Goal is stored when user inputs in add session form
 			goalId: "",
-			// owner: this.props.auth.userId,
 			owner_name: "",
 			title: "",
 			start: moment(),
@@ -55,17 +53,19 @@ class App extends Component {
 			duration_minutes: 0,
 			location: "",
 		},
-    modalToggle: {
+    modalToggle: { //Controls which modal is displayed
         profileModal: false,
         goalModal: false,
         sessionModal: false,
         sessionDetailModal: false
     }
-
-
   };
   
-  componentWillMount() {
+  //  --------------------- USER AUTHENTICATION --------------------------
+
+  componentWillMount = () => {
+    // When app mounts, makes GET request - checks if user is authenticated. Receives username and pass value, or Null if not authenticated
+
     axios.get("/auth/isAuthenticated").then(result => {
       const { userId, isAuthenticated, username } = result.data;
       this.setState({
@@ -78,18 +78,22 @@ class App extends Component {
     });
   };
 
+
+  //  Called when user presses key in input field (various forms)
+
   handleChange = event => {
     const { name, value } = event.target;
-    // Set the state for the appropriate input field
+    // Sets the state for the appropriate input field
     this.setState({
       [name]: value
     });
   };
 
+
+  // Called when user clicks submit onSign Up form   Saves user in object, resets state, and sends post request   to create new user 
+
   handleSubmit = event => {
     event.preventDefault();
-
-    //call a sign In function
     const newUser = {
       username: this.state.username,
       password: this.state.password
@@ -99,6 +103,7 @@ class App extends Component {
       password: ""
     });
     const { name } = event.target;
+    
     axios.post(name, newUser).then(data => {
       if (data.data.isAuthenticated) {
         const { userId, isAuthenticated, username } = data.data;
@@ -111,7 +116,10 @@ class App extends Component {
         });
       }
     });
-  }
+  };
+
+
+  // Called when user clicks logout button. Makes GET  request to end login session, resets user data in state
 
   handleLogout = event => {
     event.preventDefault();
@@ -126,22 +134,25 @@ class App extends Component {
     })
   };
 
-    //Add duplicated functions in Profile and Learning Goal page here
-  
-  //CREATING, VIEWING, AND EDITING USER PROFILE
+ 
+// ------CREATING, VIEWING, AND EDITING USER PROFILE-----------------------
 
-  getProfile = this.getProfile.bind(this);    //Check if user has profile and store in state, otherwise set firstLogin to true - Profile form modal will appear
-    getProfile() { //Pass down as prop to Profile and View Learning Goal pages
-      console.log("this inside getProfile", this);
+
+  /*  Bind current context of this when called in App.getProfile() to the getProfile function s /App will still be the "this" when
+   function is called as a prop by other components  */
+
+  getProfile = this.getProfile.bind(this);    
+    getProfile() { 
+      /*  API method to get the authenticated user's profile from database, store profile in state and set viewProfile true
+       (controls if profile data shows when View Profile modal shows, or edit profile form)  */
       API.getLearnerProfile(this.state.auth.userId).then(response => {
-        console.log("response from API.getLearnerProfile", response.data);
-  
         if (response.data) {
                 this.setState({
                   profile: response.data,
                   viewProfile: true
                })
         } else {
+           /*  If there is no profile for user in the Learner table, how fistLogin true - profile modal with profile form displays  */
           this.setState({
             firstLogin:true
           })
@@ -149,21 +160,33 @@ class App extends Component {
       })
     };
 
+
+    // Called oncer user submits profile form for first time. Profile modal will be hidden
+
     profileCreated = () => {
       this.setState({
         firstLogin: false
       })
     }
+
+    //Called when user enters key in Profile form. 
     handleProfileInputChange = event => {
-      console.log("handle profile input change");
       const { name, value } = event.target;
 
-      if (this.state.firstLogin) {
+      /*If user is completing profile form for the first time
+      updates state.profile values to match user input in profile.state
+      */
+      if (this.state.firstLogin) { 
         const profile = Object.assign({}, this.state.profile);
         profile[name] = value;
         this.setState({
           profile: profile
         })
+        /*
+        If user makes profile edits, save user inputs in profile form in state.editProfile
+        so it will not overwrite current profile value (state.profile) until user submits changes
+        and updated in the database
+        */
       } else {
         const editProfile = Object.assign({}, this.state.editProfile);
         editProfile[name] = value;
@@ -171,14 +194,18 @@ class App extends Component {
           editProfile: editProfile
         })
       }
-
-
     };
-    //Called when View Profile button in Navbar clicked. Toggles showing profile and profile form to edit user profile
+
+    /*Called when View Profile button in Navbar clicked or modal is showing and "Close" btn is clicked.  Toggles showing profile info 
+    and profile form to edit user profile*/
+    
     toggleProfileModal = () => {
       const modalToggle = Object.assign({}, this.state.modalToggle)
 
-      //If modal is not showing, copy the profile data into editProfile, and save in state; show profile modal
+      /*If modal is not showing, copy the profile data into editProfile and save in state (will be displayed in form inputs); show profile modal
+      If modal is already showing (called when Close is clicked), toggle modal off. Update viewProfile to display Profile info when modal opens next
+      */
+      
       if (!this.state.modalToggle.profileModal) {//If modal is not showing
         const editProfile = Object.assign({}, this.state.editProfile);
         editProfile.first_name = this.state.profile.first_name;
@@ -204,40 +231,51 @@ class App extends Component {
       }
     };
 
-    //Called When user is viewing profile, and clicks edit profile button
+
+    //  Called When user is viewing profile, and clicks edit profile button. Changes modal contents from profile data to edit profile form
+    
     editProfileFormClicked = () => {
-      console.log("edit profile clicked");
         this.setState({
         viewProfile: false,
       })
     };
 
-      //Called when user has clicks to Save Changes to profile
+
+    //  Called when user clicks Save Changes in edit profile form
+
     saveProfileEdits = () => {
-      console.log("you have requested to edit your profile");
+      /* ACTION - Add check to see if editProfile and profile in state are exactly the same (user made no changes)
+      or disable Edit btn until editProfile != profile in state.
+      */
       const profile = this.state.editProfile;
-      const userId = this.state.auth.userId
-      console.log("new profile data:", profile);
+      const userId = this.state.auth.userId;
+
+      //API method to sent patch request to edit learner profile in Learner table, then calls method to get updated profile
       API.editLearnerProfile(profile, userId).then(response=> {
         console.log(response.data);
+        //ACTION - Instead of calling method again, check above console.log to see if editLearnerProfile returns updated profile object from
+        //patch request. If, so see if that is better to use instead of calling this.getProfile method.
         this.getProfile()
         })
 
     };
 
-//USER GOALS
+//----------------USER GOALS-------------------------------------
 
-//Goal Form Input (all except date)
-	handleGoalInputChange = event => {  //Pass down to Profile and LG as prop
+//Called when user presses key inside Goal form inputs. Updates state to store input values from form for all except date
+
+	handleGoalInputChange = event => {  
 		const { name, value } = event.target;
 		const newGoal = Object.assign({}, this.state.newGoal);
 		newGoal[name] = value;
 		this.setState({
 			newGoal: newGoal
 		})
-	};
+  };
+  
 
-	//Goal form input - date
+  // Called when user makes selection inside Goal form date input - updates selected date in state
+  
 	handleGoalDate = date => { //Pass down to Profile and LG as prop
 		const newGoal = Object.assign({}, this.state.newGoal);
 		newGoal.due_date = date;
@@ -246,28 +284,32 @@ class App extends Component {
 		})
 	};
 
-	//Goal form submission 
-	createGoalSubmit = () => { //Pass down to Profile and LG as prop
-		console.log("you've created a goal!");
+
+  //  Called when user submits Goal form submission
+   
+	createGoalSubmit = () => { 
 		const goal = Object.assign({}, this.state.newGoal);
 
+    /* API method to send POST request to api/newgoal, receives updated user profile with goal populated in response and updates state of 
+    profile and goal modal to be hidden */
 		API.createGoal(goal, this.state.auth.userId).then(response => {
-      console.log("response back from creating goal - should be profile:", response.data);
-      const modalToggle = Object.assign({}, this.state.modalToggle)
+
+      const modalToggle = Object.assign({}, this.state.modalToggle);
       modalToggle.goalModal = false;
 			this.setState({
         modalToggle: modalToggle,
         profile: response.data
 			});
-			
 		})
   };
   
 
-  //CREATE NEW STUDY SESSION FORM
+  //  -------------------USER STUDY SESSION -----------------
 
-	handleSessionInputChange = event => {//Pass down to profile and LG as prop
-		// console.log(event.target);
+
+  //  Called when user updates input inside Study session form. Saves user values in state for all inputs except start date
+
+	handleSessionInputChange = event => {
 		const { name, value } = event.target;
 		const newSession = Object.assign({}, this.state.newSession);
 		newSession[name] = value;
@@ -276,28 +318,36 @@ class App extends Component {
 		})
 	};
 
-	handleStartChange = date => { //Pass down to profile and LG as prop
-		console.log(date);
+
+  //  Called when user updates start date  input inside Study session form. Saves user selection
+
+	handleStartChange = date => { 
 		const newSession = Object.assign({}, this.state.newSession);
 		newSession.start = date;
 		this.setState({
 			newSession: newSession
 		});
-	};
+  };
+  
 
-	createSessionSubmit = () => { //Pass down to profile and LG as prop
-    console.log("createSessionSubmit!");
+  // Called when user clicks create study session in study session form
+
+	createSessionSubmit = () => { 
+
+    /* ACTION - Add validation to ensure all fields are entered, sensical data  Look into disabling submit button until required
+     fields entered */
+
     API.createSession(this.state.newSession, this.state.auth.userId)
-			.then((response) => {
-				console.log(response.data);
+			.then(response => {
 				this.hideSessionModal();
         this.getProfile();
 			})
 	};
 
 
-//MODAL CONTROLS
+// ---------------- MODAL CONTROLS -------------------------
 
+// Called when Add Goal navbar button clicked, Hidden when Cancel adding goal, submit goal clicked
 showGoalModal = () => {
   const modalToggle = Object.assign({}, this.state.modalToggle)
   modalToggle.goalModal = true;
@@ -306,8 +356,12 @@ showGoalModal = () => {
   })
 };
 
+
+// ACTION - Consider merging show/hideGoalModal. Only difference is resetting newGoal value in state - can add conditional
+
+// Called when Cancel btn in Add Goal Form clicked, or after goal submission
+
 hideGoalModal = () => {
-  console.log("hide goal modal");
   const newGoal = { ...this.state.newGoal, category: "", due_date: moment(), measurement: "", barriers: "" };
   const modalToggle = Object.assign({}, this.state.modalToggle)
   modalToggle.goalModal = false;
@@ -317,26 +371,19 @@ hideGoalModal = () => {
   });
 };
 
+
+// Called when user clicks Add Study Session
+
 showSessionModal = () => {
-  console.log("'this' inside of showSessionModal", this );
   const modalToggle = Object.assign({}, this.state.modalToggle);
   modalToggle.sessionModal = true;
   this.setState({
     modalToggle: modalToggle
   });
-
-  
-  
 };
 
-redirectShowSessionModal = ()=> {
-    console.log("'this' inside of residirectShowSessionModal:", this)
-    const modalToggle = Object.assign({}, this.state.modalToggle)
-    modalToggle.sessionModal = true;  
-    this.setState({
-      modalToggle: modalToggle
-    })
-}
+
+// Called is user clicks Cancel in study session form. Resets state.newSession values, hides modal
 
 hideSessionModal = () => {
   const newSession = { ...this.state.newSession, goalId: "", title: "", location: "", start: moment(), end: moment() };
@@ -348,18 +395,19 @@ hideSessionModal = () => {
   })
 };
 
-    //----------------
+    
   render() {
     const loggedIn = this.state.auth.isAuthenticated;
     return (
-      //Add navbar and button bar component (if logged in)
+    //ACTION - Look into adding Navbar and Buttonbar for Profile and Learning Page here (if home, return Navbar 1, if !home
+    //return Navbar2 and buttonbar)
       <Router>
         <div>
           <Route exact path="/" render={() => {
-            if (loggedIn) {
-              return <Redirect to="/profile" /> //Change this to "/profile" endpoint (React Endopoint)
+            if (loggedIn) { //  At root, if user is authenticated, go to profile url (load profile component)
+              return <Redirect to="/profile" /> 
             } else {
-              return <HomePage //Change this to HomePage Component, which will require in everything needed to render Homepage
+              return <HomePage //If user not authenticated, load HomePage component
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
                 username={this.state.username}
@@ -367,54 +415,47 @@ hideSessionModal = () => {
               />
             }
           }} />
-          <Route exact path="/signup" render={() => {
-            if (loggedIn) {
-              return <Redirect to="/profile" />
-            } else {
-              return <HomePage
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-                username={this.state.username}
-                password={this.state.password}
-              />
-            }
-          }} />
-          <Route exact path="/profile" render={() => {
+
+          <Route exact path="/profile" render={() => { //If root/profile URL is hit, redired to root if not authenticated, otherwise load Profile component
             if (!loggedIn) {
               return <Redirect to="/" />
             } else {
-              return <Profile 
-                handleLogout={this.handleLogout} 
-                auth={this.state.auth} 
-                //add additional functions needed
-                profile={this.state.profile}
-                firstLogin={this.state.firstLogin}
-                getProfile={this.getProfile}
-                profileCreated={this.profileCreated}
-                viewProfile={this.state.viewProfile}
-                editProfileFormClicked={this.editProfileFormClicked}
-                editProfile={this.state.editProfile}
-                handleProfileInputChange={this.handleProfileInputChange}
-                toggleProfileModal={this.toggleProfileModal}
-                saveProfileEdits={this.saveProfileEdits}
-                newGoal={this.state.newGoal}
-                handleGoalInputChange={this.handleGoalInputChange}
-                handleGoalDate={this.handleGoalDate} 
-                createGoalSubmit={this.createGoalSubmit}
-                newSession={this.state.newSession}
-                handleSessionInputChange={this.handleSessionInputChange}
-                handleStartChange={this.handleStartChange}
-                createSessionSubmit={this.createSessionSubmit}
-                showSessionModal={this.showSessionModal}
-                hideSessionModal={this.hideSessionModal}
-                showGoalModal={this.showGoalModal}
-                hideGoalModal={this.hideGoalModal}
-                modalToggle={this.state.modalToggle}
+                return <Profile 
+                  auth={this.state.auth} 
+                  handleLogout={this.handleLogout} 
+                  profile={this.state.profile}
+                  firstLogin={this.state.firstLogin}
+                  viewProfile={this.state.viewProfile}
+                  getProfile={this.getProfile}
+                  profileCreated={this.profileCreated}
+                  editProfile={this.state.editProfile}
+                  editProfileFormClicked={this.editProfileFormClicked}
+                  handleProfileInputChange={this.handleProfileInputChange}
+                  saveProfileEdits={this.saveProfileEdits}
+                  newGoal={this.state.newGoal}
+                  handleGoalInputChange={this.handleGoalInputChange}
+                  handleGoalDate={this.handleGoalDate} 
+                  createGoalSubmit={this.createGoalSubmit}
+                  newSession={this.state.newSession}
+                  handleSessionInputChange={this.handleSessionInputChange}
+                  handleStartChange={this.handleStartChange}
+                  createSessionSubmit={this.createSessionSubmit}
+                  showGoalModal={this.showGoalModal}
+                  hideGoalModal={this.hideGoalModal}
+                  showSessionModal={this.showSessionModal}
+                  hideSessionModal={this.hideSessionModal}
+                  modalToggle={this.state.modalToggle}
+                  toggleProfileModal={this.toggleProfileModal}
                 />
+              }
             }
-          }
           } />
-          <Route exact path="/learninggoal/:goalId" render={(renderProps) => {
+
+          <Route exact path="/learninggoal/:goalId" render={renderProps => { 
+
+             /*When URL of root + learningGoal + goalId is requested, redirect to home if user is not authenticated. 
+              Otherwise load View Learning Goal component. Takes in renderProps as parameter - built in with react-router-dom and contains 
+              location, history and match data on URL location - used to compare current URL with previous to detect changes*/
             if (!loggedIn) {
               return <Redirect to="/" />
             } else {
@@ -434,21 +475,16 @@ hideSessionModal = () => {
                 createSessionSubmit={this.createSessionSubmit}
                 newSession={this.state.newSession}
                 showSessionModal={this.showSessionModal}
-                redirectShowSessionModal={this.redirectShowSessionModal}
                 toggleProfileModal = {this.toggleProfileModal}
                 editProfileFormClicked={this.editProfileFormClicked}
                 saveProfileEdits={this.saveProfileEdits}
                 showGoalModal={this.showGoalModal}
                 hideGoalModal={this.hideGoalModal}
                 hideSessionModal={this.hideSessionModal}
-
                 modalToggle={this.state.modalToggle}
-
-
-                //add additinal functions needed
                 />
+              }
             }
-          }
           } />
 
         </div>
