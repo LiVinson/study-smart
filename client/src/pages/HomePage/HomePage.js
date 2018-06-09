@@ -9,9 +9,11 @@ import SignUp from '../../components/SignUp';
 import Footer from '../../components/Footer';
 
 const HomePage = props => {
+	console.log(props.getPassValidationState);
 
 	return (
 		<div>
+
 			<NavbarBoot home={true} />
 			<JumbotronBoot />
 			<Grid>
@@ -44,6 +46,7 @@ const HomePage = props => {
 					</Col>
 					<Col xs={12} sm={5}>
 						<Tabs defaultActiveKey={1} animation={true} id="signInOrsignUp">
+						 {/* SignIn/Up Modal tabs. Component inside of tab with corresopndin event key displays */}
 
 							<Tab eventKey={1} title="Sign Up">
 							<SignUp
@@ -51,6 +54,8 @@ const HomePage = props => {
 									handleSubmit={props.handleSubmit}
 									username={props.username}
 									password={props.password}
+									authErrorMessage={props.authErrorMessage}
+									getPassValidationState={props.getPassValidationState}
 								/>
 
 							</Tab>
@@ -60,6 +65,7 @@ const HomePage = props => {
 									handleSubmit={props.handleSubmit}
 									username={props.username}
 									password={props.password}
+									authErrorMessage={props.authErrorMessage}
 								/>
 							</Tab>
 						</Tabs>

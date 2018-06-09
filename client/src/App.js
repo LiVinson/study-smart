@@ -16,10 +16,12 @@ class App extends Component {
   state = {
     username: "",
     password: "",
+    authErrorMessage: "",
     auth: {
       userId: "",
       username: "",
-      isAuthenticated: false
+      isAuthenticated: false,
+     
     },
     firstLogin: false,
     profile: { //Passed down as prop to LG and Profile to store user profile
@@ -67,6 +69,7 @@ class App extends Component {
     // When app mounts, makes GET request - checks if user is authenticated. Receives username and pass value, or Null if not authenticated
 
     axios.get("/auth/isAuthenticated").then(result => {
+      console.log("result from checking for authenication: ", result);
       const { userId, isAuthenticated, username } = result.data;
       this.setState({
         auth: {
@@ -75,8 +78,10 @@ class App extends Component {
           username
         }
       });
-    });
-  };
+    }).catch(err=> {
+      console.log("error received back from get request to check if user is authenticated", err);
+  })
+};
 
 
   //  Called when user presses key in input field (various forms)
@@ -85,11 +90,20 @@ class App extends Component {
     const { name, value } = event.target;
     // Sets the state for the appropriate input field
     this.setState({
-      [name]: value
+      [name]: value,
+      
     });
   };
 
+  //ACTION add getEmailValidationState function to ensure email entered is valid 
 
+  getPassValidationState = () => {
+      const length = this.state.password.length;
+      //ACTION - Add additional validation aside from length, and do not allow submission
+      if (length > 4) return 'success';
+      else if (length > 0) return 'error';
+      return null;
+  }
   // Called when user clicks submit onSign Up form   Saves user in object, resets state, and sends post request   to create new user 
 
   handleSubmit = event => {
@@ -98,16 +112,19 @@ class App extends Component {
       username: this.state.username,
       password: this.state.password
     };
+   
     this.setState({
-      username: "",
+      // username: "",
       password: ""
     });
-    const { name } = event.target;
-    
+    const { name } = event.target; //button name is auth/signin or auth/signup
+
     axios.post(name, newUser).then(data => {
       if (data.data.isAuthenticated) {
         const { userId, isAuthenticated, username } = data.data;
         this.setState({
+          authErrorMessage: "",
+          username: "",
           auth: {
             userId,
             isAuthenticated,
@@ -115,8 +132,32 @@ class App extends Component {
           }
         });
       }
-    });
-  };
+      else { 
+        console.log("what was received back from an unssuccesful authentication post:", data.data);    
+        let authErrorText;
+        switch (data.data.name) {
+          case ("UserExistsError"): 
+            authErrorText = "A user with that email address is already signed up. Please double check the email entered or sign in with the correct password";
+            break;
+          case ("IncorrectPasswordError"): 
+            authErrorText = "The email address or password you entered is incorrect. Please try again."
+            break;
+          case ("IncorrectUsernameError"): 
+            authErrorText = "Unable to find your Study Smart account. Please check your email address and try again."
+            break;
+          default:
+            console.log("this was the error message received back: ", data.data.message);
+            authErrorText = "There was a problem signing you in. Please try again";
+          }
+        this.setState({
+          authErrorMessage: authErrorText
+          })
+      }
+    }).catch(err => {
+      console.log("error message inside catch for signin post request:", err.response);
+
+        });
+      };
 
 
   // Called when user clicks logout button. Makes GET  request to end login session, resets user data in state
@@ -408,10 +449,12 @@ hideSessionModal = () => {
               return <Redirect to="/profile" /> 
             } else {
               return <HomePage //If user not authenticated, load HomePage component
+                authErrorMessage={this.state.authErrorMessage}
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
                 username={this.state.username}
                 password={this.state.password}
+                getPassValidationState={this.getPassValidationState}
               />
             }
           }} />

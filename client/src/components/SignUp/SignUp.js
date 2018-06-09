@@ -1,6 +1,7 @@
 import React from 'react';
 import "./SignUp.css";
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import ErrorMsgText from '../ErrorMsgText';
 
 
 const SignUp = props => {
@@ -18,10 +19,12 @@ const SignUp = props => {
                         onChange={props.handleChange}
                         name='username'
                         value={props.username}
-
+                        required
                     />
                 </FormGroup>
                 <FormGroup
+                    validationState={props.getPassValidationState()}
+
                     >
                     <ControlLabel>Password</ControlLabel>
                     <FormControl
@@ -31,10 +34,13 @@ const SignUp = props => {
                         onChange={props.handleChange}
                         name='password'
                         value={props.password}
+                        required
                     />
                 </FormGroup>
                 <br />
                 <Button className='signUpBtn' block type='submit' name="/auth/signup" onClick={props.handleSubmit}>Sign Up for Study Smart!</Button>
+                <ErrorMsgText>{props.authErrorMessage}</ErrorMsgText>
+
             </form>
 		</div>
 	);

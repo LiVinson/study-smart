@@ -6,7 +6,7 @@ module.exports = {
 	/ If so, returns username, pass, and true authentication status
 	*/
 	getAuthentication: (req, res) => {
-		console.log("get  authenthication");
+		console.log("Checking if user is authenticated...");
 		if (req.isAuthenticated()) {
 			res.json({
 				userId: req.user._id,
@@ -34,7 +34,8 @@ module.exports = {
 		console.log("user info in controller:", newUser);
 		User.register(newUser, newUser.password, (err, user) => {
 			if (err) {
-				return res.json(err.message);
+				console.log("there was an error with signing up the new user:", err);
+				return res.json(err);
 			}
 			res.json({
 				userId: user._id,
@@ -46,12 +47,13 @@ module.exports = {
 
 	/*
 		Called when POST request received at auth/signin
-		receives output from passport.authenticate()
+		receives succesful output from passport.authenticate()
 	*/
 	signInUser: (req, res) => {
+		console.log("sign-in user in controller was called. Req.body is: ", req);
 		res.json({
-			userId: req.user._id,
-			username: req.user.username,
+			userId: req._id,
+			username: req.username,
 			isAuthenticated: true
 		});
 	},

@@ -11,7 +11,16 @@ module.exports = function (passport) {
 
 	router.post("/signup", authController.createNewUser);
 
-	router.post("/signin",passport.authenticate('local'), authController.signInUser);
+	router.post("/signin", (req, res) => {
+		passport.authenticate('local', (err, user, info) => {
+			if (!user) {
+				res.json(info);
+			}
+			else{
+				authController.signInUser(user, res)
+			}
+
+	})(req, res)});
 
 	router.get('/logout', authController.logoutUser);
 

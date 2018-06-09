@@ -45,7 +45,6 @@ class ViewLearningGoal extends Component {
 		newGoal: {
 			category: "",
 			due_date: moment(),
-			// goalId: "",
 			measurement: "",
 			barriers: "",
 		},
@@ -68,33 +67,31 @@ class ViewLearningGoal extends Component {
     };
 
     componentDidMount() {
-        console.log("renderProps (goalData):, passed in as props.goalData", this.props.goalData);
-        this.retrieveGoal();
+        this.retrieveSelectedGoal();
    };
 
-	 retrieveGoal() {
-		console.log("profile.goals saved in Apps state passed down to View Learning Goal", this.props.profile.goals)
+   retrieveSelectedGoal() {
 
+        //Takes goals array in props.profile, and filter into array the goal with id= to the id 
+        //value stored in current page info via goalData (passed down by renderProps from react-router-dom) - 1 result in array
 		const goal = this.props.profile.goals.filter(goal => {
 			return goal._id === this.props.goalData.match.params.goalId
 		})[0];
-
-		console.log("const goal:", goal);
 
 		this.findPastAndUpcomingSessions(goal);
 	};
 
 	findPastAndUpcomingSessions(goal) {
-		console.log("goal insie findPastandUpcoming:", goal)
 		const pastSessions = 
 			goal.sessions.filter(session => {
               	return ((moment(session.end)).diff(moment()) < 0)
-            });
+            }); //Filters through session in pageGoal, and and returns sessions with negative
+            // difference between current date/time and session end date/time (means session is in the past)
 			
 		const upcomingSessions =
 			goal.sessions.filter(session => {
                 return ((moment(session.end)).diff(moment()) > 0)
-			});
+			});//Filters through sessions to find sessions that are in the future
 			
 
         this.setState({
@@ -104,24 +101,22 @@ class ViewLearningGoal extends Component {
         })
 	};
 
-	//Checks if there was an update in the LearningGoal prop, and compares previous location to current location
+
+    //  Each time Learning Page updates (i.e. button clicked, form submitted) - Checks if there was an 
+    //  update in the LearningGoal prop, and compares previous location (goal Id) to current location (new goalId)
+    //  If there is a change (a new goal has been selected),calls route change function
+    //  Exposed through react-router-dom
+    
     componentDidUpdate(prevProps) {
-        console.log("prevProps.goalData.location:", prevProps.goalData.location);
-        console.log("this.props.goalData.location:", this.props.goalData.location);
-
         if (this.props.goalData.location !== prevProps.goalData.location) {
-			console.log("the locations are not the same, so the learning goal component updated when you selected something")
-          this.onRouteChanged();
+          this.retrieveSelectedGoal();
         }
-      };
-	
-	  //Called if the component has updated, and location has changed (triggered when new LG clicked)
-      onRouteChanged() {
-        console.log("ROUTE CHANGED");
-        this.retrieveGoal();
-      };
+    };
+    
+    
+    // Takes array of study events from state, and a paramater - will be name of the property to be accessed for each element 
+    // inside session (items) array. Value of session.duration is converted to hours, totaled and returned for rendering 
 
-	  //Takes array of study events, and sums the duration property/60 (to get # of hours from minutes) and returns total
     calculateStudyHoursCompleted(items, prop) {
         return items.reduce((acc, session) => {
             return (acc + session[prop]/60);
@@ -129,7 +124,7 @@ class ViewLearningGoal extends Component {
     };
 
      render() {
-        console.log("renderProps (goalData):", this.props.goalData);
+
         return (
             <div>
 				<NavbarBoot home={false} first_name={this.props.profile.first_name} handleLogout={this.props.handleLogout} toggleProfileModal={this.props.toggleProfileModal}/>
@@ -143,13 +138,12 @@ class ViewLearningGoal extends Component {
                             <h2>Learning Goals</h2>
                             {this.props.profile.goals.length ? (									
                                     <div> 
+                                        {/* Reverses order of goals before mapping goal data of each goal to a card */}
                                        {this.props.profile.goals.slice(0).reverse().map(goal => (
-
-                                                   <GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
+                                            <GoalCard key={goal._id} goalId={goal._id} category={goal.category} goal={goal.goal} due_date={goal.due_date} />
 
                                        ))}
-                                    </div>
-                                   
+                                    </div>                                   
                                ) : (
                                        <GoalPanelMessage message='Looks like you need to create some learning goals!' />
                                    )}
@@ -168,7 +162,7 @@ class ViewLearningGoal extends Component {
                                             <p><span>Created Date: </span>{moment(this.state.goal.createdAt).format("dddd, MMMM, D, YYYY")}</p>
                                             <p><span>Due Date: </span>{moment(this.state.goal.due_date).format("dddd, MMMM, D, YYYY")}</p>
                                             <p><span>Total Study Hours Completed: </span>{this.state.pastSessions ? (this.calculateStudyHoursCompleted(this.state.pastSessions, "duration")): ("0 minutes - It looks like you need to hit the books!")}</p>
-
+                                            {/* ACTION - Consider adding "Days since last study session field" */}
                                         </div>
                                     </Col>
                                 </Row>
@@ -201,18 +195,11 @@ class ViewLearningGoal extends Component {
                                                     <p><span className="bold">Date: </span>{moment(session.end).format("MMMM Do YYYY, h:mm A")}</p>
                                                     
                                                 </div>)
+                                                //ACTION - Consider making session divs clickable to open event modal and view details, edit session
                                                 })
-                                            ) : (<div>You do not have any study sessions scheduled for this goal.</div>)
+                                            ) : (<div>You do not have any study sessions scheduled for this goal!</div>)
                                         }
                                         </div>
-
-                            {/* ACTION - Confirm create profile modal can be deleted from this page */}
-                            <ModalBoot show={this.state.firstLogin} title='Welcome to Study SMART!'>
-								<ProfileForm
-									handleProfileInputChange={this.props.handleProfileInputChange}
-									createProfileSubmit={this.createProfileSubmit}
-								/>
-							</ModalBoot>
 
 							<ModalBoot show={this.props.modalToggle.ProfileModal} title='View &amp; Edit Your Profile'>
 								<ViewProfile
@@ -223,7 +210,6 @@ class ViewLearningGoal extends Component {
 									handleProfileInputChange={this.props.handleProfileInputChange}
 									toggleProfileModal={this.props.toggleProfileModal}
 									editProfile={this.state.editProfile}
-									// createProfileSubmit={this.createProfileSubmit}
 								/>
 							</ModalBoot>
 
