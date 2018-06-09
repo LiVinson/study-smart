@@ -5,7 +5,7 @@ import './ViewProfile.css';
 const ViewProfile = props => {
     return (
         <div>
-            {props.viewProfile ? (
+            {props.viewProfile ? ( //determines whether Profile data is displayed or a form to edit profile data
                 <div className="viewProfileDiv">
                     <div>
                         <p className="profileText"><span>First Name: </span>{props.profile.first_name}</p>

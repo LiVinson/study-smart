@@ -28,3 +28,12 @@
 .italics{
     font-style:italic;
 }
+
+@media screen and (max-device-width : 320px)
+{
+    .buttonBarBtn {
+        font-size:10px;
+    }
+}
+
+/* y */

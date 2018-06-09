@@ -6,7 +6,6 @@ import moment from 'moment';
 
 const GoalCard = props => {
     const date = moment(props.due_date).format("ddd, MMMM D, YYYY");
-    console.log("goalcard has been rendered");
     return (
         <Link className="goalLink" to={"/learninggoal/" + props.goalId}>
                 <Panel className="goalCard">
@@ -16,7 +15,6 @@ const GoalCard = props => {
                     </Panel.Body>
                 </Panel>
         </Link>
-
     );
 }
 

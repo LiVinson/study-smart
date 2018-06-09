@@ -25,8 +25,7 @@ const StudySessionForm = props => {
         </FormGroup>
 
         <FormGroup>
-            {/* <ControlLabel>End Date and Time</ControlLabel>
-            <DateTimePicker name="end" timeframe={props.end} handleChange={props.handleEndChange} />    */}
+           
                 <FormControl.Static>
                     How Long are You Planning to Study (Make sure to account for time to take short breaks) 
                 </FormControl.Static>
@@ -35,7 +34,6 @@ const StudySessionForm = props => {
             <ControlLabel>Number of Hours</ControlLabel>
 
             <FormControl onChange={props.handleSessionInputChange} name="duration_hours" componentClass="select" placeholder="select">
-                  <option value="0">Select number of hours</option>
                   <option value="0">0</option>
                   <option value="60">1</option>
                   <option value="120">2</option>
@@ -51,7 +49,6 @@ const StudySessionForm = props => {
             <ControlLabel>Number of Minutes</ControlLabel>
             
             <FormControl onChange={props.handleSessionInputChange} name="duration_minutes" componentClass="select" placeholder="select">
-                  <option value="0">Select number of minutes</option>
                   <option value="0">0</option>
                   <option value="15">15</option>
                   <option value="30">30</option>
@@ -62,7 +59,6 @@ const StudySessionForm = props => {
         <FormGroup>
             <ControlLabel>What topics will you be studying?</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     label="Text"
                     placeholder="example: data types, array methods"
@@ -75,7 +71,6 @@ const StudySessionForm = props => {
             
             <ControlLabel>Where will you be studying?</ControlLabel>
             <FormControl
-                    // id="formControlsText"
                     type="text"
                     label="Text"
                     placeholder="Enter 'Home', 'School' or an address"

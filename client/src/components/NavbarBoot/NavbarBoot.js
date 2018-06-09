@@ -7,7 +7,7 @@ import "./NavbarBoot.css";
 const NavbarBoot = props => {
 
   return (
-    props.home ? (
+    props.home ? (//Renders navbar without username and log out if on the homepage
       <Navbar fluid className="homeNav">
       <Navbar.Header>
         <Navbar.Brand className='navHeader'>

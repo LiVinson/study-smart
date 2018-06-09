@@ -63,6 +63,7 @@ const AddGoalForm = props => {
                     onChange={props.handleGoalInputChange}
                     value={props.barriers}
                 />
+                {/* ACTION - Add validations - character # */}
         </FormGroup>
         <div className='goalFormBtnContainer'>
             <Button className="addGoalBtn" onClick={props.createGoalSubmit}>Add Learning Goal</Button>

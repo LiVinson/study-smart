@@ -8,21 +8,21 @@ const ButtonBar = props => {
         <Row className='buttonBar'>
             <Col sm={3} xs={12}>
                 <Link to={"/profile"}>
-                    <Button block>View Study Calendar</Button>
+                    <Button className="buttonBarBtn" block>View Study Calendar</Button>
                 </Link>
             </Col>
 
             <Col sm={3} xs={12}>
-                <Button block onClick={props.showGoalModal}>Add New Learning Goal</Button>
+                <Button className="buttonBarBtn" block onClick={props.showGoalModal}>Add New Learning Goal</Button>
             </Col>
 
             <Col sm={3} xs={12}>
-                <Button disabled={props.goalCreated < 1} block onClick={props.showSessionModal}>Add New Study Session</Button>
+                <Button className="buttonBarBtn" disabled={props.goalCreated < 1} block onClick={props.showSessionModal}>Add New Study Session</Button>
 
             </Col>
             <Col className="btnBarCol4" sm={3} xs={12}>
                 <Link to={"/"}>
-                    <Button disabled block>View Study Invites - <span className="italics">Coming soon!</span></Button>
+                    <Button className="buttonBarBtn" disabled block>View Study Invites - <span className="italics">Coming soon!</span></Button>
                 </Link>
             </Col>
         </Row>

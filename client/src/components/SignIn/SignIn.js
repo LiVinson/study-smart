@@ -1,6 +1,7 @@
 import React from 'react';
 import './SignIn.css';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import ErrorMsgText from '../ErrorMsgText';
 
 const SignIn = props => {
     return (
@@ -32,6 +33,7 @@ const SignIn = props => {
                 </FormGroup>
                <br />
                 <Button className='signInBtn' block type='submit' name="/auth/signin" onClick={props.handleSubmit}>Sign In to study SMART!</Button>
+                <ErrorMsgText>{props.authErrorMessage}</ErrorMsgText>
             </form>
         </div>
     );

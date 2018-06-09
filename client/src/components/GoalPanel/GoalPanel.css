@@ -2,8 +2,6 @@
     border: solid 2px black;
     background-color:lightgray;
     padding:10px;
-
-    /* max-height: 95vh; */
     height:100%;
     overflow-y: auto;
 }
