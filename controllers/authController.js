@@ -6,7 +6,6 @@ module.exports = {
 	/ If so, returns username, pass, and true authentication status
 	*/
 	getAuthentication: (req, res) => {
-		console.log("Checking if user is authenticated...");
 		if (req.isAuthenticated()) {
 			res.json({
 				userId: req.user._id,
@@ -31,10 +30,8 @@ module.exports = {
 	*/
 	createNewUser: (req, res) => {
 		const newUser = req.body;
-		console.log("user info in controller:", newUser);
 		User.register(newUser, newUser.password, (err, user) => {
 			if (err) {
-				console.log("there was an error with signing up the new user:", err);
 				return res.json(err);
 			}
 			res.json({
@@ -50,7 +47,6 @@ module.exports = {
 		receives succesful output from passport.authenticate()
 	*/
 	signInUser: (req, res) => {
-		console.log("sign-in user in controller was called. Req.body is: ", req);
 		res.json({
 			userId: req._id,
 			username: req.username,

@@ -69,7 +69,6 @@ class App extends Component {
     // When app mounts, makes GET request - checks if user is authenticated. Receives username and pass value, or Null if not authenticated
 
     axios.get("/auth/isAuthenticated").then(result => {
-      console.log("result from checking for authenication: ", result);
       const { userId, isAuthenticated, username } = result.data;
       this.setState({
         auth: {
@@ -140,10 +139,10 @@ class App extends Component {
             authErrorText = "A user with that email address is already signed up. Please double check the email entered or sign in with the correct password";
             break;
           case ("IncorrectPasswordError"): 
-            authErrorText = "The email address or password you entered is incorrect. Please try again."
+            authErrorText = "The email address or password you entered are incorrect. Please try again"
             break;
           case ("IncorrectUsernameError"): 
-            authErrorText = "Unable to find your Study Smart account. Please check your email address and try again."
+            authErrorText = "Unable to find your Study Smart account. Please check your email address and try again"
             break;
           default:
             console.log("this was the error message received back: ", data.data.message);
@@ -326,14 +325,16 @@ class App extends Component {
 	};
 
 
-  //  Called when user submits Goal form submission
-   
-	createGoalSubmit = () => { 
-		const goal = Object.assign({}, this.state.newGoal);
+  /* Called when user submits Goal form submission. Saves value of goal inputs from App.state into goal
+  Calls createGoal method on API which will make POST request to create a goal in the database and
+  receive updated user profile back as response.
+  After response received, The goals modal is closed and state.profile is updated with new profile 
+  including newly created goal*/
 
-    /* API method to send POST request to api/newgoal, receives updated user profile with goal populated in response and updates state of 
-    profile and goal modal to be hidden */
-		API.createGoal(goal, this.state.auth.userId).then(response => {
+	createGoalSubmit = () => { 
+    const goal = Object.assign({}, this.state.newGoal);
+
+    API.createGoal(goal, this.state.auth.userId).then(response => {
 
       const modalToggle = Object.assign({}, this.state.modalToggle);
       modalToggle.goalModal = false;
@@ -371,17 +372,26 @@ class App extends Component {
   };
   
 
-  // Called when user clicks create study session in study session form
+  /* Called when user clicks create study session in study session form. Creates a newSession object from
+    the session details captured form user, stored in state. Adds sessionOwnerId property = to the 
+    authenticated user's Id. this will be used to keep track of session owner for purposes of sending
+    and receiving event invitation and differentiating from user that created event and others who are 
+    invited.
+    
+    Once session is saved in database, calls to hide session modal and get profile are called, which will 
+    ensure updated events are displayed in calendar */
 
 	createSessionSubmit = () => { 
 
     /* ACTION - Add validation to ensure all fields are entered, sensical data  Look into disabling submit button until required
      fields entered */
 
-    API.createSession(this.state.newSession, this.state.auth.userId)
+     const newSession = Object.assign({}, this.state.newSession);
+     newSession.sessionOwnerId = this.state.auth.userId;
+    API.createSession(newSession)
 			.then(response => {
 				this.hideSessionModal();
-        this.getProfile();
+        this.getProfile(); //ACTION - Instead of calling function to get profile, update controller to have profile sent back from call 
 			})
 	};
 

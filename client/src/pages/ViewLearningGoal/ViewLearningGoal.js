@@ -8,7 +8,6 @@ import GoalPanelMessage from '../../components/GoalPanelMessage';
 import GoalCard from '../../components/GoalCard';
 import AddGoalForm from '../../components/AddGoalForm';
 import ModalBoot from '../../components/ModalBoot';
-import ProfileForm from '../../components/ProfileForm';
 import ViewProfile from '../../components/ViewProfile';
 import StudySessionForm from '../../components/StudySessionForm';
 import moment from 'moment';

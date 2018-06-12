@@ -29,8 +29,8 @@ export default {
     },
 
 //STUDY SESSIONS
-    createSession: (sessionData, userId) => {
-        return (axios.post(`/api/studysession/${userId}`, sessionData))
+    createSession: (sessionData) => {
+        return (axios.post(`/api/studysession/`, sessionData))
     },
 
     getSession: (sessionId) => {
@@ -54,9 +54,9 @@ export default {
 
     },
 
-    sendSessionInvitation: (userId, inviteData) =>{
-        console.log("invitee userID and invite Data", userId, inviteData);
-        return (axios.post(`/api/invite/${userId}`, inviteData))
+    sendSessionInvitation: (userId, invitedSessionDetails) =>{
+        console.log("invitee userID and invite Data", userId, invitedSessionDetails);
+        return (axios.post(`/api/invite/${userId}`, invitedSessionDetails))
     },
 
 

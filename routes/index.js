@@ -7,6 +7,7 @@ module.exports = function (passport) {
 	router.use("/api",require("./profileRoutes.js")(passport));
 	router.use("/api",require("./goalRoutes.js")(passport));
 	router.use("/api",require("./studySessionRoutes.js")(passport));
+	router.use("/api",require("./invitationRoutes.js")(passport));
 
 	// If no API routes are hit, send the React app
 	router.use(function(req, res) {

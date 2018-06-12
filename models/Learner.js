@@ -37,26 +37,15 @@ const Learner = new Schema({
       }
     ],
     invitations:[{
-        eventId: {
-            type: Schema.Types.ObjectId,
-            ref: "StudySession"
-        },
-        status: {
-            type: String,
-            required:true,
-            default:"pending"
-        },
-        // sessionOwnerId: {
-        //     type: Schema.Types.ObjectId,
-        //     ref: "User"
-        // },
-        owner: String,
-        owner_name: String,
-        title: String,
-        location: String,
-        start: String,
-        end: String,
-        duration: String
+        sessionId: {
+        type: Schema.Types.ObjectId,
+        ref: "StudySession"
+      },
+    status: {
+        type: String,
+        default: "pending",
+        required: true
+    }
     }]
 }, {
     timestamps: true

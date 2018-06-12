@@ -13,14 +13,14 @@ const StudyBuddyForm = props => {
                     placeholder="user@email.com"
                     name="email"
                     onChange={props.handleStudyBuddyInputChange}
-                    value={props.study_buddy.email}
+                    value={props.studyBuddyEmail}
                 />
-                {/* <HelpBlock>{props.study_buddy.emailError}</HelpBlock> */}
-                <HelpBlock><b>Coming Soon!</b></HelpBlock>
+                <HelpBlock>{props.studyBuddyEmailMsg}</HelpBlock>
+               
 
             </FormGroup>
 
-            <Button disabled onClick={props.handleStudyBuddySubmit}>Send Invite</Button>
+            <Button onClick={props.handleStudyBuddySubmit}>Send Invite</Button>
         </form>
     )
 };

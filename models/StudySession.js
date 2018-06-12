@@ -10,10 +10,10 @@ const StudySession = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    owner_name: {
-        type:String,
-        required:false
-    }, 
+    sessionOwnerId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
 
     title: {
         type: String,   
