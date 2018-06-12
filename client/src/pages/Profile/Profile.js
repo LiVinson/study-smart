@@ -22,16 +22,19 @@ class Profile extends Component {
 			_id: "",
 			active: true,
 			title: "",
-			owner: "",
-			owner_name: "",
+			sessionOwnerId: "",
 			start: "",
 			duration: "",
 			end: "",
 			location: "",
 			createdAt: "",
 			updatedAt: "",
+			resources: [],
 			invitees: [],
-			resources: []
+			newStudyBuddyInfo: {
+				email:"",
+				studyBuddyEmailMsg:""
+			}
 		},
 		newResource: {
 			description: "",
@@ -40,10 +43,7 @@ class Profile extends Component {
 		showSessionDetailModal: false,
 		showProfileModal: false,
 		error: "",
-		// study_buddy: {
-		// 	email: "",
-		// 	emailError: ""
-		// },
+
 	};
 
 
@@ -89,12 +89,14 @@ class Profile extends Component {
 	};
 
 
+	//Called when studySession event is clicked in Calendar. 
 	viewSessionDetails = clickedEvent => {
 		// console.log("event clicked! - before formatting:", clickedEvent);
 		API.getSession(clickedEvent._id).then(response => {
 			const selectedSession = { ...response.data, }
 			selectedSession.start = moment(selectedSession.start).format("dddd, MMMM, D, YYYY,  h:mm A"); //copies data and formats, but does not impact original
 			selectedSession.end = moment(selectedSession.end).format("dddd, MMMM, D, YYYY,  h:mm A");
+			selectedSession.newStudyBuddyInfo = { email:"", studyBuddyEmailMsg: ""};
 			console.log("selectedSession after formatting:", selectedSession);
 
 			this.setState({
@@ -117,6 +119,10 @@ class Profile extends Component {
 			location: "",
 			createdAt: "",
 			updatedAt: "",
+			newStudyBuddyInfo: {
+				email:"",
+				studyBuddyEmailMsg: ""
+			},
 			invitees: [],
 			resources: []
 		};
@@ -126,48 +132,62 @@ class Profile extends Component {
 		})
 	};
 
-	//INVITE STUDYBUDDY FORM
-	// handleStudyBuddyInputChange = event => {
-	// 	const { name, value } = event.target;
-	// 	const study_buddy = Object.assign({}, this.state.study_buddy);
-	// 	study_buddy[name] = value;
-	// 	this.setState({
-	// 		study_buddy: study_buddy
-	// 	})
-	// };
+	//INVITE STUDYBUDDY FORM 
 
-	// handleStudyBuddySubmit = event => {
-	// 	event.preventDefault();
-	// 	const studyBuddyEmail = this.state.study_buddy.email.toLowerCase();
-	// 	API.checkEmailExists(studyBuddyEmail).then(response => {
-	// 		console.log("response received from API.checkEmail:", response.data)
-	// 		if (response.data === "null") { //invalid email
+	//Called each time key is input in study buddy form. Handles saving updated value of input into state
+	handleStudyBuddyInputChange = event => {
+		const { name, value } = event.target;
+		const selectedSession= Object.assign({}, this.state.selectedSession);
+		selectedSession.newStudyBuddyInfo[name] = value;
+		this.setState({
+			selectedSession: selectedSession
+		})
+	};
 
-	// 			const study_buddy = this.state.study_buddy;
-	// 			study_buddy.emailError = `${study_buddy.email} does not match any study Smart users.`
 
-	// 			this.setState({
-	// 				study_buddy: study_buddy
-	// 			})
+	/*
+	Called when user enters study buddy email in studdy session detail modal and clicks send invite.
+	//Does a get to user collection to check if user with that email address exists. If response
+	//is returned null (no match), sets emaill Error property in state.newStudyBuddyInfo to 
+	reflect no user is found with that email. If a matching email is found among users,
+	sets message invitation is being sent, and callsinviteUser function with invitees email address
+	*/
+	handleStudyBuddySubmit = event => {
+		event.preventDefault();
+		const studyBuddyEmail = this.state.selectedSession.newStudyBuddyInfo.email.toLowerCase();
+		API.checkEmailExists(studyBuddyEmail).then(response => {
+			console.log("response received from API.checkEmail:", response.data)
+			if (response.data === "null") { //email does not belong to any users
+				const selectedSession = Object.assign({}, this.state.selectedSession)
+				selectedSession.newStudyBuddyInfo.studyBuddyEmailMsg = `${studyBuddyEmail} does not match any study Smart users. Please try again.`
+				//ACTION - Look into adding means to invite someone to join via email?
 
-	// 		} else {
-	// 			const study_buddy = this.state.study_buddy;
-	// 			study_buddy.emailError = `${study_buddy.email} is a valid email address!.`
-	// 			//Send invite to this user
-	// 			this.setState({
-	// 				study_buddy: study_buddy
-	// 			}, this.inviteUser(response.data))
+				this.setState({
+					selectedSession: selectedSession
+				})
+			} else {
+				const selectedSession = Object.assign({}, this.state.selectedSession);
+				selectedSession.newStudyBuddyInfo.studyBuddyEmailMsg = `Sending invitation....`
+				//Send invite to this user
+				this.setState({
+					selectedSession: selectedSession
+				}, this.inviteUser(response.data)) //check what this is doing, should be sending invitees Id to function to send session details for invite
+			}
+		})
+	};
 
-	// 		}
-	// 	})
-	// };
 
-	// inviteUser = (buddyId) => {
-	// 	const session = this.state.selectedSession;
-	// 	API.sendSessionInvitation(buddyId, session).then(response => {
-	// 		console.log("response received from API.sendSessionInvitation", response.data)
-	// 	})
-	// };
+	/*Called onced it is verified that email address entered in stdy buddy invite form is valid. 
+	Sends invited user's Id and copy of session and calls API Send Session Invitation to 
+	save record of session in invited users's invitation array in database
+	*/
+
+	inviteUser = buddyId => {
+		const session = this.state.selectedSession;
+		API.sendSessionInvitation(buddyId, session).then(response => {
+			console.log("response received from API.sendSessionInvitation", response.data);
+		})
+	};
 
 	// viewStudyInvites = () => {
 	// 	alert("view your invites");
@@ -260,9 +280,9 @@ class Profile extends Component {
 								handleResourceSubmit={this.handleResourceSubmit}
 								hideSessionDetails={this.hideSessionDetails}
 								auth={this.props.auth}
-								// study_buddy={this.state.study_buddy}
-								// handleStudyBuddyInputChange={this.handleStudyBuddyInputChange}
-								// handleStudyBuddySubmit={this.handleStudyBuddySubmit}
+								sessionOwnerId={this.state.selectedSession.sessionOwnerId}
+								handleStudyBuddyInputChange={this.handleStudyBuddyInputChange}
+								handleStudyBuddySubmit={this.handleStudyBuddySubmit}
 							/>
 						</Col>
 					</Row>

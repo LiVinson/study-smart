@@ -2,11 +2,21 @@ const db = require("../models");
 const moment = require('moment');
 
 module.exports = {
+
+    /*
+    Method called when POST request received to api/createSession containining session data in req.body
+    Duration of session in total minutes computed so end time can be calculated (start + duration)
+    and saved in the database. Response session (with Id, and creation times added by DB). Session is stored in 
+    Goal.sessions array, response to push is updated goal with session in array. THis is pushed into Learners.goal
+    array then updated profile is received and sent back as response to query 
+
+    */
     createStudySession: (req, res) => {
+        console.log("In createStudySession in controller, req.body: ", req.body);
         const {
             goalId,
             owner,
-            // owner_name,
+            sessionOwnerId,
             title,
             start,
             location
@@ -15,10 +25,11 @@ module.exports = {
         const duration = parseInt(req.body.duration_hours) + parseInt(req.body.duration_minutes);
         const end = moment(req.body.start).add(duration, "minutes");
 
+
         db.StudySession.create({
                 goalId,
                 owner,
-                // owner_name,
+                sessionOwnerId,
                 title,
                 start,
                 duration,
@@ -34,7 +45,7 @@ module.exports = {
                     }
                 }).then(goalresponse => {
                     db.Learner.findOneAndUpdate({
-                            _userId: req.params.userId
+                            _userId: req.body.sessionOwnerId
                         }, {
                             $push: {
                                 sessions: response._id

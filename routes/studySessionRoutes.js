@@ -8,7 +8,7 @@ module.exports = function (passport) {
     router.get("/studysessions/:userId", studySessionController.findAllStudySessions);
     // //When certain event is Clicked 
     router.get("/studysession/:sessionId", studySessionController.findOneStudySessions);
-    router.post("/studysession/:userId", studySessionController.createStudySession);
+    router.post("/studysession/", studySessionController.createStudySession);
     router.post("/studyresource/:sessionId", studySessionController.addStudyResource);
 
     return router;

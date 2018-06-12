@@ -6,7 +6,7 @@ const User = new Schema({
 	name: String
 });
 //passport-local-mongoose creates a 'username' and some password fields for you
-//you can add some other fields here too if you like
+//you can add some other fields here too 
 
 User.plugin(passportLocalMongoose);
 

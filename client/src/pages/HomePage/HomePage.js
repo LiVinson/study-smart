@@ -9,7 +9,6 @@ import SignUp from '../../components/SignUp';
 import Footer from '../../components/Footer';
 
 const HomePage = props => {
-	console.log(props.getPassValidationState);
 
 	return (
 		<div>
