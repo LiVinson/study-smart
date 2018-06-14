@@ -3,6 +3,7 @@
     max-height:100vh;
 }
 
+
 .mainContainer {
     /* border:2px solid black; */
     padding:2px;
@@ -22,4 +23,12 @@
 
 ul{ 
     list-style-type: none; 
+}
+
+@media only screen and (min-width: 768px) {
+    .mainRow{
+        display:flex;
+        align-items: stretch;
+    
+    }
 }

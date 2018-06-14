@@ -21,6 +21,18 @@
     margin-bottom:8px;
 }
 
+.resourceDiv > p {
+    margin-bottom:3px;
+    font-weight: bold;
+}
+
 .centerHeader{
     text-align:center;
+}
+
+.comingSoonNote{
+    font-size:14px;
+    color:red;
+    font-style: italic;
+    text-align: center;
 }

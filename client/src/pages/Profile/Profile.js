@@ -80,10 +80,16 @@ class Profile extends Component {
 		const newResource = { ...this.state.newResource };
 		const sessionId = this.state.selectedSession._id;
 		API.addSessionResource(newResource, sessionId).then(response => {
-			console.log("response from adding newResource, and updating assiociated event:", response.data)
+			// console.log("response from adding newResource, and updating assiociated event:", response.data)
 			API.getSession(sessionId).then(responseSession => {
-				console.log("response from getting event (should have updated resource),", responseSession.data);
-				this.setState({ selectedSession: responseSession.data })
+				// console.log("response from getting event (should have updated resource),", responseSession.data);
+				const newResource = {
+					description: "",
+					url: ""
+				}
+				this.setState({ selectedSession: responseSession.data,
+								newResource: newResource 
+							})
 			})
 		})
 	};
@@ -126,8 +132,13 @@ class Profile extends Component {
 			invitees: [],
 			resources: []
 		};
+		const newResource = {
+			description: "",
+			url: ""
+		}
 		this.setState({
 			selectedSession: selectedSession,
+			newResource: newResource,
 			showSessionDetailModal: false
 		})
 	};
@@ -171,7 +182,7 @@ class Profile extends Component {
 				//Send invite to this user
 				this.setState({
 					selectedSession: selectedSession
-				}, this.inviteUser(response.data)) //check what this is doing, should be sending invitees Id to function to send session details for invite
+				}, this.inviteUser(response.data)) //Sends invited user's Learner record to inviteUser function
 			}
 		})
 	};
@@ -182,11 +193,19 @@ class Profile extends Component {
 	save record of session in invited users's invitation array in database
 	*/
 
-	inviteUser = buddyId => {
-		const session = this.state.selectedSession;
-		API.sendSessionInvitation(buddyId, session).then(response => {
+	inviteUser = invitedUserData => {
+		const sessionInviteInfo = this.state.selectedSession;
+		sessionInviteInfo.invitedUserData = invitedUserData;
+		API.sendSessionInvitation(sessionInviteInfo).then(response => {
 			console.log("response received from API.sendSessionInvitation", response.data);
+			
+			// if (response) {
+				
+			// const selectedSession = response.data;
+			//this.setState({selectedSession: selectedSession})
+			// }
 		})
+		//Action - Add step 
 	};
 
 	// viewStudyInvites = () => {

@@ -200,15 +200,15 @@ class ViewLearningGoal extends Component {
                                         }
                                         </div>
 
-							<ModalBoot show={this.props.modalToggle.ProfileModal} title='View &amp; Edit Your Profile'>
+							<ModalBoot show={this.props.modalToggle.profileModal} title='View &amp; Edit Your Profile'>
 								<ViewProfile
-									viewProfile={this.state.viewProfile} //ACTION - determine if state in this component needed, or should be props
-									profile={this.state.profile}
+									viewProfile={this.props.viewProfile} //ACTION - determine if state in this component needed, or should be props
+									profile={this.props.profile}
 									editProfileFormClicked={this.props.editProfileFormClicked}
 									saveProfileEdits={this.props.saveProfileEdits}
 									handleProfileInputChange={this.props.handleProfileInputChange}
 									toggleProfileModal={this.props.toggleProfileModal}
-									editProfile={this.state.editProfile}
+									editProfile={this.props.editProfile}
 								/>
 							</ModalBoot>
 

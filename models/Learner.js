@@ -39,7 +39,8 @@ const Learner = new Schema({
     invitations:[{
         sessionId: {
         type: Schema.Types.ObjectId,
-        ref: "StudySession"
+        ref: "StudySession",
+        required: true
       },
     status: {
         type: String,
