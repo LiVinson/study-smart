@@ -5,7 +5,7 @@ module.exports = function (passport) {
 
     //STUDY BUDDIES:
     router.get("/buddyId/:buddyEmail", invitationController.getBuddyUserId);
-    router.post("/invite/:userId", invitationController.createInvitation);
+    router.post("/inviteUser", invitationController.createInvitation);
 
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { Tabs, Tab } from 'react-bootstrap';
 import { FormControl, FormGroup, ControlLabel, Button } from "react-bootstrap";
-import StudyBuddyForm from '.././StudyBuddyForm';
+// import StudyBuddyForm from '.././StudyBuddyForm';
 import './SessionTabModal.css'
 
 
@@ -103,18 +103,19 @@ const SessionTabModal = props => {
 
                     <Tab eventKey={3} title="Study Buddies">
                         <h2 className="sessionDetailHeader">Study Buddies</h2>
-                        {(props.selectedSession.sessionOwnerId === props.auth.userId) ? (
+                        <p className="comingSoonNote"><b>Coming Soon!</b> Invite your friends and form group study sessions!</p>
+                        {/* {(props.selectedSession.sessionOwnerId === props.auth.userId) ? (
                             <StudyBuddyForm 
                                 studyBuddyEmail={props.selectedSession.newStudyBuddyInfo.email} 
                                 studyBuddyEmailMsg={props.selectedSession.newStudyBuddyInfo.studyBuddyEmailMsg}
                                 handleStudyBuddyInputChange={props.handleStudyBuddyInputChange}
                                 handleStudyBuddySubmit={props.handleStudyBuddySubmit}
-                                selectedSession={props.selectedSession}
-                            />
-                            // props.selectedSession.invitees.length ? (
-                            //     <div>You have invited some study buddies. Their names and acceptance status will show here</div>
-                            // ) : (<div>You haven't invited anyone to study with yet...</div>)
-                        ) : (<div>You are not the owner of this event. You will not be able to invite others or view pending invites, but you can see accepted users who have accepted.</div>)}
+                                selectedSession={props.selectedSession} */}
+                            {/* />
+                             props.selectedSession.invitees.length ? (
+                                 <div>You have invited some study buddies. Their names and acceptance status will show here</div>
+                             ) : (<div>You haven't invited anyone to study with yet...</div>)
+                        // ) : (<div>You are not the owner of this event. You will not be able to invite others or view pending invites, but you can see accepted users who have accepted.</div>)} */}
                     </Tab>
 
                 </Tabs>

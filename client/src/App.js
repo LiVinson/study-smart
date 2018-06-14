@@ -112,8 +112,9 @@ class App extends Component {
       password: this.state.password
     };
    
+    //ACTION - Add validation for email address being valid, and also add validation of password length
     this.setState({
-      // username: "",
+      username: "",
       password: ""
     });
     const { name } = event.target; //button name is auth/signin or auth/signup
@@ -240,6 +241,7 @@ class App extends Component {
     and profile form to edit user profile*/
     
     toggleProfileModal = () => {
+      console.log("toggle Profile Modal called");
       const modalToggle = Object.assign({}, this.state.modalToggle)
 
       /*If modal is not showing, copy the profile data into editProfile and save in state (will be displayed in form inputs); show profile modal
@@ -247,6 +249,7 @@ class App extends Component {
       */
       
       if (!this.state.modalToggle.profileModal) {//If modal is not showing
+        console.log("modal is hidden!, copy info and then show the modal in view mode")
         const editProfile = Object.assign({}, this.state.editProfile);
         editProfile.first_name = this.state.profile.first_name;
         editProfile.last_name = this.state.profile.last_name;
@@ -262,6 +265,8 @@ class App extends Component {
         })
       }
       else {
+        console.log("modal is showing! HIde it!");
+
         modalToggle.profileModal = false;
 
         this.setState({
@@ -333,14 +338,25 @@ class App extends Component {
 
 	createGoalSubmit = () => { 
     const goal = Object.assign({}, this.state.newGoal);
+    if (goal.category === "" || goal.measurement === "") {
+      return
+    };
 
+    // ACTION - Add additional validation to check for text length, display error message under each input
     API.createGoal(goal, this.state.auth.userId).then(response => {
 
       const modalToggle = Object.assign({}, this.state.modalToggle);
+      
       modalToggle.goalModal = false;
 			this.setState({
         modalToggle: modalToggle,
-        profile: response.data
+        profile: response.data,
+        newGoal: {
+          category: "",
+          due_date: moment(),
+          measurement: "",
+          barriers: "",
+        }
 			});
 		})
   };
@@ -387,6 +403,12 @@ class App extends Component {
      fields entered */
 
      const newSession = Object.assign({}, this.state.newSession);
+     if (newSession.title === "" || newSession.location === "") {
+      return;
+    }
+    else if (newSession.duration_hours <= 0 &&  newSession.duration_minutes <= 0) {
+      return;
+    };
      newSession.sessionOwnerId = this.state.auth.userId;
     API.createSession(newSession)
 			.then(response => {
@@ -529,6 +551,10 @@ hideSessionModal = () => {
                 newSession={this.state.newSession}
                 showSessionModal={this.showSessionModal}
                 toggleProfileModal = {this.toggleProfileModal}
+                viewProfile={this.state.viewProfile}
+
+                editProfile={this.state.editProfile}
+
                 editProfileFormClicked={this.editProfileFormClicked}
                 saveProfileEdits={this.saveProfileEdits}
                 showGoalModal={this.showGoalModal}

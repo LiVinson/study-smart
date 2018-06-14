@@ -46,18 +46,14 @@ const StudySession = new Schema({
         ref: "Resource"
         }
     ],
-    invitees: [{
-        eventId: {
+    invitedUsers: [
+        {
+            
             type: Schema.Types.ObjectId,
-            ref: "User"
-        },
-        first_name: String,
-        last_initial: String,
-        invite_status: {
-            type: String,
-            default: "pending"
-        }
-    }],
+            ref: "Learner"
+        }, 
+    
+    ],
     active: {
         type: Boolean,
         required:true,

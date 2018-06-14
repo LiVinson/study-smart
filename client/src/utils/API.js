@@ -54,9 +54,8 @@ export default {
 
     },
 
-    sendSessionInvitation: (userId, invitedSessionDetails) =>{
-        console.log("invitee userID and invite Data", userId, invitedSessionDetails);
-        return (axios.post(`/api/invite/${userId}`, invitedSessionDetails))
+    sendSessionInvitation: (invitedSessionDetails) =>{
+        return (axios.post(`/api/inviteUser`, invitedSessionDetails))
     },
 
 
