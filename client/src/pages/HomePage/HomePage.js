@@ -45,7 +45,7 @@ const HomePage = props => {
 					</Col>
 					<Col xs={12} sm={5}>
 						<Tabs defaultActiveKey={1} animation={true} id="signInOrsignUp">
-						 {/* SignIn/Up Modal tabs. Component inside of tab with corresopndin event key displays */}
+						 {/* SignIn/Up Modal tabs. Component inside of tab with corresopnding event key displays */}
 
 							<Tab eventKey={1} title="Sign Up">
 							<SignUp

@@ -46,7 +46,7 @@ const AddGoalForm = props => {
         </FormGroup>
 
         <FormGroup>
-            <ControlLabel>When do you want to have acheive this goal by?</ControlLabel>
+            <ControlLabel>When do you want to acheive this goal by?</ControlLabel>
                 <DateSelector 
                     name="due_date"
                     due_date={props.due_date}

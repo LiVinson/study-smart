@@ -42,23 +42,16 @@ export default {
     },
 
     addSessionResource: (resource, sessionId) => {
-        console.log("resource and sessionId inside of API.addSessionResource", resource, sessionId)
-        return (axios.post(`/api/studyresource/${sessionId}`, resource))
-
+       return (axios.post(`/api/studyresource/${sessionId}`, resource))
     },
 
     //STUDY BUDDY INVITATIONS
     checkEmailExists: (userEmail) => {
-        console.log("API.checkEmailExists - email before GET", userEmail);
         return (axios.get(`/api/buddyId/${userEmail}`))
 
     },
 
     sendSessionInvitation: (invitedSessionDetails) =>{
         return (axios.post(`/api/inviteUser`, invitedSessionDetails))
-    },
-
-
-
-
+    }
 }

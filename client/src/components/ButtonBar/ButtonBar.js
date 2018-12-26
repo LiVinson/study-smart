@@ -26,29 +26,6 @@ const ButtonBar = props => {
                 </Link>
             </Col>
         </Row>
-
-
-
-
-
-
-    //     <div className="buttonBar">
-    //     {/* <div className="welcome"><p>Welcome {props.first_name}!</p></div> */}
-    
-    // <ButtonGroup>
-    //         <Link to={"/profile"}>
-    //             <Button>View Study Calendar</Button>
-    //         </Link>
-
-    //         <Button onClick={props.showGoalModal}>Add New Learning Goal</Button>
-    //         <Button onClick={props.showSessionModal}>Add New Study Session</Button>
-            
-    //         <Link>
-    //         <Button>View Study Invites</Button>
-    //         </Link>
-
-    // </ButtonGroup>
-    //     </div>
     )
 
 };

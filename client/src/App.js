@@ -78,10 +78,9 @@ class App extends Component {
         }
       });
     }).catch(err=> {
-      console.log("error received back from get request to check if user is authenticated", err);
-  })
+      return false;
+    })
 };
-
 
   //  Called when user presses key in input field (various forms)
 
@@ -133,29 +132,26 @@ class App extends Component {
         });
       }
       else { 
-        console.log("what was received back from an unssuccesful authentication post:", data.data);    
         let authErrorText;
         switch (data.data.name) {
           case ("UserExistsError"): 
-            authErrorText = "A user with that email address is already signed up. Please double check the email entered or sign in with the correct password";
+            authErrorText = "A user with that email address is already signed up. Please double check the email entered or sign in with the correct password.";
             break;
           case ("IncorrectPasswordError"): 
-            authErrorText = "The email address or password you entered are incorrect. Please try again"
+            authErrorText = "The email address or password you entered are incorrect. Please try again."
             break;
           case ("IncorrectUsernameError"): 
-            authErrorText = "Unable to find your Study Smart account. Please check your email address and try again"
+            authErrorText = "Unable to find your Study Smart account. Please check your email address and try again."
             break;
           default:
-            console.log("this was the error message received back: ", data.data.message);
-            authErrorText = "There was a problem signing you in. Please try again";
+            authErrorText = "There was a problem signing you in. Please try again.";
           }
         this.setState({
           authErrorMessage: authErrorText
           })
       }
     }).catch(err => {
-      console.log("error message inside catch for signin post request:", err.response);
-
+        return false;   
         });
       };
 
@@ -241,7 +237,6 @@ class App extends Component {
     and profile form to edit user profile*/
     
     toggleProfileModal = () => {
-      console.log("toggle Profile Modal called");
       const modalToggle = Object.assign({}, this.state.modalToggle)
 
       /*If modal is not showing, copy the profile data into editProfile and save in state (will be displayed in form inputs); show profile modal
@@ -249,7 +244,6 @@ class App extends Component {
       */
       
       if (!this.state.modalToggle.profileModal) {//If modal is not showing
-        console.log("modal is hidden!, copy info and then show the modal in view mode")
         const editProfile = Object.assign({}, this.state.editProfile);
         editProfile.first_name = this.state.profile.first_name;
         editProfile.last_name = this.state.profile.last_name;
@@ -265,10 +259,7 @@ class App extends Component {
         })
       }
       else {
-        console.log("modal is showing! HIde it!");
-
         modalToggle.profileModal = false;
-
         this.setState({
           modalToggle: modalToggle,
           viewProfile: true
@@ -297,7 +288,6 @@ class App extends Component {
 
       //API method to sent patch request to edit learner profile in Learner table, then calls method to get updated profile
       API.editLearnerProfile(profile, userId).then(response=> {
-        console.log(response.data);
         //ACTION - Instead of calling method again, check above console.log to see if editLearnerProfile returns updated profile object from
         //patch request. If, so see if that is better to use instead of calling this.getProfile method.
         this.getProfile()
