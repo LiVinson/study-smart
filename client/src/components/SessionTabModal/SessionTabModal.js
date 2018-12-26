@@ -124,6 +124,7 @@ const SessionTabModal = props => {
             <Modal.Footer>
                 {/* {(props.selectedSession.owner === props.auth.userId) ? (<Button>Edit Study Session</Button>) : (null)} */}
                 <Button className="sessionDetailBtn" onClick={props.hideSessionDetails}>Close</Button>
+                <Button className="sessionDetailBtn delete" onClick={props.deleteEvent}>Delete Study Session</Button>
             </Modal.Footer>
         </Modal>
     )
