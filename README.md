@@ -1,40 +1,51 @@
 # Study SMART  
 
-A web application using the MVC model to help students and self learners organize their learning goals and schedule study sessions for each goal. 
+A web application to help students and self learners organize their learning goals and schedule study sessions.
 
-## Videos
+## About 📝
 
-Coming Soon!
+Study Smart is made to help users manage their learning schedules and set specific, targeted goals for what they want to accomplish and when. Study Smart allows users to create an account and begin creating learning goals right away. For each goal, learners can create and schedule study sessions, vieweable on a monthly, weekly, or daily planner while seeing an overview of what they have accomplished.
 
-## Getting Started
+Head to the live application for [Study Smart](https://vast-temple-43715.herokuapp.com/), and sign up to take start scheduling your learning!
 
-Please go to the link for [Study Smart](https://vast-temple-43715.herokuapp.com/), deployed at Heroku, and use your email and password to sign up and start learning!
+## Run Locally 🏃🏿‍♀️
 
-## Deployment
+Clone this repository and navigate into the study-smart directory.
 
-This application is deployed using [Heroku](http://www.heroku.com) and mLab. 
+```bash
+git clone git@github.com:LiVinson/study-smart.git
+cd study-smart
+```
 
-## Built With
+Install all of the dependencies listed in the package.json
 
-* [React.js](https://reactjs.org/) - A JavaScript library for building user interfaces
-* [React Bootstrap](https://react-bootstrap.github.io/) - Bootstrap 3.0 components rebuilt for React
-* [Express](https://www.npmjs.com/package/express) - Server Framework
-* [MongoDB](https://www.mongodb.com/) - Database Management system used locally
-* [Mongoose](http://docs.sequelizejs.com/) - MongoDB object modeling tool 
-* [MLab](https://www.mlab.com/home) - Database Management system when deployed
-* [Node.JS](https://nodejs.org/en/) - Server-side Javascript language
-* [Passport](https://www.npmjs.com/package/passport) - NPM for user authentication using email and password
-* [MomentJs](https://momentjs.com/) - Parse, validate, manipulate, and display dates and times in JavaScript.
+```node
+yarn add
+```
 
-## Future Developments
+Open the application using live server
 
-This application is continuously being approved. Developments in progress include:
-* Ability to invite other users and create group study sessions
-* Ability to schedule multiple study sessions at once
-* Opt in to receiving text message reminders for upcoming sessions
+```bash
+yarn start
+```
 
-## Authors
+## Tools and Technology 💻
 
- Lisa Vinson
-* [Github](https://github.com/LiVinson)
-* [Portfolio](www.LisaVinson.com)
+* React.js
+* React Router
+* React Bootstrap
+* Express
+* MongoDB
+* Mongoose
+* Node.js
+* Passport
+* Moment.js
+
+## Contributions 🤝🏾
+
+I am not open to accepting pull requests at this time, but feel free to fork the repository to make changes on your own.
+
+## License 🔓
+
+This project is licensed under the [MIT license](https://github.com/LiVinson/study-smart/blob/master/LICENSE).
+
